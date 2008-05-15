@@ -86,7 +86,7 @@ namespace CLROpenCV {
 			// 
 			// pictureBox2
 			// 
-			this->pictureBox2->Location = System::Drawing::Point(448, 41);
+			this->pictureBox2->Location = System::Drawing::Point(384, 44);
 			this->pictureBox2->Name = L"pictureBox2";
 			this->pictureBox2->Size = System::Drawing::Size(320, 240);
 			this->pictureBox2->TabIndex = 14;
@@ -94,7 +94,7 @@ namespace CLROpenCV {
 			// 
 			// pictureBox1
 			// 
-			this->pictureBox1->Location = System::Drawing::Point(70, 41);
+			this->pictureBox1->Location = System::Drawing::Point(60, 44);
 			this->pictureBox1->Name = L"pictureBox1";
 			this->pictureBox1->Size = System::Drawing::Size(320, 240);
 			this->pictureBox1->TabIndex = 13;
@@ -102,9 +102,9 @@ namespace CLROpenCV {
 			// 
 			// button2
 			// 
-			this->button2->Location = System::Drawing::Point(70, 380);
+			this->button2->Location = System::Drawing::Point(60, 412);
 			this->button2->Name = L"button2";
-			this->button2->Size = System::Drawing::Size(120, 23);
+			this->button2->Size = System::Drawing::Size(103, 25);
 			this->button2->TabIndex = 15;
 			this->button2->Text = L"Start";
 			this->button2->UseVisualStyleBackColor = true;
@@ -116,16 +116,16 @@ namespace CLROpenCV {
 			// 
 			// textBox1
 			// 
-			this->textBox1->Location = System::Drawing::Point(70, 310);
+			this->textBox1->Location = System::Drawing::Point(60, 336);
 			this->textBox1->Name = L"textBox1";
-			this->textBox1->Size = System::Drawing::Size(100, 21);
+			this->textBox1->Size = System::Drawing::Size(86, 20);
 			this->textBox1->TabIndex = 16;
 			// 
 			// MovingDetect
 			// 
-			this->AutoScaleDimensions = System::Drawing::SizeF(7, 12);
+			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(832, 535);
+			this->ClientSize = System::Drawing::Size(713, 580);
 			this->Controls->Add(this->textBox1);
 			this->Controls->Add(this->button2);
 			this->Controls->Add(this->pictureBox2);
