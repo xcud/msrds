@@ -192,7 +192,7 @@
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{A7CE3B85-D968-43EE-B542-864995A76625}"
-			RelativePathToProject=".\HMMcpp.vcproj"
+			RelativePathToProject="..\HMMcpp\HMMcpp.vcproj"
 		/>
 	</References>
 	<Files>
