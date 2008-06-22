@@ -1,28 +1,18 @@
-﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x86\Release\</OutputPath>
-    <DefineConstants>TRACE;INSTRUMENTED</DefineConstants>
-    <BaseAddress>285212672</BaseAddress>
-    <WarningLevel>1</WarningLevel>
-    <NoWarn>3003</NoWarn>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-  </PropertyGroup>
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
     <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{3CE010BC-254F-41D0-A2E6-178736567642}</ProjectGuid>
+    <ProjectGuid>{4DFDBB9E-C2AD-4099-B9CE-0A67CBD4285E}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ApplicationIcon>
     </ApplicationIcon>
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
-    <AssemblyName>DssOpenCV.Y2008.M05</AssemblyName>
-    <RootNamespace>Robotics.DssOpenCV</RootNamespace>
-    <AssemblyOriginatorKeyFile>mrisamples.snk</AssemblyOriginatorKeyFile>
+    <AssemblyName>DSSOpenCV2.Y2008.M06</AssemblyName>
+    <RootNamespace>Robotics.Dssopencv2</RootNamespace>
+    <AssemblyOriginatorKeyFile>D:\Microsoft Robotics Dev Studio 2008\samples\mrisamples.snk</AssemblyOriginatorKeyFile>
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
@@ -34,13 +24,9 @@
     </StartupObject>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
-    <OldToolsVersion>2.0</OldToolsVersion>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <UpgradeBackupLocation>
-    </UpgradeBackupLocation>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <OutputPath>bin\AnyCPU\Debug\</OutputPath>
+    <OutputPath>D:\Microsoft Robotics Dev Studio 2008\bin\</OutputPath>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <BaseAddress>285212672</BaseAddress>
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
@@ -60,7 +46,7 @@
     <WarningLevel>1</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <OutputPath>D:\Documents and Settings\Administrator\Microsoft Robotics Dev Studio 2008\bin\</OutputPath>
+    <OutputPath>D:\Microsoft Robotics Dev Studio 2008\bin\</OutputPath>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <BaseAddress>285212672</BaseAddress>
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
@@ -80,46 +66,30 @@
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningLevel>1</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x86\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;INSTRUMENTED</DefineConstants>
-    <BaseAddress>285212672</BaseAddress>
-    <WarningLevel>1</WarningLevel>
-    <NoWarn>3003</NoWarn>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Ccr.Adapters.WinForms, Version=2.0.730.3, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\Microsoft Robotics Dev Studio 2008\bin\Ccr.Adapters.WinForms.dll</HintPath>
-    </Reference>
-    <Reference Include="CLROpenCV, Version=1.0.3090.42094, Culture=neutral, PublicKeyToken=42c253f23352e170, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\CLROpenCV\Debug\CLROpenCV.dll</HintPath>
-    </Reference>
+    <Reference Include="Ccr.Adapters.WinForms, Version=2.0.730.3, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="DssRuntime">
       <SpecificVersion>False</SpecificVersion>
       <Private>False</Private>
-      <HintPath>..\..\..\Microsoft Robotics Dev Studio 2008\bin\DssRuntime.dll</HintPath>
+    </Reference>
+    <Reference Include="mscorlib">
+      <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Ccr.Core">
       <SpecificVersion>False</SpecificVersion>
       <Private>False</Private>
-      <HintPath>..\..\..\Microsoft Robotics Dev Studio 2008\bin\Ccr.Core.dll</HintPath>
     </Reference>
     <Reference Include="DssBase">
       <SpecificVersion>False</SpecificVersion>
       <Private>False</Private>
-      <HintPath>..\..\..\Microsoft Robotics Dev Studio 2008\bin\DssBase.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <SpecificVersion>False</SpecificVersion>
       <Private>False</Private>
     </Reference>
-    <Reference Include="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\WINDOWS\Microsoft.NET\Framework\v2.0.50727\System.Windows.Forms.dll</HintPath>
-    </Reference>
+    <Reference Include="System.Data, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=x86" />
+    <Reference Include="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL" />
     <Reference Include="System.Xml">
       <SpecificVersion>False</SpecificVersion>
       <Private>False</Private>
@@ -127,15 +97,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="DssOpenCV.cs" />
-    <Compile Include="DssOpenCVTypes.cs" />
+    <Compile Include="Dssopencv2.cs" />
+    <Compile Include="Dssopencv2Types.cs" />
+    <Compile Include="DSSOpenCVForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <AppDesigner Include="Properties" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="DssOpenCV.manifest.xml" />
+    <Content Include="DSSOpenCV2.manifest.xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="mrisamples.snk" />
+    <ProjectReference Include="..\CLROpenCV\CLROpenCV.vcproj">
+      <Project>{CEBFFBEC-10E6-48BE-8FE5-1726481A92C2}</Project>
+      <Name>CLROpenCV</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
@@ -147,6 +123,6 @@
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
-    <PostBuildEvent>"D:\Microsoft Robotics Dev Studio 2008\bin\dssproxy.exe" /dll:"$(TargetPath)" /vstarget:VS2005 /proxyprojectpath:"$(ProjectDir)Proxy " /keyfile:"$(AssemblyOriginatorKeyFile)" $(ProxyDelaySign) $(CompactFrameworkProxyGen) /binpath:". " /referencepath:"D:\Microsoft Robotics Dev Studio 2008\bin\ " /referencepath:"D:\Microsoft Robotics Dev Studio 2008\bin\ "</PostBuildEvent>
+    <PostBuildEvent>"D:\Microsoft Robotics Dev Studio 2008\bin\dssproxy.exe" /dll:"$(TargetPath)" /vstarget:VS2005 /proxyprojectpath:"$(ProjectDir)Proxy " /keyfile:"$(AssemblyOriginatorKeyFile)" $(ProxyDelaySign) $(CompactFrameworkProxyGen) /binpath:". " /referencepath:"D:\Microsoft Robotics Dev Studio 2008\bin\ " /referencepath:"D:\Microsoft Robotics Dev Studio 2008\bin\ " </PostBuildEvent>
   </PropertyGroup>
 </Project>
