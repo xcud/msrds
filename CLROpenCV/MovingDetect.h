@@ -185,11 +185,16 @@ namespace CLROpenCV {
 	private: System::Void button2_Click(System::Object^  sender, System::EventArgs^  e) {
 			if( this->button2->Text == "Start")
 				{
-					_timer1->Start();
+					
 
 					this->button2->Text = "End";
 
 					_gestureDetect->OpenCam(0);
+					
+
+					// opencv 초기화 하고 콜해야함
+					_timer1->Start();
+
 					
 				}else
 				{
@@ -215,9 +220,6 @@ namespace CLROpenCV {
 				pictureBox2->Image = _bmp2;
 				
 
-
-				
-
 				if( 0 < index)
 				{
 					textBox1->Text = String::Format("{0}",index);
@@ -232,5 +234,11 @@ namespace CLROpenCV {
 				//pictureBox2->Image->FromHbitmap(_bmp->GetHbitmap());
 					//= _bmp;
 			 }
+
+			 public : virtual void OnDectect(int index)
+					  {
+					  
+					  }
+
 };
 }

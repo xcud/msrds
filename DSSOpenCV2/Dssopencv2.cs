@@ -71,19 +71,55 @@ namespace Robotics.Dssopencv2
 			// Add service specific initialization here.
 
 
-            WinFormConstructor wc = new WinFormConstructor(
-                delegate
-                {
-                    return new CLROpenCV.MovingDetect();
-                }
-                );
-
-            _MovingDetect = (CLROpenCV.MovingDetect)wc.Invoke();
-
-            WinFormsServicePort.FormInvoke(
-                delegate() { _MovingDetect.Show(); }
+            WinFormsServicePort.Post(
+                new RunForm(
+                    delegate()
+                    {
+                        return new DSSOpenCVForm(
+                            ServiceForwarder<Dssopencv2Operations>(ServiceInfo.Service)
+                        );
+                    }
+                )
             );
 
+
+            //WinFormConstructor wc = new WinFormConstructor(
+            //    delegate
+            //    {
+            //        return new DSSOpenCVForm(_mainPort);
+            //    }
+            //    );
+
+            //_MovingDetect = (DSSOpenCVForm)wc.Invoke();
+
+            //WinFormsServicePort.FormInvoke(
+            //    delegate() { _MovingDetect.Show(); }
+            //);
+
         }
+
+
+        [ServiceHandler(ServiceHandlerBehavior.Concurrent)]
+        public IEnumerator<ITask> SubscribeHandler(Subscribe subscribe)
+        {
+            SubscribeHelper(_submgrPort, subscribe.Body, subscribe.ResponsePort);
+            yield break;
+        }
+
+
+        [ServiceHandler(ServiceHandlerBehavior.Exclusive)]
+        public virtual IEnumerator<ITask> ButtonPressHandler(ButtonPress buttonPress)
+        {
+            SendNotification(_submgrPort, buttonPress);
+
+            yield break;
+        }
+
+        //[ServiceHandler(ServiceHandlerBehavior.Exclusive)]
+        //public virtual IEnumerator<ITask> IndexUpdateHandler(Dssopencv2State state)
+        //{
+        //    SendNotification<IndexUpdate>(_submgrPort, state);
+        //    yield break;
+        //}
     }
 }
