@@ -97,6 +97,10 @@ namespace CLROpenCVs {
 				cvReleaseCapture(p);
 			}
 
+
+			//cvcamSelectCamera
+
+//			index = cvcamSelectCamera(NULL); 
 			_Input_video = cvCaptureFromCAM(index);
 
 
@@ -247,8 +251,8 @@ namespace CLROpenCVs {
 			
 			
 			
-			
-			return _TemporaryImage;		
+			// 캡쳐된 원본이미지를 넘겨줌
+			return _OriginaImage;		
 		}
 		
 		IplImage* GesDetectedInfo()
