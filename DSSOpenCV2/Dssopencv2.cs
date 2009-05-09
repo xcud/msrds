@@ -108,7 +108,7 @@ namespace Robotics.Dssopencv2
 
 
         [ServiceHandler(ServiceHandlerBehavior.Exclusive)]
-        public virtual IEnumerator<ITask> ButtonPressHandler(ButtonPress buttonPress)
+        public virtual IEnumerator<ITask> IndexUpdateHandler(IndexUpdate buttonPress)
         {
             SendNotification(_submgrPort, buttonPress);
 

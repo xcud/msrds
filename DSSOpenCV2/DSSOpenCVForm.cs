@@ -21,12 +21,13 @@ namespace Robotics.Dssopencv2
             _eventsPort = eventsPort;
 
         }
-
+         
         public override void OnDectect(int index)
         {
             if(-1 < index && _CurIndex != index)
             {
-                //_eventsPort.Post(new IndexUpdate(new Dssopencv2State(index)));
+                _CurIndex = index;
+                _eventsPort.Post(new IndexUpdate(new ButtonPressRequest(index)));
                 
             }
         
