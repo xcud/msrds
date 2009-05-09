@@ -79,7 +79,7 @@ namespace Robotics.Dssopencv2
     /// Dssopencv2 Main Operations Port
     /// </summary>
     [ServicePort]
-    public class Dssopencv2Operations : PortSet<DsspDefaultLookup, DsspDefaultDrop, Subscribe, ButtonPress>
+    public class Dssopencv2Operations : PortSet<DsspDefaultLookup, DsspDefaultDrop, Subscribe, IndexUpdate>
     {
     }
     //, Subscribe, IndexUpdate
@@ -91,13 +91,13 @@ namespace Robotics.Dssopencv2
 
     
     
-    public class ButtonPress : Update<ButtonPressRequest, PortSet<DefaultUpdateResponseType, Fault>>
+    public class IndexUpdate : Update<ButtonPressRequest, PortSet<DefaultUpdateResponseType, Fault>>
     {
-        public ButtonPress()
+        public IndexUpdate()
         {
         }
 
-        public ButtonPress(ButtonPressRequest body)
+        public IndexUpdate(ButtonPressRequest body)
             : base(body)
         {
         }

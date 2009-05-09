@@ -223,6 +223,7 @@ namespace CLROpenCV {
 				if( 0 < index)
 				{
 					textBox1->Text = String::Format("{0}",index);
+					OnDectect(index);
 				}
 
 
