@@ -1,0 +1,6 @@
+<Sequences type="int" >
+ <DiscretePD>
+  1 <Sequence id="seq101.000000" ><!-- Length: 10 --> 1 1 1 1 1 1 1 1 1 1  </Sequence>
+  1 <Sequence id="seq101.000000" ><!-- Length: 15 --> 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1  </Sequence>
+ </DiscretePD>
+</Sequences>

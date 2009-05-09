@@ -1,0 +1,58 @@
+checking model:
+model is ok
+two_states_three_symbols model:
+HMM = {
+	M = 3;
+	N = 2;
+	prior = -1.000;
+	ModelType = 0;
+	A = matrix {
+	0.90, 0.10;
+	0.10, 0.90;
+	};
+	B = matrix {
+	0.50, 0.50, 0.00;
+	0.00, 0.00, 1.00;
+	};
+	Pi = vector {
+	0.50, 0.50;
+	};
+	fix_state = vector {
+	0, 0;
+	};
+};
+
+generating sequences:...Done
+SEQ = {
+	O = {
+	1, 1, 0, 1, 0, 0, 0, 1, 1, 1;
+	1, 0, 1, 0, 1, 2, 2, 2, 2, 2;
+	2, 2, 2, 2, 2, 1, 0, 0, 1, 1;
+	2, 2, 2, 2, 2, 2, 2, 1, 1, 1;
+	0, 0, 0, 0, 2, 2, 2, 2, 0, 1;
+	};
+};
+
+reestimating with Baum-Welch-algorithm...Done
+the result is:
+HMM = {
+	M = 3;
+	N = 2;
+	prior = -1.000;
+	ModelType = 0;
+	A = matrix {
+	0.92, 0.08;
+	0.15, 0.85;
+	};
+	B = matrix {
+	0.45, 0.55, 0.00;
+	0.00, 0.00, 1.00;
+	};
+	Pi = vector {
+	0.60, 0.40;
+	};
+	fix_state = vector {
+	0, 0;
+	};
+};
+
