@@ -143,21 +143,42 @@ void generateDigitModel (ghmm_dmodel *mo, int noStates,int noSimbol, unsigned in
 
 }
 
+// 
 
 ghmm_dseq* gen_seq(int * seq,int len)
 {
-	ghmm_dseq* seq_array = ghmm_dseq_calloc(1);
-	seq_array->seq_len[0]=len;
+
+	int count  = (len +1) * 8;
+
+	ghmm_dseq* seq_array = ghmm_dseq_calloc(count);
+	seq_array->seq_len[0]=len +1;
 	seq_array->seq_id[0]=101.0;
 	seq_array->seq[0]=(int*)malloc(seq_array->seq_len[0]*sizeof(int));
 	seq_array->seq_w = (double*)malloc(seq_array->seq_len[0]*sizeof(double));
 	seq_array->seq_w[0] = 1.0;
 
-	for (int i =0;i < len;i++)
+	for(int s = 0;s < 8 ;s++)
 	{
-		seq_array->seq[0][i] = seq[i];
-	
+		for(int n = 0;n < len+1;n++)
+		{
+
+			seq_array->seq[0][n] = s;
+
+			for (int i =0;i < len;)
+			{
+				if( i+1 == (n))
+				{
+					continue;
+				}else
+				{
+					seq_array->seq[0][n] = seq[i++];
+				}
+			
+			}
+		}
+
 	}
+
 	seq_array->seq_number = 1;
 	seq_array->total_w = 0.0;
 
