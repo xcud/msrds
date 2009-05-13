@@ -151,19 +151,24 @@ ghmm_dseq* gen_seq(int * seq,int len)
 	int count  = (len +1) * 8;
 
 	ghmm_dseq* seq_array = ghmm_dseq_calloc(count);
-	seq_array->seq_len[0]=len +1;
-	seq_array->seq_id[0]=101.0;
-	seq_array->seq[0]=(int*)malloc(seq_array->seq_len[0]*sizeof(int));
-	seq_array->seq_w = (double*)malloc(seq_array->seq_len[0]*sizeof(double));
-	seq_array->seq_w[0] = 1.0;
+	
+	
+	seq_array->seq_number = count;
+	seq_array->total_w = 0.0;
+	seq_array->seq_w = (double*)malloc(count*sizeof(double));
+	
+	
+	int index = 0;
 
 	for(int s = 0;s < 8 ;s++)
 	{
 		for(int n = 0;n < len+1;n++)
 		{
-
-			seq_array->seq[0][n] = s;
-
+			seq_array->seq_len[index]=len +1;
+			seq_array->seq_id[index]=101.0;
+			seq_array->seq[index]=(int*)malloc(seq_array->seq_len[index]*sizeof(int));
+			seq_array->seq[index][n] = s;
+			seq_array->seq_w[index] = 1.0;
 			for (int i =0;i < len;)
 			{
 				if( i+1 == (n))
@@ -171,7 +176,7 @@ ghmm_dseq* gen_seq(int * seq,int len)
 					continue;
 				}else
 				{
-					seq_array->seq[0][n] = seq[i++];
+					seq_array->seq[index][n] = seq[i++];
 				}
 			
 			}
@@ -179,8 +184,8 @@ ghmm_dseq* gen_seq(int * seq,int len)
 
 	}
 
-	seq_array->seq_number = 1;
-	seq_array->total_w = 0.0;
+	
+	
 
 	return seq_array;
 }
