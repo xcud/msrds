@@ -160,32 +160,37 @@ ghmm_dseq* gen_seq(int * seq,int len)
 	
 	int index = 0;
 
-	for(int s = 0;s < 8 ;s++)
+
+	for(int y = 0;y < len+1;y++)
 	{
-		for(int n = 0;n < len+1;n++)
+
+		for(int s = 0;s < 8 ;s++)
 		{
 			seq_array->seq_len[index]=len +1;
 			seq_array->seq_id[index]=101.0;
 			seq_array->seq[index]=(int*)malloc(seq_array->seq_len[index]*sizeof(int));
-			seq_array->seq[index][n] = s;
 			seq_array->seq_w[index] = 1.0;
-			for (int i =0;i < len;)
+			int i = 0;
+			for(int n = 0;n < len+1;n++)
 			{
-				if( i+1 == (n))
+					
+							
+				if( y == n)
 				{
-					continue;
+					seq_array->seq[index][n] = s;
 				}else
 				{
 					seq_array->seq[index][n] = seq[i++];
 				}
-			
+
+				
 			}
+
+			index++;
 		}
 
-	}
-
 	
-	
+	}	
 
 	return seq_array;
 }
@@ -246,11 +251,11 @@ int seqlen	 = 2700;
 
   ghmm_dmodel_print(_File, mo_gen);
 
-//  error = ghmm_dmodel_baum_welch(mo_gen, my_output);
+  error = ghmm_dmodel_baum_welch(mo_gen, my_output);
 //  error = ghmm_dmodel_baum_welch(mo_gen2, my_output2);
  // error = ghmm_dmodel_baum_welch(mo_gen3, my_output3);
 
-  ghmm_dmodel_baum_welch_nstep(mo_gen,my_output,1,GHMM_EPS_ITER_BW);
+  //ghmm_dmodel_baum_welch_nstep(mo_gen,my_output,500,GHMM_EPS_ITER_BW);
 
 
   ghmm_dmodel_print(_File, mo_gen);
