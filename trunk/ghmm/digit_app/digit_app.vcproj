@@ -197,6 +197,11 @@
 			AssemblyName="WindowsBase, Version=3.0.0.0, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL"
 			MinFrameworkVersion="196608"
 		/>
+		<AssemblyReference
+			RelativePath="..\XMLLib\XMLLib\bin\Debug\XMLLib.dll"
+			AssemblyName="XMLLib, Version=1.0.0.0, processorArchitecture=MSIL"
+			MinFrameworkVersion="131072"
+		/>
 	</References>
 	<Files>
 		<Filter

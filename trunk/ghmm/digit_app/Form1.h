@@ -84,6 +84,12 @@ namespace digit_app {
 	private: System::Windows::Forms::Button^  button3;
 	private: System::Windows::Forms::Button^  button4;
 	private: System::Windows::Forms::Button^  button5;
+	private: System::Windows::Forms::Button^  button6;
+	private: System::Windows::Forms::Label^  label1;
+	private: System::Windows::Forms::Label^  label2;
+	private: System::Windows::Forms::Button^  button7;
+	private: System::Windows::Forms::Button^  button8;
+	private: System::Windows::Forms::Button^  button9;
 	protected: 
 
 	private:
@@ -107,6 +113,12 @@ namespace digit_app {
 			this->button3 = (gcnew System::Windows::Forms::Button());
 			this->button4 = (gcnew System::Windows::Forms::Button());
 			this->button5 = (gcnew System::Windows::Forms::Button());
+			this->button6 = (gcnew System::Windows::Forms::Button());
+			this->label1 = (gcnew System::Windows::Forms::Label());
+			this->label2 = (gcnew System::Windows::Forms::Label());
+			this->button7 = (gcnew System::Windows::Forms::Button());
+			this->button8 = (gcnew System::Windows::Forms::Button());
+			this->button9 = (gcnew System::Windows::Forms::Button());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox1))->BeginInit();
 			this->SuspendLayout();
 			// 
@@ -146,13 +158,13 @@ namespace digit_app {
 			// 
 			// button2
 			// 
-			this->button2->Location = System::Drawing::Point(291, 30);
+			this->button2->Location = System::Drawing::Point(305, 187);
 			this->button2->Name = L"button2";
-			this->button2->Size = System::Drawing::Size(63, 23);
+			this->button2->Size = System::Drawing::Size(52, 23);
 			this->button2->TabIndex = 3;
 			this->button2->Text = L"ADD";
 			this->button2->UseVisualStyleBackColor = true;
-			this->button2->Click += gcnew System::EventHandler(this, &Form1::button2_Click);
+			this->button2->Click += gcnew System::EventHandler(this, &Form1::SEQ_ADD_Click);
 			// 
 			// listBox2
 			// 
@@ -160,9 +172,9 @@ namespace digit_app {
 			this->listBox2->ItemHeight = 12;
 			this->listBox2->Items->AddRange(gcnew cli::array< System::Object^  >(10) {L"0", L"1", L"2", L"3", L"4", L"5", L"6", L"7", 
 				L"8", L"9"});
-			this->listBox2->Location = System::Drawing::Point(291, 59);
+			this->listBox2->Location = System::Drawing::Point(305, 57);
 			this->listBox2->Name = L"listBox2";
-			this->listBox2->Size = System::Drawing::Size(145, 196);
+			this->listBox2->Size = System::Drawing::Size(148, 124);
 			this->listBox2->TabIndex = 4;
 			// 
 			// button3
@@ -177,13 +189,13 @@ namespace digit_app {
 			// 
 			// button4
 			// 
-			this->button4->Location = System::Drawing::Point(372, 30);
+			this->button4->Location = System::Drawing::Point(363, 187);
 			this->button4->Name = L"button4";
-			this->button4->Size = System::Drawing::Size(64, 23);
+			this->button4->Size = System::Drawing::Size(42, 23);
 			this->button4->TabIndex = 6;
 			this->button4->Text = L"Save";
 			this->button4->UseVisualStyleBackColor = true;
-			this->button4->Click += gcnew System::EventHandler(this, &Form1::button4_Click);
+			this->button4->Click += gcnew System::EventHandler(this, &Form1::SEQ_Save_Click);
 			// 
 			// button5
 			// 
@@ -195,11 +207,75 @@ namespace digit_app {
 			this->button5->UseVisualStyleBackColor = true;
 			this->button5->Click += gcnew System::EventHandler(this, &Form1::button5_Click);
 			// 
+			// button6
+			// 
+			this->button6->Location = System::Drawing::Point(411, 188);
+			this->button6->Name = L"button6";
+			this->button6->Size = System::Drawing::Size(42, 23);
+			this->button6->TabIndex = 8;
+			this->button6->Text = L"Load";
+			this->button6->UseVisualStyleBackColor = true;
+			this->button6->Click += gcnew System::EventHandler(this, &Form1::SEQ_Load_Click);
+			// 
+			// label1
+			// 
+			this->label1->AutoSize = true;
+			this->label1->Location = System::Drawing::Point(246, 194);
+			this->label1->Name = L"label1";
+			this->label1->Size = System::Drawing::Size(30, 12);
+			this->label1->TabIndex = 9;
+			this->label1->Text = L"SEQ";
+			// 
+			// label2
+			// 
+			this->label2->AutoSize = true;
+			this->label2->Location = System::Drawing::Point(246, 224);
+			this->label2->Name = L"label2";
+			this->label2->Size = System::Drawing::Size(48, 12);
+			this->label2->TabIndex = 10;
+			this->label2->Text = L"MODEL";
+			// 
+			// button7
+			// 
+			this->button7->Location = System::Drawing::Point(411, 219);
+			this->button7->Name = L"button7";
+			this->button7->Size = System::Drawing::Size(42, 23);
+			this->button7->TabIndex = 13;
+			this->button7->Text = L"Load";
+			this->button7->UseVisualStyleBackColor = true;
+			this->button7->Click += gcnew System::EventHandler(this, &Form1::Model_Load_Click);
+			// 
+			// button8
+			// 
+			this->button8->Location = System::Drawing::Point(363, 219);
+			this->button8->Name = L"button8";
+			this->button8->Size = System::Drawing::Size(42, 23);
+			this->button8->TabIndex = 12;
+			this->button8->Text = L"Save";
+			this->button8->UseVisualStyleBackColor = true;
+			this->button8->Click += gcnew System::EventHandler(this, &Form1::Model_Save_Click);
+			// 
+			// button9
+			// 
+			this->button9->Location = System::Drawing::Point(305, 219);
+			this->button9->Name = L"button9";
+			this->button9->Size = System::Drawing::Size(52, 23);
+			this->button9->TabIndex = 11;
+			this->button9->Text = L"Lean";
+			this->button9->UseVisualStyleBackColor = true;
+			this->button9->Click += gcnew System::EventHandler(this, &Form1::Model_Lean_Click);
+			// 
 			// Form1
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(7, 12);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(487, 431);
+			this->Controls->Add(this->button7);
+			this->Controls->Add(this->button8);
+			this->Controls->Add(this->button9);
+			this->Controls->Add(this->label2);
+			this->Controls->Add(this->label1);
+			this->Controls->Add(this->button6);
 			this->Controls->Add(this->button5);
 			this->Controls->Add(this->button4);
 			this->Controls->Add(this->button3);
@@ -213,6 +289,7 @@ namespace digit_app {
 			this->Load += gcnew System::EventHandler(this, &Form1::Form1_Load);
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox1))->EndInit();
 			this->ResumeLayout(false);
+			this->PerformLayout();
 
 		}
 #pragma endregion
@@ -340,7 +417,10 @@ private: System::Void button2_Click(System::Object^  sender, System::EventArgs^ 
 		 }
 private: System::Void button4_Click(System::Object^  sender, System::EventArgs^  e) 
 		 {
-			_hmm->Save();
+			//_hmm->Save();
+			
+			
+
 		 }
 private: System::Void Form1_Load(System::Object^  sender, System::EventArgs^  e) {
 
@@ -357,6 +437,41 @@ private: System::Void button5_Click(System::Object^  sender, System::EventArgs^ 
 
 
 			 _hmm->Estimate( this->_SimbolList);
+		 }
+
+private: System::Void Model_Lean_Click(System::Object^  sender, System::EventArgs^  e) {
+			 if( this->listBox2->SelectedItem == nullptr)
+				 return;
+				
+			 _hmm->Model_Lean(this->listBox2->SelectedIndex);
+		 }
+
+private: System::Void Model_Save_Click(System::Object^  sender, System::EventArgs^  e) {
+			 if( this->listBox2->SelectedItem == nullptr)
+				 return;
+				
+			 _hmm->Model_Save(this->listBox2->SelectedIndex);
+
+		 }
+
+private: System::Void Model_Load_Click(System::Object^  sender, System::EventArgs^  e) {
+		 }
+private: System::Void SEQ_ADD_Click(System::Object^  sender, System::EventArgs^  e) {
+			  if( this->listBox2->SelectedItem == nullptr)
+				 return;
+				
+			 _hmm->Seq_Add(this->listBox2->SelectedIndex,this->_SimbolList);
+
+		 }
+private: System::Void SEQ_Save_Click(System::Object^  sender, System::EventArgs^  e) {
+ 			  if( this->listBox2->SelectedItem == nullptr)
+				 return;
+				
+			 _hmm->Seq_Save(this->listBox2->SelectedIndex);
+
+		 }
+
+private: System::Void SEQ_Load_Click(System::Object^  sender, System::EventArgs^  e) {
 		 }
 };
 }

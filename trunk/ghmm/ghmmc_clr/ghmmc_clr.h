@@ -127,6 +127,7 @@ namespace ghmmc_clr {
 
 		//std::map<int,ghmm_dmodel *>* _ModelList;
 		System::Collections::Generic::Dictionary<int,model^>^ _ModelList;
+		System::Collections::Generic::Dictionary<int,XMLLib::Digit^>^ _DigitXML;
 
 		void Init()
 		{
@@ -134,6 +135,7 @@ namespace ghmmc_clr {
 
 			//_ModelList = new std::map<int,ghmm_dmodel *>;
 			_ModelList = gcnew System::Collections::Generic::Dictionary<int,model^>;
+			_DigitXML = gcnew System::Collections::Generic::Dictionary<int,XMLLib::Digit^>;
 		}
 		void sequence_alloc_print(void);
 		void libxml_print(void);
@@ -141,6 +143,8 @@ namespace ghmmc_clr {
 		void label_higher_order_test(void);
 		
 		void Test_digit_code();
+		
+		ghmm_dmodel * CreateDigitModel(System::Collections::Generic::List<int> ^ seq);
 
 		void Save()
 		{
@@ -230,6 +234,51 @@ namespace ghmmc_clr {
 
 			return key;
 		}
+		
+		void Seq_Add(int model_id,System::Collections::Generic::List<int> ^ seq)
+		{
+			XMLLib::Digit ^ digit ;
+			if( _DigitXML->TryGetValue(model_id,digit) == false)
+			{
+				digit = gcnew XMLLib::Digit;
+				_DigitXML->Add(model_id,digit);
+				digit->_NUM = model_id;
+			}
+
+			XMLLib::SIMBOLLIST ^ sl = gcnew XMLLib::SIMBOLLIST;
+			sl->_SIMBOL = seq;
+			
+			digit->_SIMBOLLIST->Add(sl);
+		}
+
+		void Seq_Save(int model_id)
+		{
+			XMLLib::Xml::SaveXml<XMLLib::Digit^>(String::Format("{0}_seq.xml",model_id),_DigitXML[model_id]);
+		}
+
+		void Model_Save(int model_id)
+		{
+			_ModelList[ model_id]->Save(String::Format("{0}_model.xml",model_id));
+		}
+
+
+		void Model_Lean(int model_id)
+		{
+			model ^ m = gcnew model;
+			
+			static char * str[MAX_INDEX] = {"0","1","2","3","4","5","6","7"};
+
+			_ModelList[ model_id]->_m = CreateDigitModel(_DigitXML[model_id]->_SIMBOLLIST[0]->_SIMBOL);
+			
+				m->_m->alphabet = new ghmm_alphabet;
+				m->_m->alphabet->id = 0;
+				m->_m->alphabet->size = MAX_INDEX;
+				m->_m->alphabet->description = "test";
+				m->_m->alphabet->symbols =  str;
+
+		}
+
+			
 
 		void Add_Lean(int model_id,System::Collections::Generic::List<int> ^ seq)
 		{

@@ -180,6 +180,11 @@
 			ReferencedProjectIdentifier="{79E57CC5-320A-4580-A044-A68994390618}"
 			RelativePathToProject=".\ghmm\ghmmc2.vcproj"
 		/>
+		<AssemblyReference
+			RelativePath="..\XMLLib\XMLLib\bin\Debug\XMLLib.dll"
+			AssemblyName="XMLLib, Version=1.0.0.0, processorArchitecture=MSIL"
+			MinFrameworkVersion="131072"
+		/>
 	</References>
 	<Files>
 		<Filter
