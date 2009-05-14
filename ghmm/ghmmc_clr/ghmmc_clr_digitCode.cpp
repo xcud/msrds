@@ -197,7 +197,29 @@ ghmm_dseq* gen_seq(int * seq,int len)
 
 
 
+ghmm_dmodel * ghmm::CreateDigitModel(System::Collections::Generic::List<int> ^ seq)
+{
+	ghmm_dmodel * mo_gen = NULL;
+	ghmm_dseq * my_output = NULL;
+	generateDigitModel(mo_gen,4  , 8,92304);
+
+	//int * temp_seq = new int[seq->Count];
 	
+	int * ghmm_seq = (int*)malloc(seq->Count*sizeof(int));
+
+	int i = 0;
+	for each(int s in seq)
+	{
+		ghmm_seq[i] = s;
+		i++;
+		
+	}
+
+	my_output = gen_seq(ghmm_seq,i);
+
+	 ghmm_dmodel_baum_welch(mo_gen, my_output);
+	return mo_gen;
+}
 
 				
 void ghmm::Test_digit_code()

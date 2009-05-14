@@ -20,7 +20,9 @@ namespace test
         {
             XMLLib.Digit di = new XMLLib.Digit();
             di._NUM = 1;
-            di._SIMBOL = new uint[] { 1, 1 };
+            XMLLib.SIMBOLLIST sl = new XMLLib.SIMBOLLIST ();
+            sl._SIMBOL = new List<int>();
+            di._SIMBOLLIST.Add(sl);
             XMLLib.Xml.SaveXml<XMLLib.Digit>("111.xml", di);
 
         }
