@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE mixture PUBLIC "-//ghmm.org//DOCUMENT ghmm V1.0//EN" "http://ghmm.sourceforge.net/xml/1.0/ghmm.dtd">
+<mixture version="1.0" noComponents="1">
+ <HMM name="perpet" type="discrete">
+  <alphabet id="0">
+   <symbol code="0">0</symbol>
+   <symbol code="1">1</symbol>
+   <symbol code="2">2</symbol>
+   <symbol code="3">3</symbol>
+   <symbol code="4">4</symbol>
+   <symbol code="5">5</symbol>
+   <symbol code="6">6</symbol>
+   <symbol code="7">7</symbol>
+  </alphabet>
+  <state id="0" initial="1.00000000" desc="state">
+   <discrete id="0">0.63128583, 0.016171516, 0.016171516, 0.016171516, 0.018700552, 0.012547548, 0.007282376, 0.28166914</discrete>
+  </state>
+  <state id="1" initial="0.00000000" desc="state">
+   <discrete id="0">0.00011499024, 0.0064204868, 0.0064204868, 0.0064204868, 3.8815936e-006, 0.0079329134, 0.60947642, 0.36321033</discrete>
+  </state>
+  <state id="2" initial="0.00000000" desc="state">
+   <discrete id="0">0.0059960021, 0.01044778, 0.01044778, 0.01044778, 0.058629395, 0.87284067, 0.03119059, 0</discrete>
+  </state>
+  <state id="3" initial="0.00000000" desc="state">
+   <discrete id="0">0.37968176, 0.011762009, 0.011762009, 0.011762009, 0.35841267, 0.018622203, 0.010903571, 0.19709377</discrete>
+  </state>
+  <transition source="0" target="0">
+   <probability>0.38952361</probability>
+  </transition>
+  <transition source="0" target="1">
+   <probability>0.61047639</probability>
+  </transition>
+  <transition source="1" target="1">
+   <probability>0.37955317</probability>
+  </transition>
+  <transition source="1" target="2">
+   <probability>0.62044683</probability>
+  </transition>
+  <transition source="2" target="2">
+   <probability>0.5613397</probability>
+  </transition>
+  <transition source="2" target="3">
+   <probability>0.4386603</probability>
+  </transition>
+  <transition source="3" target="3">
+   <probability>1</probability>
+  </transition>
+ </HMM>
+</mixture>

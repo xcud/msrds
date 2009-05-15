@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Digit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <_NUM>5</_NUM>
+  <_SIMBOLLIST>
+    <SIMBOLLIST>
+      <_SIMBOL>
+        <int>5</int>
+        <int>5</int>
+        <int>7</int>
+        <int>0</int>
+        <int>0</int>
+        <int>5</int>
+        <int>4</int>
+        <int>4</int>
+        <int>0</int>
+        <int>0</int>
+      </_SIMBOL>
+    </SIMBOLLIST>
+  </_SIMBOLLIST>
+</Digit>
