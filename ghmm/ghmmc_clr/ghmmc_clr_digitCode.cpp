@@ -45,7 +45,7 @@ void generateDigitModel (ghmm_dmodel *mo, int noStates,int noSimbol, unsigned in
   mo->prior = -1;
 
   /* Model has Higher order Emissions and labeled states*/
-  mo->model_type = GHMM_kLabeledStates;
+  mo->model_type = GHMM_kLabeledStates | GHMM_kDiscreteHMM;
   if (!(mo->label = (int*)malloc(sizeof(int) * mo->N))) 
     {printf ("malloc failed in line %d", __LINE__); exit(1);}
   if (mo->maxorder>0) {
@@ -64,6 +64,8 @@ void generateDigitModel (ghmm_dmodel *mo, int noStates,int noSimbol, unsigned in
 
   /*initialize states*/
   for (i=0; i < mo->N; i++) {
+	  states[i].desc = "state";
+
     states[i].pi = (0==i ? 1.0:0.0);
     states[i].fix = 0;
 
@@ -201,6 +203,13 @@ ghmm_dmodel * ghmm::CreateDigitModel(System::Collections::Generic::List<int> ^ s
 {
 	ghmm_dmodel * mo_gen = NULL;
 	ghmm_dseq * my_output = NULL;
+
+
+	if (!(mo_gen = (ghmm_dmodel*)malloc (sizeof (ghmm_dmodel))))
+	    {printf ("malloc failed in line %d", __LINE__); exit(1);}
+	
+	mo_gen->model_type = GHMM_kDiscreteHMM;
+	mo_gen->name = "perpet";
 	generateDigitModel(mo_gen,4  , 8,92304);
 
 	//int * temp_seq = new int[seq->Count];

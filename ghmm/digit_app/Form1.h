@@ -436,7 +436,12 @@ private: System::Void Form1_Load(System::Object^  sender, System::EventArgs^  e)
 private: System::Void button5_Click(System::Object^  sender, System::EventArgs^  e) {
 
 
-			 _hmm->Estimate( this->_SimbolList);
+			 int index = _hmm->Estimate( this->_SimbolList);
+
+			this->listBox1->Items->Insert(0,"Eval : " + index.ToString());
+
+			
+
 		 }
 
 private: System::Void Model_Lean_Click(System::Object^  sender, System::EventArgs^  e) {
@@ -455,6 +460,7 @@ private: System::Void Model_Save_Click(System::Object^  sender, System::EventArg
 		 }
 
 private: System::Void Model_Load_Click(System::Object^  sender, System::EventArgs^  e) {
+			_hmm->Model_Load(this->listBox2->SelectedIndex);
 		 }
 private: System::Void SEQ_ADD_Click(System::Object^  sender, System::EventArgs^  e) {
 			  if( this->listBox2->SelectedItem == nullptr)
@@ -472,6 +478,13 @@ private: System::Void SEQ_Save_Click(System::Object^  sender, System::EventArgs^
 		 }
 
 private: System::Void SEQ_Load_Click(System::Object^  sender, System::EventArgs^  e) {
+
+			  if( this->listBox2->SelectedItem == nullptr)
+				 return;
+				
+			  _hmm->Seq_Load( this->listBox2->SelectedIndex);
+//>Seq_Save(this->listBox2->SelectedIndex);
+
 		 }
 };
 }
