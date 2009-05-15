@@ -82,7 +82,7 @@ namespace ghmmc_clr {
 			//pin_ptr<ghmm_dmodel**> m = &_m;
 			
 			
-			_m->model_type = GHMM_kDiscreteHMM + GHMM_kLeftRight ;//+ GHMM_kTransitionClasses;
+			_m->model_type = GHMM_kDiscreteHMM;// + GHMM_kLeftRight ;//+ GHMM_kTransitionClasses;
 
 			ghmm_dmodel_xml_write2(_m, str2, 1);
 			
@@ -162,7 +162,7 @@ namespace ghmmc_clr {
 			for(int i = 0;i < 10 ; i++)
 			{
 				model^ m = gcnew model;
-				m->Load("ghmm_" + i.ToString() + ".txt");
+				m->Load(String::Format("{0}_model.xml",i));
 				if( m->_m != NULL)
 				{
 					_ModelList->Add(i,m);
@@ -175,7 +175,7 @@ namespace ghmmc_clr {
 
 			 int * state_seq ;
 
-			double last_log_p = 0;
+			
 
 
 			int * ghmm_seq = (int*)malloc(seq->Count*sizeof(int));
@@ -206,26 +206,25 @@ namespace ghmmc_clr {
 				
 				
 				
-				
+				double last_log_p = -99999999;
 
 
 			for each( KeyValuePair<int, model^> pair in _ModelList)
 			{
-				double log_p = 0;
-
 				
 				//int result = ghmm_dmodel_logp(pair.Value->_m,ghmm_seq, seq->Count,&log_p);
 				
 				//viterbi
 				 ghmm_dmodel_normalize(pair.Value->_m);
 				//log_p = ghmm_dmodel_viterbi_logp(pair.Value->_m, ghmm_seq, seq->Count,state_seq); 
-				log_p = ghmm_dmodel_likelihood(pair.Value->_m,seq_array);
+				double log_p = ghmm_dmodel_likelihood(pair.Value->_m,seq_array);
 				
 				//state_seq = ghmm_dmodel_viterbi_logp(pair.Value->_m, ghmm_seq, seq->Count,&log_p); 
 
 				if( last_log_p < log_p)
 				{
 					key = pair.Key;
+					last_log_p = log_p;
 				}
 			}
 			
@@ -256,6 +255,18 @@ namespace ghmmc_clr {
 			XMLLib::Xml::SaveXml<XMLLib::Digit^>(String::Format("{0}_seq.xml",model_id),_DigitXML[model_id]);
 		}
 
+		void Seq_Load(int model_id)
+		{
+			XMLLib::Digit ^ seq = XMLLib::Xml::LoadXml<XMLLib::Digit^>(String::Format("{0}_seq.xml",model_id));
+
+			_DigitXML->Add(model_id,seq);
+			
+		}
+
+		void Model_Load(int model_id)
+		{
+		}
+
 		void Model_Save(int model_id)
 		{
 			_ModelList[ model_id]->Save(String::Format("{0}_model.xml",model_id));
@@ -268,14 +279,23 @@ namespace ghmmc_clr {
 			
 			static char * str[MAX_INDEX] = {"0","1","2","3","4","5","6","7"};
 
-			_ModelList[ model_id]->_m = CreateDigitModel(_DigitXML[model_id]->_SIMBOLLIST[0]->_SIMBOL);
 			
-				m->_m->alphabet = new ghmm_alphabet;
-				m->_m->alphabet->id = 0;
-				m->_m->alphabet->size = MAX_INDEX;
-				m->_m->alphabet->description = "test";
-				m->_m->alphabet->symbols =  str;
 
+			m->_m = CreateDigitModel(_DigitXML[model_id]->_SIMBOLLIST[0]->_SIMBOL);
+			
+			m->_m->alphabet = new ghmm_alphabet;
+			m->_m->alphabet->id = 0;
+			m->_m->alphabet->size = MAX_INDEX;
+			m->_m->alphabet->description = "test";
+			m->_m->alphabet->symbols =  str;
+		
+			_ModelList->Add(model_id,m);
+
+			FILE * _File = fopen("lean.txt","w");
+
+			ghmm_dmodel_print(_File, m->_m);
+
+			fclose(_File);
 		}
 
 			
