@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE mixture PUBLIC "-//ghmm.org//DOCUMENT ghmm V1.0//EN" "http://ghmm.sourceforge.net/xml/1.0/ghmm.dtd">
+<mixture version="1.0" noComponents="1">
+ <HMM name="perpet" type="discrete">
+  <alphabet id="0">
+   <symbol code="0">0</symbol>
+   <symbol code="1">1</symbol>
+   <symbol code="2">2</symbol>
+   <symbol code="3">3</symbol>
+   <symbol code="4">4</symbol>
+   <symbol code="5">5</symbol>
+   <symbol code="6">6</symbol>
+   <symbol code="7">7</symbol>
+  </alphabet>
+  <state id="0" initial="1.00000000" desc="state">
+   <discrete id="0">0.015081028, 0.015027625, 0.015027625, 0.015027625, 0.015027631, 0.89655475, 0.015027625, 0.013226096</discrete>
+  </state>
+  <state id="1" initial="0.00000000" desc="state">
+   <discrete id="0">5.5931616e-009, 8.3573295e-010, 8.3573295e-010, 8.3573295e-010, 1.8882456e-009, 8.1989551e-009, 8.3573295e-010, 0.99999998</discrete>
+  </state>
+  <state id="2" initial="0.00000000" desc="state">
+   <discrete id="0">0.92851271, 0.011380757, 0.011380757, 0.011380757, 0.0079588192, 0.016460734, 0.011380757, 0.0015447045</discrete>
+  </state>
+  <state id="3" initial="0.00000000" desc="state">
+   <discrete id="0">0.43700982, 0.011873277, 0.011873277, 0.011873277, 0.33237407, 0.17057119, 0.011873277, 0.012551815</discrete>
+  </state>
+  <transition source="0" target="0">
+   <probability>0.55918967</probability>
+  </transition>
+  <transition source="0" target="1">
+   <probability>0.44081033</probability>
+  </transition>
+  <transition source="1" target="1">
+   <probability>0.014017151</probability>
+  </transition>
+  <transition source="1" target="2">
+   <probability>0.98598285</probability>
+  </transition>
+  <transition source="2" target="2">
+   <probability>0.31572324</probability>
+  </transition>
+  <transition source="2" target="3">
+   <probability>0.68427676</probability>
+  </transition>
+  <transition source="3" target="3">
+   <probability>1</probability>
+  </transition>
+ </HMM>
+</mixture>
