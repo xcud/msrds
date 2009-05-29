@@ -1,0 +1,79 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ko">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+<title>http://tweakbits.com/UnmanagedToManagedCallback.cpp</title>
+
+	<link href="../xhtmlContentBody.css" media="screen" rel="Stylesheet" type="text/css" />
+
+</head>
+
+<body class="xhtmlEditorBody background_no" id="viewXhtml_body">
+<h1 class="printNxhtmlTitle hentry" style="display:none;"><a href="http://perpet.springnote.com/pages/302870" rel="bookmark">http://tweakbits.com/UnmanagedToManagedCallback.cpp</a></h1>
+
+
+	<p>&nbsp;</p>
+<pre>
+// UnmanagedToManagedCallback.cpp : main project file.
+
+#include "stdafx.h"
+#include &lt;msclr/auto_gcroot.h&gt;
+
+using namespace System;
+
+////////////////////////////////////////////
+
+#pragma unmanaged
+
+typedef void (__stdcall *PtrCallback)(void* param, int arg);
+
+void UnmanagedSender(PtrCallback callback, void* param)
+// event sender
+{
+   if(callback) callback(param, 10);
+}
+
+////////////////////////////////////////////
+
+#pragma managed
+
+ref class ManagedReceiver
+// event receiver
+{
+public:
+        void HandleEvent(int arg)
+        {
+                Console::WriteLine(arg);
+        }
+};
+
+class Thunk
+// event forwarder
+{
+public:
+        Thunk(ManagedReceiver^ A_receiver) : receiver(A_receiver) { }
+        static void __stdcall CallbackForwarder(void* param, int arg)
+        {
+                static_cast&lt;Thunk*&gt;(param)-&gt;receiver-&gt;HandleEvent(arg);
+        }
+private:
+        msclr::auto_gcroot&lt;ManagedReceiver^&gt; receiver;
+};
+
+////////////////////////////////////////////
+
+int main(array&lt;System::String ^&gt; ^args)
+{
+        ManagedReceiver^ receiver = gcnew ManagedReceiver;
+        Thunk thunk(receiver);
+        UnmanagedSender(&amp;Thunk::CallbackForwarder, &amp;thunk);
+        return 0;
+}
+</pre>
+
+
+
+
+</body>
+</html>

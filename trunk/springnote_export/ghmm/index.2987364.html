@@ -1,0 +1,724 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ko">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+<title>ghmm</title>
+
+	<link href="../xhtmlContentBody.css" media="screen" rel="Stylesheet" type="text/css" />
+
+</head>
+
+<body class="xhtmlEditorBody background_no" id="viewXhtml_body">
+<h1 class="printNxhtmlTitle hentry" style="display:none;"><a href="http://perpet.springnote.com/pages/2987364" rel="bookmark">ghmm</a></h1>
+
+
+	<p>&nbsp;</p>
+<table width="760">
+<tbody>
+<tr>
+<td colspan="2" style="PADDING-RIGHT: 0px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; PADDING-TOP: 10px;">
+<table width="100%">
+<tbody>
+<tr>
+<td><a href="http://nandaro.tistory.com/" class="title"><span style="COLOR: #0000ff;">computational linguistics</span></a></td>
+<td class="util_menu"><a href="http://nandaro.tistory.com/location" class="util_menu"><span style="COLOR: #0000ff;">위치로그</span></a> &nbsp;|&nbsp; <a href="http://nandaro.tistory.com/tag" class="util_menu"><span style="COLOR: #0000ff;">태그</span></a> &nbsp;|&nbsp; <a href="http://nandaro.tistory.com/media" class="util_menu"><span style="COLOR: #0000ff;">미디어로그</span></a> &nbsp;|&nbsp; <a href="http://nandaro.tistory.com/guestbook" class="util_menu"><span style="COLOR: #0000ff;">방명록</span></a></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr>
+<td rowspan="4">
+<table width="100%">
+<tbody>
+<tr>
+<td><span style="COLOR: #0000ff;">&nbsp;</span></td>
+</tr>
+<tr>
+<td><span style="COLOR: #0000ff;">&nbsp;</span></td>
+</tr>
+<tr>
+<td><span style="COLOR: #0000ff;">&nbsp;</span></td>
+</tr>
+<tr>
+<td class="td_bodyt" style="BORDER-BOTTOM: #ccc 1px dotted;"><span style="COLOR: #0000ff;"><img src="http://cfs.tistory.com/custom/blog/25/258288/skin/images/icon_comment.gif" alt="icon" /></span> <a href="http://nandaro.tistory.com/entry/GHMM-%EC%82%AC%EC%9A%A9%EB%B2%95-%EA%B4%80%EB%A0%A8-%EA%B3%B5%EB%B6%80"><span class="head_title" style="COLOR: #810081;">GHMM 사용법 관련 공부</span></a><br />
+<a href="http://nandaro.tistory.com/category/NLP/machine%20learning" class="gbtn_kor"><span style="COLOR: #810081;">NLP/machine learning</span></a> | 2008/09/19 22:34<br /></td>
+</tr>
+<tr>
+<td class="td_body">&nbsp;</td>
+</tr>
+<tr>
+<td class="td_body">
+<table width="530">
+<tbody>
+<tr>
+<td>
+<p>[refer to] <a href="http://ghmm.sourceforge.net/"><span style="COLOR: #273e67;">http://ghmm.sourceforge.net/</span></a></p>
+<p>[첨부문서 참고]</p>
+<p><img src="http://icon.daum-img.net/editor/p_pdf_s.gif" /> ghmm.pdf</p>
+<p><br /></p>
+<p><strong><span style="COLOR: #3058d2; BACKGROUND-COLOR: #eff4d8;"><span style="FONT-SIZE: 12pt;">1. 다운로드 및 설치</span></span></strong></p>
+<p><br /></p>
+<p>gsl-1.9.tar.gz 설치</p>
+<p>ghmm-0.7.0.tar.gz 설치</p>
+<p><br /></p>
+<p>cd ghmm-0.7.0</p>
+<p>./configure</p>
+<p>make</p>
+<p>make install</p>
+<p><br /></p>
+<p><strong><span style="COLOR: #3058d2; BACKGROUND-COLOR: #eff4d8;"><span style="FONT-SIZE: 12pt;">2. 분석 시작</span></span></strong></p>
+<p><br /></p>
+<p>cd ghmm-0.7.0/tests</p>
+<p><br /></p>
+<p>two_states_three_symbols.c 를 먼저 분석</p>
+<p><br /></p>
+<p>---------------------------------------------------------------------------------------------</p>
+<p>/*******************************************************************************<br />
+&nbsp; author &nbsp; &nbsp; &nbsp; : Achim Gaedke<br />
+&nbsp; filename &nbsp; &nbsp; : ghmm/tests/two_states_three_symbols.c<br />
+&nbsp; created &nbsp; &nbsp;&nbsp; : DATE: 2001-04-25<br />
+&nbsp; $Id: two_states_three_symbols.c,v 1.10 2005/07/05 20:19:51 grunau Exp $<br />
+*******************************************************************************/</p>
+<p>#ifdef WIN32<br />
+#&nbsp; include "win_config.h"<br />
+#endif</p>
+<p>#ifdef HAVE_CONFIG_H<br />
+#&nbsp; include "config.h"<br />
+#endif</p>
+<p>#include "stdio.h"<br />
+#include "ghmm/vector.h"<br />
+#include "ghmm/rng.h"<br />
+#include "ghmm/sequence.h"<br />
+#include "ghmm/model.h"<br />
+#include "ghmm/reestimate.h"<br />
+/*<br />
+&nbsp; model with two states and three symbols<br />
+&nbsp; transition probability: 0-&gt;0: 0.9, 0-&gt;1: 0.1, 1-&gt;0: 0.1 and 1-&gt;1:0.9<br />
+&nbsp; state 0 has symbol 0 (probability 0.5) and 1 (probability 0.5)<br />
+&nbsp; state 1 has symbol 2</p>
+<p><br />
+<br /></p>
+<p><img class="txc-image" src="http://cfs11.blog.daum.net/image/23/blog/2008/08/06/13/30/489928f8c26b6" width="543" /></p>
+<p><br /></p>
+<p><br />
+*/</p>
+<p><br />
+&nbsp;</p>
+<p>int my_model()<br />
+{<br />
+&nbsp; /* model structure, that contains states ( <span style="COLOR: #3058d2;">모델 하나를 선언</span> )*/<br />
+&nbsp; model my_model;<br />
+&nbsp; /* array of states( <span style="COLOR: #3058d2;">상태의 수만큼 지정</span> ) */<br />
+&nbsp; state model_states[2];</p>
+<p><br /></p>
+<p>&nbsp; /**********************************************************************************************/</p>
+<p>&nbsp; /* <strong>1. 위의 그림과 같은 구성을 만든다</strong> */</p>
+<p>&nbsp; /**********************************************************************************************/ &nbsp;</p>
+<p>&nbsp; /* first state ( <span style="COLOR: #3058d2;">첫번째 상태</span> )*/</p>
+<p>&nbsp; /*&nbsp; probability of emmission of 0,1 or 2 ( <span style="COLOR: #3058d2;">각각의 상태에 대해서, output 심벌 확률을 배열로 저장</span> )*/<br />
+&nbsp; double symbols_0_state[3]={0.5,0.5,0.0};<br />
+&nbsp; /* transition to which state is given in the following arrays ( <span style="COLOR: #3058d2;">0-&gt;0, 0-&gt;1 전이 가능함을 지정</span> )*/<br />
+&nbsp; int trans_id_0_state[2]={0,1};<br />
+&nbsp; /* transition probability <span style="COLOR: #e31600;">from here</span> to 0-state (self) and 1-state ( <span style="COLOR: #3058d2;">0-&gt;0, 0-&gt;1 전이 확률 저장</span> )*/<br />
+&nbsp; double trans_prob_0_state[2]={0.9,0.1};<br />
+&nbsp; /* transition probability from 0-state (self) and 1-state <span style="COLOR: #e31600;">to this state</span> ( <span style="COLOR: #3058d2;">0</span><span style="COLOR: #3058d2;">-&gt;0, 1-&gt;0 전이 확률 저장</span> )*/<br />
+&nbsp; double trans_prob_0_state_rev[2]={0.9,0.1};</p>
+<p><br /></p>
+<p>&nbsp; /* second state , comments see above ( <span style="COLOR: #3058d2;">각각의 상태에 대해서, output 심벌 확률을 배열로 저장</span> )*/<br />
+&nbsp; double symbols_1_state[3]={0.0,0.0,1.0};<br />
+&nbsp; int trans_id_1_state[2]={0,1};<br />
+&nbsp; double trans_prob_1_state[2]={0.1,0.9}; &nbsp; &nbsp; &nbsp; // 1-&gt;0, 1-&gt;1&nbsp; (from here)<br />
+&nbsp; double trans_prob_1_state_rev[2]={0.1,0.9}; // 0-&gt;1, 1-&gt;1&nbsp; (to this state)</p>
+<p>&nbsp; /**********************************************************************************************/</p>
+<p><br />
+&nbsp; sequence_t* my_output;<br /></p>
+<p>&nbsp; int pow_look[2] = {1,3};</p>
+<p>&nbsp; /* flags indicating whether a state is silent */<br />
+&nbsp; /*int silent_array[2] =&nbsp; {0,0};*/</p>
+<p><br /></p>
+<p>&nbsp; /**********************************************************************************************/</p>
+<p>&nbsp; /* <strong>2. state 0, 1 을 초기화 한다.</strong> */</p>
+<p>&nbsp; /**********************************************************************************************/</p>
+<p>&nbsp; /* initialise state 0 */<br />
+&nbsp; /* start probability for this state */<br />
+&nbsp; model_states[0].pi = 0.5;<br />
+&nbsp; /* array with emission probabilities ( <span style="COLOR: #5fb636;">output 심벌의 출력 확률을 세팅</span> ) */<br />
+&nbsp; model_states[0].b=symbols_0_state;<br />
+&nbsp; /* number of fields in out_a and out_id */<br />
+&nbsp; model_states[0].out_states=2; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; // <span style="COLOR: #5fb636;">0에서 나갈수 있는 state의 갯수 설정</span>&nbsp;<br />
+&nbsp; /* transition probability from this state ( <span style="COLOR: #5fb636;">0에서</span> <span style="COLOR: #5fb636;">나가는</span> <span style="COLOR: #5fb636;">전이 확률 테이블 세팅</span> ) */<br />
+&nbsp; model_states[0].out_a=trans_prob_0_state;<br />
+&nbsp; /* state ids belonging to the probability ( <span style="COLOR: #5fb636;">0에서 나가는</span> <span style="COLOR: #5fb636;">전이 가능 테이블 세팅</span> ) */<br />
+&nbsp; model_states[0].out_id=trans_id_0_state;<br />
+&nbsp; /* transition probability to this state */<br />
+&nbsp; /* in_states,in_id and in_a have the same function as above*/<br />
+&nbsp; model_states[0].in_states=2; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; // <span style="COLOR: #5fb636;">0으로 들어올 수 있는 state 갯수 설정</span></p>
+<p>&nbsp; model_states[0].in_a=trans_prob_0_state_rev; // <span style="COLOR: #5fb636;">0으로 들어오는 전이 확률 테이블 세팅</span><br />
+&nbsp; model_states[0].in_id=trans_id_0_state; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; // <span style="COLOR: #5fb636;">0으로 들어오는 전이 가능 테이블 세팅</span><br />
+&nbsp;</p>
+<p>&nbsp; /* should emission probabilities be changed during reestimation? 1: no, else: yes*/<br />
+&nbsp; model_states[0].fix=0;</p>
+<p><br />
+&nbsp; /* state label */<br />
+&nbsp; model_states[0].label=0;<br />
+&nbsp; model_states[0].order = 0;</p>
+<p><br /></p>
+<p>&nbsp; /* initialise state 1 ( <span style="COLOR: #5fb636;">위의 state 0에 대한 과정을 똑같이 수행</span> ) */<br />
+&nbsp; /* same meaning as above */<br />
+&nbsp; model_states[1].pi = 0.5;<br />
+&nbsp; model_states[1].b=symbols_1_state;<br />
+&nbsp; model_states[1].out_states=2;<br />
+&nbsp; model_states[1].out_a=trans_prob_1_state;<br />
+&nbsp; model_states[1].out_id=trans_id_1_state;<br />
+&nbsp; model_states[1].in_states=2;</p>
+<p>&nbsp; model_states[1].in_a=trans_prob_1_state_rev;<br />
+&nbsp; model_states[1].in_id=trans_id_0_state;<br />
+&nbsp; &nbsp; model_states[1].fix=0;<br />
+&nbsp; model_states[1].label=1;<br />
+&nbsp; model_states[1].order = 0;</p>
+<p>&nbsp; /**********************************************************************************************/</p>
+<p><br />
+&nbsp;</p>
+<p>&nbsp; /**********************************************************************************************/</p>
+<p>&nbsp; /* <strong>3. 위에서 설정된 model_states를 my_model에 세팅하고, 기타 추가 설정을 한다.</strong> */</p>
+<p>&nbsp; /**********************************************************************************************/</p>
+<p>&nbsp; /* initialise model */<br />
+&nbsp; my_model.N=2; /* number of states, dimension of model.s */<br />
+&nbsp; my_model.M=3; /* number of symbols, dimension of states.b */<br />
+&nbsp; <strong><span style="COLOR: #e31600;">my_model.s=model_states;</span></strong> /* array of states */<br />
+&nbsp; my_model.prior=-1; /* probability of this model, used in a model array */</p>
+<p>&nbsp; /*my_model.silent = silent_array;*/<br />
+&nbsp; my_model.pow_lookup = pow_look;<br />
+&nbsp; my_model.maxorder = 0;<br />
+&nbsp; my_model.model_type =0;</p>
+<p>&nbsp; /**********************************************************************************************/</p>
+<p><br />
+&nbsp; /* consistency check */<br />
+&nbsp; fprintf(stdout,"checking model:\n");<br />
+&nbsp; if (model_check(&amp;my_model))<br />
+&nbsp; {<br />
+&nbsp; &nbsp; &nbsp; fprintf(stderr,"model_check failed!\n");<br />
+&nbsp; &nbsp; &nbsp; return 1;<br />
+&nbsp; }<br />
+&nbsp; fprintf(stdout,"model is ok\n");</p>
+<p><br /></p>
+<p>&nbsp; /* print model parameters */<br />
+&nbsp; fprintf(stdout,"two_states_three_symbols model:\n");<br />
+&nbsp; model_print(stdout,&amp;my_model);</p>
+<p><br /></p>
+<p>&nbsp; /* generate sequences */<br />
+&nbsp; fprintf(stdout,"generating sequences:...");<br />
+&nbsp; my_output=model_generate_sequences(&amp;my_model, /* model */<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; 0, &nbsp; /* random seed */<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; 100, /* <strong><span style="COLOR: #3058d2;">length of each sequence</span></strong> */<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; 100, /* no of sequences */<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; 100); /* maxT */<br />
+&nbsp; fprintf(stdout,"Done\n");</p>
+<p><br />
+&nbsp; sequence_print(stdout,my_output); // <span style="COLOR: #e31600;">생성된 sequence들을 출력</span></p>
+<p><br /></p>
+<p>&nbsp; /* slight change of emission probabilities in state 0 */<br />
+&nbsp; symbols_0_state[0] = 0.6;<br />
+&nbsp; symbols_0_state[1] = 0.4;<br />
+&nbsp; symbols_0_state[2] = 0.0;</p>
+<p><br /></p>
+<p>&nbsp; /* reestimation */<br />
+&nbsp; fprintf(stdout,"reestimating with Baum-Welch-algorithm...");<br />
+&nbsp; reestimate_baum_welch(&amp;my_model,my_output);</p>
+<p><br /></p>
+<p>&nbsp; /* print the result */<br />
+&nbsp; fprintf(stdout,"Done\nthe result is:\n");<br />
+&nbsp; model_print(stdout,&amp;my_model);</p>
+<p>&nbsp; sequence_free(&amp;my_output);</p>
+<p>&nbsp; return 0;</p>
+<p><br />
+}<br /></p>
+<p>int main()<br />
+{<br />
+&nbsp; /* Important! initialise rng&nbsp; */<br />
+&nbsp; ghmm_rng_init();</p>
+<p>&nbsp; return my_model();<br />
+}<br /></p>
+<p>-----------------------------------------------------------------------------------------------------------------------------</p>
+<p>[실행결과]</p>
+<p><br /></p>
+<p>checking model:<br />
+model is ok<br />
+two_states_three_symbols model:<br />
+HMM = {<br />
+&nbsp; &nbsp; &nbsp; &nbsp; <strong><span style="COLOR: #ffe409;">M = 3; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; // Number of Symbols observable in states<br /></span></strong>&nbsp; &nbsp; &nbsp; &nbsp; <strong><span style="COLOR: #5fb636;">N = 2; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; // Number of States<br /></span></strong>&nbsp; &nbsp; &nbsp; &nbsp; prior = -1.000;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; Model Type = 0;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; <strong><span style="COLOR: #e31600;">A = matrix { &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; // state transition probability distribution<br />
+&nbsp; &nbsp; &nbsp; &nbsp; 0.90, 0.10;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; 0.10, 0.90;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; };<br /></span></strong>&nbsp; &nbsp; &nbsp; &nbsp; <span style="COLOR: #2341db;"><strong>B = matrix { &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; // emission probability distribution<br />
+&nbsp; &nbsp; &nbsp; &nbsp; 0.50, 0.50, 0.00;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; 0.00, 0.00, 1.00;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; };<br /></strong></span>&nbsp; &nbsp; &nbsp; &nbsp; <strong><span style="COLOR: #ff8b16;">Pi = vector { &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; // initial state distribution<br />
+&nbsp; &nbsp; &nbsp; &nbsp; 0.50, 0.50;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; };<br /></span></strong>&nbsp; &nbsp; &nbsp; &nbsp; fix_state = vector {<br />
+&nbsp; &nbsp; &nbsp; &nbsp; 0, 0;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; };<br />
+&nbsp; &nbsp; &nbsp; &nbsp; label_state = vector {<br />
+&nbsp; &nbsp; &nbsp; &nbsp; 0, 1;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; };<br />
+};</p>
+<p><br /></p>
+<p><strong><span style="COLOR: #e31600;">// 위와 같은 HMM에서 관측 가능한(observable) sequence들은 아래와 같다</span></strong></p>
+<p>generating sequences:...Done</p>
+<p>SEQ = {<br />
+&nbsp; &nbsp; &nbsp; &nbsp; O = {<br />
+&nbsp; &nbsp; &nbsp; &nbsp; 2, 2, 2, 2, 2, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 2, 2,<br />
+2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1,<br />
+&nbsp;0;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0,<br />
+0, 0, 0, 2, 2, 2, 1, 0, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 1,<br />
+&nbsp;0;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 1, 2, 2, 2, 2, 2,<br />
+2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 1, 0, 0, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,<br />
+&nbsp;2;<br />
+.........</p>
+<p>}</p>
+<p><br /></p>
+<p><span style="COLOR: #5fb636;"><strong>//위에서 출력한 output sequence들이 새로운 학습 데이터가 된다.</strong></span></p>
+<p><span style="COLOR: #5fb636;"><strong>//초기 HMM의 첫번째 state의 emission probability를 약간 수정</strong></span></p>
+<p><span style="COLOR: #5fb636;"><strong>//그리고 나서, BW 알고리즘을 돌린다.</strong></span></p>
+<p><span style="COLOR: #5fb636;"><strong>//(함수의 파라미터로 my_model, my_output이 있는 것을 확인)<br /></strong></span>reestimating with Baum-Welch-algorithm...<span style="COLOR: #af65dd;"><em class="underline">Convergence after 3 steps</em></span><br />
+Done<br />
+the result is:<br />
+HMM = {<br />
+&nbsp; &nbsp; &nbsp; &nbsp; M = 3;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; N = 2;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; prior = -1.000;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; Model Type = 0;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span style="COLOR: #e31600;"><strong>A = matrix { &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; // &lt;---- 갱신되었다!!<br />
+&nbsp; &nbsp; &nbsp; &nbsp; 0.90, 0.10;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; 0.09, 0.91;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; };<br /></strong></span>&nbsp; &nbsp; &nbsp; &nbsp; B = matrix {<br />
+&nbsp; &nbsp; &nbsp; &nbsp; 0.50, 0.50, 0.00;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; 0.00, 0.00, 1.00;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; };<br />
+&nbsp; &nbsp; &nbsp; &nbsp; Pi = vector {<br />
+&nbsp; &nbsp; &nbsp; &nbsp; 0.51, 0.49;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; };<br />
+&nbsp; &nbsp; &nbsp; &nbsp; fix_state = vector {<br />
+&nbsp; &nbsp; &nbsp; &nbsp; 0, 0;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; };<br />
+&nbsp; &nbsp; &nbsp; &nbsp; label_state = vector {<br />
+&nbsp; &nbsp; &nbsp; &nbsp; 0, 1;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; };<br />
+};<br />
+&nbsp;</p>
+<p><br /></p>
+<p><span style="COLOR: #3058d2;"><strong><span style="FONT-SIZE: 12pt;">3.&nbsp; Baum-Welch algorithm 테스트, 사용법</span></strong></span></p>
+<p><br /></p>
+<p>&nbsp;// 프로그램에 마지막 부분에 아래와 같은 라인을 추가해서 다시 한번 테스트해봤다</p>
+<p><br /></p>
+<p>&nbsp; /* XXX : change emission probabilites and reestimation again */<br />
+&nbsp; sequence_free(&amp;my_output);<br />
+&nbsp; fprintf(stdout,"Again generating sequences:...");<br />
+&nbsp; my_output=model_generate_sequences(&amp;my_model, /* model */<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; 0, &nbsp; /* random seed */<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; 100, /* length of each sequence */<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; 200, /* no of sequences */<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; 100); /* maxT */<br />
+&nbsp; fprintf(stdout,"Done\n");<br />
+&nbsp; symbols_1_state[0] = 0.0;<br />
+&nbsp; symbols_1_state[1] = 0.5;<br />
+&nbsp; symbols_1_state[2] = 0.5;</p>
+<p>&nbsp; fprintf(stdout,"Again reestimating with Baum-Welch-algorithm...");<br />
+&nbsp; reestimate_baum_welch(&amp;my_model,my_output);<br />
+&nbsp; fprintf(stdout,"Again Done\nthe result is:\n");<br />
+&nbsp; model_print(stdout,&amp;my_model);<br /></p>
+<p><span style="COLOR: #3058d2;">&nbsp;//즉, 한번 갱신된 HMM에서 다시 학습 데이터를 생성시키고</span></p>
+<p><span style="COLOR: #3058d2;">&nbsp;//( 학습데이터를 구하기 힘드니, 그냥 생성시킨 거다)</span></p>
+<p><span style="COLOR: #3058d2;">&nbsp;//second state의 emission probability를 약간 수정한 다음에</span></p>
+<p><span style="COLOR: #3058d2;">&nbsp;//다시 Baum-Welch 알고리즘을 돌린 것이다.</span></p>
+<p><span style="COLOR: #3058d2;">&nbsp;//그 결과는 아래와 같다.</span></p>
+<p><br /></p>
+<p>Again generating sequences:...Done<br />
+Again reestimating with Baum-Welch-algorithm...<span style="COLOR: #5fb636;"><em class="underline">Convergence after 8 steps</em></span><br />
+Again Done<br />
+the result is:<br />
+HMM = {<br />
+&nbsp; &nbsp; &nbsp; &nbsp; M = 3;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; N = 2;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; prior = -1.000;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; Model Type = 0;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; <span style="COLOR: #e31600;"><strong>A = matrix { &nbsp; &nbsp; // --&gt; 다시 갱신되었다<br />
+&nbsp; &nbsp; &nbsp; &nbsp; 0.91, 0.09;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; 0.10, 0.90;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; };<br /></strong></span>&nbsp; &nbsp; &nbsp; &nbsp; B = matrix {<br />
+&nbsp; &nbsp; &nbsp; &nbsp; 0.50, 0.50, 0.00;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; 0.00, 0.00, 1.00;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; };<br />
+&nbsp; &nbsp; &nbsp; &nbsp; Pi = vector {<br />
+&nbsp; &nbsp; &nbsp; &nbsp; 0.50, 0.50;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; };<br />
+&nbsp; &nbsp; &nbsp; &nbsp; fix_state = vector {<br />
+&nbsp; &nbsp; &nbsp; &nbsp; 0, 0;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; };<br />
+&nbsp; &nbsp; &nbsp; &nbsp; label_state = vector {<br />
+&nbsp; &nbsp; &nbsp; &nbsp; 0, 1;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; };<br />
+};<br /></p>
+<p>이제 대충 알 것 같다. 애초에 output sequence 학습 데이터가 있고</p>
+<p>기본적인 모델 설정을 해 둔 상태에서</p>
+<p>Baum-Welch reestimation 함수를 돌리면</p>
+<p>HMM 모델은 학습된다.</p>
+<p><br /></p>
+<p>여기서는 테스트를 위해서, 학습데이터를 초기에 설정된 모델에서 랜덤하게 출력시켜서 모은 다음에</p>
+<p>Baum-Welch reestimation 함수를 호출한 경우인데,</p>
+<p>초기 설정이<span id="callbacknestnandarotistorycom86681" style="FLOAT: left; WIDTH: 226px; HEIGHT: 196px;"></span> 똑같다면 같은 모델이 나올 것이므로</p>
+<p>초기 설정을 약간 수정한 것 뿐이다.</p>
+<p><br /></p>
+<p><span style="COLOR: #3058d2;"><strong><span style="FONT-SIZE: 12pt;">4. Viterbi Decoding 테스트, 사용법</span></strong></span></p>
+<p><br /></p>
+<p>음.. 이제부터는 학습된 HMM이 있을 때,</p>
+<p>어떤 output sequence가 나오면</p>
+<p>most probable state sequence가 무엇인지 판단하는 부분을 살펴봐야겠다.</p>
+<p><br /></p>
+<p>이를 테스트 하기 위해서는 프로그램의 마지막 부분에 아래와 같은 코드를 추가했다.</p>
+<p><br /></p>
+<p>&nbsp; /* XXX : viterbi test */<br />
+&nbsp; double log_p=0.0;<br />
+&nbsp; int &nbsp; *state_seq=NULL;<br />
+&nbsp; int &nbsp; idx;<br />
+&nbsp; fprintf(stdout,"process viterbi decoding with my_output.seq[0]\n");<br />
+&nbsp; for(idx=0; idxseq_len[0]; idx++)<br />
+&nbsp; {<br />
+&nbsp; &nbsp; &nbsp; fprintf(stdout,"%d ",my_output-&gt;seq[0][idx]);<br />
+&nbsp; }<br />
+&nbsp; fprintf(stdout, "\n");<br />
+&nbsp; state_seq = viterbi(&amp;my_model, my_output-&gt;seq[0], my_output-&gt;seq_len[0],&amp;log_p);<br />
+&nbsp; fprintf(stdout,"print state sequence by viterbi decoding\n");<br />
+&nbsp; for(idx=0; idxseq_len[0]; idx++)<br />
+&nbsp; {<br />
+&nbsp; &nbsp; &nbsp; fprintf(stdout,"%d ",state_seq[idx]);<br />
+&nbsp; }<br />
+&nbsp; fprintf(stdout, "\n");<br /></p>
+<p>&nbsp; 즉, <strong><span style="COLOR: #c8056a;">sequence 데이터가 없으니, my_output-&gt;seq[0]&nbsp; 를 이용해서 해당하는 state sequence를 구해보겠다는 것</span></strong></p>
+<p><br /></p>
+<p>&nbsp; 이를 컴파일하고 다시 실행시키면 그 결과는 아래와 같다.</p>
+<p><br /></p>
+<p><strong>process viterbi decoding with my_output.seq[0]</strong><br />
+2 2 2 2 0 2 2 2 2 2 2 2 2 2 2 2 2 2 0 0 1 0 1 0 0 0 1 0 0 2 2 2 2 2 2 2 0 2 1 0 0 0 1 1 1 1 0 0 0 0 0 0 1 0 0 0 1 2 2 2 2 2 2 2 2 2 0 0 0 1 2 2 2 0 0 1 1 1 1 0 1 2 2 2 0 0 0 0 1 1 1 1 0 1 1 0 1 0 0 1<br />
+<strong>print state sequence by viterbi decoding</strong><br />
+1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 0 0 0 0 1 1 1 0 0 0 0 0 0 0 0 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0<br /></p>
+<p>&nbsp; 여기까지 보면,</p>
+<p>&nbsp; 어떤 output sequence들이 있고 기본적인 모델 설정이 되면</p>
+<p>&nbsp; Baum-Welch reestimation 함수를 이용해서 HMM을 학습시킬 수 있고,</p>
+<p>&nbsp; ( reestimate_baum_welch(&amp;my_model,my_output); )</p>
+<p>&nbsp; 학습된 HMM이 있고, 어떤&nbsp; output sequence가 주어지면</p>
+<p>&nbsp; viterbi 함수를 통해서 해당하는 가장 그럴듯한 state sequence를 구할 수 있다는 것을 확인할 수 있다.</p>
+<p>&nbsp; ( state_seq = viterbi(&amp;my_model, my_output-&gt;seq[0], my_output-&gt;seq_len[0],&amp;log_p); )</p>
+<p><br /></p>
+<p><strong><span style="COLOR: #3058d2;"><span style="FONT-SIZE: 12pt;">5.&nbsp; 파일로 학습데이터를 읽어서 HMM을 만드는 방법</span></span></strong></p>
+<p><br /></p>
+<p>&nbsp;이제 더 남아 뜯어봐야할 부분은</p>
+<p><br /></p>
+<p>&nbsp;파일로 output sequence가 주어진 경우</p>
+<p><br /></p>
+<p>&nbsp;이를 읽어서 HMM을 만드는 것 정도일 것이다.</p>
+<p><br /></p>
+<p>&nbsp;ghmm/sequence.h</p>
+<p><br /></p>
+<p>&nbsp;이 파일에 보면</p>
+<p><br /></p>
+<p>&nbsp;sequence_t **sequence_read (const char *filename, int *seq_arrays);</p>
+<p><br /></p>
+<p>&nbsp;이 함수가 있는 데,&nbsp; 이 함수는 아래와 같은 형식으로 되어 있는 sequence 파일을 읽어서</p>
+<p>&nbsp;sequence_t *&nbsp; array를 반환한다.</p>
+<p><br /></p>
+<p>&nbsp;SEQ = {<br />
+&nbsp; &nbsp; O = {<br />
+&nbsp; &nbsp; 2, 2, 2, 2, 2, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 0;<br />
+&nbsp; &nbsp; 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 2, 2, 2, 1, 0, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 0, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 1, 0;</p>
+<p>&nbsp; &nbsp; .........</p>
+<p>&nbsp; &nbsp; 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 2, 2, 2, 2, 2, 2;<br />
+&nbsp; &nbsp; 2, 2, 2, 2, 2, 1, 1, 0, 0, 0, 0, 2, 2, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 0, 1, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 0, 0, 2, 2, 2, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 2;<br />
+&nbsp; &nbsp; };<br />
+};<br /></p>
+<p>&nbsp;================================================================================================================================<br /></p>
+<p>&nbsp;우리가 어떤 문제를 HMM으로 풀고자 할 경우,</p>
+<p>&nbsp;우선 HMM 모델의 기본이 되는 설정을 해야 한다.</p>
+<p>&nbsp;number of states ,&nbsp; number of&nbsp; symbols</p>
+<p>&nbsp;그리고 초기 상태의 output probability array</p>
+<p>&nbsp;기타 등등...</p>
+<p>&nbsp;A(aij), B(pij) 는 초기에 그냥 랜덤한 확률 값을 배정하면 된다.</p>
+<p><br /></p>
+<p>&nbsp;그리고 나서,</p>
+<p><br /></p>
+<p>&nbsp;관측된 output sequence들로 위와 같은 파일 포맷을 만들고</p>
+<p>&nbsp;이것과 기본 설정된 HMM을 가지고</p>
+<p>&nbsp;reestimate_baum_welch(&amp;my_model,my_output);</p>
+<p>&nbsp;이 함수를 호출하면 HMM이 학습된다.</p>
+<p><br /></p>
+<p>&nbsp;학습된 HMM을 사용하는 방식은 위에서 기술한 바 있다. &nbsp;</p>
+<p><br /></p>
+<p><strong><span style="COLOR: #3058d2;"><span style="FONT-SIZE: 12pt;">6. 파일에서 Model 파일 및 Sequence 파일을 읽어서 테스트하는 방법</span></span></strong></p>
+<p><br /></p>
+<p>POS tagging 문제를 풀 경우에는 어떨까?&nbsp; 이 경우는 굳이 state transition 확률을 학습할 필요 없이</p>
+<p>곧바로 학습 데이터로부터 확률을 얻을 수 있다.</p>
+<p>즉, 위에서 초기에&nbsp; A, B 등을 랜덤하게 설정하는 것이 아니라</p>
+<p>정확한 값을 집어 넣는 것으로 모델 설정이 끝난다.</p>
+<p>그리고 나서, 어떤 input sequence에 대해서 viterbi 함수를 이용해서 pos 를 얻어내면 된다. &nbsp;</p>
+<p><br /></p>
+<p>그런데 문제는, 초기 모델을 설정할 때, 너무 많은 상태로 인해서 코드의 복잡도가 확! 증가한다는 것이다.</p>
+<p><br /></p>
+<p>이건 어떻게 해결할까?</p>
+<p><br /></p>
+<p>ghmm/model.h</p>
+<p><br /></p>
+<p>여기에 보면</p>
+<p><br /></p>
+<p>model **model_read (char *filename, int *mo_number);</p>
+<p><br /></p>
+<p>이 함수가 있는데, 여기서 filename의 포맷은 아래와 같다.</p>
+<p><br /></p>
+<p>HMM = {<br />
+&nbsp; &nbsp; M = 3;<br />
+&nbsp; &nbsp; N = 2;<br />
+&nbsp; &nbsp; prior = -1.000;<br />
+&nbsp; &nbsp; <span style="COLOR: #e31600;">Model Type = 0; &nbsp; // 필요없다&nbsp; --&gt; 삭제<br /></span>&nbsp; &nbsp; A = matrix {<br />
+&nbsp; &nbsp; 0.90, 0.10;<br />
+&nbsp; &nbsp; 0.09, 0.91;<br />
+&nbsp; &nbsp; };<br />
+&nbsp; &nbsp; B = matrix {<br />
+&nbsp; &nbsp; 0.50, 0.50, 0.00;<br />
+&nbsp; &nbsp; 0.00, 0.00, 1.00;<br />
+&nbsp; &nbsp; };<br />
+&nbsp; &nbsp; Pi = vector {<br />
+&nbsp; &nbsp; 0.51, 0.49;<br />
+&nbsp; &nbsp; };<br />
+&nbsp; &nbsp; fix_state = vector {<br />
+&nbsp; &nbsp; 0, 0;<br />
+&nbsp; &nbsp; };<br />
+&nbsp; &nbsp; <span style="COLOR: #e31600;">label_state = vector { &nbsp; // 필요없다 --&gt; 삭제<br />
+&nbsp; &nbsp; 0, 1;<br />
+&nbsp; &nbsp; };</span><br />
+};<br /></p>
+<p>&nbsp;즉, 위와 같은 포맷으로 POS tagging데 대한 HMM 모델 파일을 만들고</p>
+<p>&nbsp;A, B는 tagged corpus에서 추출한 확률 값으로 설정해 둔 다음에</p>
+<p>&nbsp;model_read( ) 함수로 읽어 버리면</p>
+<p>&nbsp;굳이 복잡하게 코드로 모델을 설정 안해도 된다.</p>
+<p><br /></p>
+<p>&nbsp;그래서 다시 한번 함수를 만들어서 테스트해 봤다.</p>
+<p><br /></p>
+<p>&nbsp;int my_read_model(char *model_filename)<br />
+{<br />
+&nbsp; &nbsp; /* model structure, that contains states */<br />
+&nbsp; &nbsp; model **my_model_array;<br />
+&nbsp; &nbsp; model *my_model;<br />
+&nbsp; &nbsp; int &nbsp; *mo_number;</p>
+<p>&nbsp; &nbsp; my_model_array = model_read(model_filename, mo_number);<br />
+&nbsp; &nbsp; my_model = my_model_array[0];</p>
+<p>&nbsp; &nbsp; /* consistency check */<br />
+&nbsp; &nbsp; fprintf(stdout,"checking model:\n");<br />
+&nbsp; &nbsp; if (model_check(my_model))<br />
+&nbsp; &nbsp; {<br />
+&nbsp; &nbsp; &nbsp; &nbsp; fprintf(stderr,"model_check failed!\n");<br />
+&nbsp; &nbsp; &nbsp; &nbsp; return 1;<br />
+&nbsp; &nbsp; }<br />
+&nbsp; &nbsp; fprintf(stdout,"model is ok\n");</p>
+<p>&nbsp; &nbsp; /* print model parameters */<br />
+&nbsp; &nbsp; fprintf(stdout,"model:\n");<br />
+&nbsp; &nbsp; model_print(stdout,my_model);</p>
+<p>&nbsp; &nbsp; return 0;<br />
+}</p>
+<p>int main(int argc, char **argv)<br />
+{<br />
+&nbsp; &nbsp; if( argc != 2 )<br />
+&nbsp; &nbsp; {<br />
+&nbsp; &nbsp; &nbsp; &nbsp; fprintf(stderr,"usage : %s model_file\n", argv[0]);<br />
+&nbsp; &nbsp; &nbsp; &nbsp; exit(0);<br />
+&nbsp; &nbsp; }</p>
+<p>&nbsp; &nbsp; /* Important! initialise rng&nbsp; */<br />
+&nbsp; &nbsp; ghmm_rng_init();</p>
+<p>&nbsp; &nbsp; //my_model();</p>
+<p>&nbsp; &nbsp; my_read_model(argv[1]);</p>
+<p>&nbsp; &nbsp; return 0;<br />
+}<br /></p>
+<p>&nbsp;몇번의 디버깅 과정을 거쳤는데, 확인해 보니 모델 입력 파일에서 삭제되어야할 부분이 있었다.</p>
+<p>&nbsp;Model Type = 0;</p>
+<p>&nbsp;label_state = vector {<br />
+&nbsp; &nbsp; 0, 1;<br />
+&nbsp; &nbsp; };</p>
+<p>&nbsp;<span style="COLOR: #e31600;"><strong>이 두가지 태그는 지워야 한다.</strong></span></p>
+<p><br /></p>
+<p>&nbsp;프로그램을 다시 컴파일하고 실행시키면</p>
+<p><br /></p>
+<p>&nbsp;./two_states_three_symbols two_states_three_symbols.model</p>
+<p><br /></p>
+<p>checking model:<br />
+<span style="COLOR: #c8056a;">model_check(771): sum out_a[j] = 0.99000 != 1.0 (state 0)</span>&nbsp; &nbsp;&nbsp; // 이런 오류 메시지가 나오긴 하지만, 무시<br />
+<span style="COLOR: #c8056a;">model_check(771): sum out_a[j] = 1.01000 != 1.0 (state 1) &nbsp; &nbsp;<br /></span>model is ok<br />
+model:<br />
+HMM = {<br />
+&nbsp; &nbsp; &nbsp; &nbsp; M = 3;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; N = 2;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; prior = -1.000;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; Model Type = 0;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; A = matrix {<br />
+&nbsp; &nbsp; &nbsp; &nbsp; 0.90, 0.10;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; 0.09, 0.91;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; };<br />
+&nbsp; &nbsp; &nbsp; &nbsp; B = matrix {<br />
+&nbsp; &nbsp; &nbsp; &nbsp; 0.50, 0.50, 0.00;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; 0.00, 0.00, 1.00;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; };<br />
+&nbsp; &nbsp; &nbsp; &nbsp; Pi = vector {<br />
+&nbsp; &nbsp; &nbsp; &nbsp; 0.51, 0.49;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; };<br />
+&nbsp; &nbsp; &nbsp; &nbsp; fix_state = vector {<br />
+&nbsp; &nbsp; &nbsp; &nbsp; 0, 0;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; };<br />
+&nbsp; &nbsp; &nbsp; &nbsp; label_state = vector {<br />
+&nbsp; &nbsp; &nbsp; &nbsp; 0, 0;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; };<br />
+};<br /></p>
+<p>&nbsp;자 이제, model 파일을 읽어서 초기 HMM을 설정하는 방법을 확인했다.</p>
+<p><br /></p>
+<p>HMM을 만들었다면, sequence 파일을 읽어서 viterbi decoding하는 방법도 확인해 보자.</p>
+<p><br /></p>
+<p>sequence_read( ) 함수가 읽는 sequence file의 포맷은 아래와 같다.</p>
+<p><br /></p>
+<p>SEQ = {<br />
+&nbsp; &nbsp; O = {<br />
+&nbsp; &nbsp; &nbsp; &nbsp; 2, 2, 2, 2, 2, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 0;<br />
+&nbsp; &nbsp; };<br />
+};<br /></p>
+<p><br /></p>
+<p>테스트를 위해서 소스를 아래와 같이 수정하였다.</p>
+<p><br /></p>
+<p>int my_read_model(char *model_filename, char *seq_filename)<br />
+{<br />
+&nbsp; &nbsp; /* model structure, that contains states */<br />
+&nbsp; &nbsp; model **my_model_array;<br />
+&nbsp; &nbsp; model *my_model;<br />
+&nbsp; &nbsp; int &nbsp; *mo_number;</p>
+<p>&nbsp; &nbsp; my_model_array = model_read(model_filename, mo_number);<br />
+&nbsp; &nbsp; my_model = my_model_array[0];</p>
+<p>&nbsp; &nbsp; /* consistency check */<br />
+&nbsp; &nbsp; fprintf(stdout,"checking model:\n");<br />
+&nbsp; &nbsp; if (model_check(my_model))<br />
+&nbsp; &nbsp; {<br />
+&nbsp; &nbsp; &nbsp; &nbsp; fprintf(stderr,"model_check failed!\n");<br />
+&nbsp; &nbsp; &nbsp; &nbsp; return 1;<br />
+&nbsp; &nbsp; }<br />
+&nbsp; &nbsp; fprintf(stdout,"model is ok\n");</p>
+<p>&nbsp; &nbsp; /* print model parameters */<br />
+&nbsp; &nbsp; fprintf(stdout,"model:\n");<br />
+&nbsp; &nbsp; model_print(stdout,my_model);</p>
+<p>&nbsp; &nbsp; /* read sequence from file and test viterbi*/<br />
+&nbsp; &nbsp; sequence_t **my_output_array;<br />
+&nbsp; &nbsp; sequence_t* my_output;<br />
+&nbsp; &nbsp; int *seq_arrays;<br />
+&nbsp; &nbsp; int idx;<br />
+&nbsp; &nbsp; double log_p=0.0;<br />
+&nbsp; &nbsp; int *state_seq=NULL;<br />
+&nbsp; &nbsp; fprintf(stdout,"read sequence file....\n");<br />
+&nbsp; &nbsp; my_output_array = sequence_read(seq_filename, seq_arrays);<br />
+&nbsp; &nbsp; my_output = my_output_array[0];<br />
+&nbsp; &nbsp; fprintf(stdout,"process viterbi decoding with my_output.seq[0]\n");<br />
+&nbsp; &nbsp; for(idx=0; idxseq_len[0]; idx++)<br />
+&nbsp; &nbsp; {<br />
+&nbsp; &nbsp; &nbsp; &nbsp; fprintf(stdout,"%d ",my_output-&gt;seq[0][idx]);<br />
+&nbsp; &nbsp; }<br />
+&nbsp; &nbsp; fprintf(stdout, "\n");<br />
+&nbsp; &nbsp; state_seq = viterbi(my_model, my_output-&gt;seq[0], my_output-&gt;seq_len[0],&amp;log_p);<br />
+&nbsp; &nbsp; fprintf(stdout,"print state sequence by viterbi decoding\n");<br />
+&nbsp; &nbsp; for(idx=0; idxseq_len[0]; idx++)<br />
+&nbsp; &nbsp; {<br />
+&nbsp; &nbsp; &nbsp; &nbsp; fprintf(stdout,"%d ",state_seq[idx]);<br />
+&nbsp; &nbsp; }<br />
+&nbsp; &nbsp; fprintf(stdout, "\n");<br />
+&nbsp; &nbsp; fprintf(stdout, "log_p = %f\n", log_p);</p>
+<p>&nbsp; &nbsp; return 0;<br />
+}<br /></p>
+<p>int main(int argc, char **argv)<br />
+{<br />
+&nbsp; &nbsp; if( argc != 3 )<br />
+&nbsp; &nbsp; {<br />
+&nbsp; &nbsp; &nbsp; &nbsp; fprintf(stderr,"usage : %s model_file seq_file\n", argv[0]);<br />
+&nbsp; &nbsp; &nbsp; &nbsp; exit(0);<br />
+&nbsp; &nbsp; }</p>
+<p>&nbsp; &nbsp; /* Important! initialise rng&nbsp; */<br />
+&nbsp; &nbsp; ghmm_rng_init();</p>
+<p>&nbsp; &nbsp; //my_model();</p>
+<p>&nbsp; &nbsp; my_read_model(argv[1], argv[2]);</p>
+<p>&nbsp; &nbsp; return 0;<br />
+}<br /></p>
+<p>이를 컴파일하고 실행하면,</p>
+<p><br /></p>
+<p>&nbsp;./two_states_three_symbols two_states_three_symbols.model two_states_three_symbols.seq<br />
+checking model:<br />
+model_check(771): sum out_a[j] = 0.99000 != 1.0 (state 0)<br />
+model_check(771): sum out_a[j] = 1.01000 != 1.0 (state 1)<br />
+model is ok<br />
+model:<br />
+HMM = {<br />
+&nbsp; &nbsp; &nbsp; &nbsp; M = 3;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; N = 2;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; prior = -1.000;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; Model Type = 0;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; A = matrix {<br />
+&nbsp; &nbsp; &nbsp; &nbsp; 0.90, 0.10;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; 0.09, 0.91;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; };<br />
+&nbsp; &nbsp; &nbsp; &nbsp; B = matrix {<br />
+&nbsp; &nbsp; &nbsp; &nbsp; 0.50, 0.50, 0.00;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; 0.00, 0.00, 1.00;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; };<br />
+&nbsp; &nbsp; &nbsp; &nbsp; Pi = vector {<br />
+&nbsp; &nbsp; &nbsp; &nbsp; 0.51, 0.49;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; };<br />
+&nbsp; &nbsp; &nbsp; &nbsp; fix_state = vector {<br />
+&nbsp; &nbsp; &nbsp; &nbsp; 0, 0;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; };<br />
+&nbsp; &nbsp; &nbsp; &nbsp; label_state = vector {<br />
+&nbsp; &nbsp; &nbsp; &nbsp; 0, 0;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; };<br />
+};</p>
+<p>read sequence file....<br />
+process viterbi decoding with my_output.seq[0]<br />
+2 2 2 2 2 0 0 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 0 1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 1 0 1 1 1 1 1 0 0 0 0 0 0 0 0 1 0 0 0 0 1 1 1 1 1 0 1 0<br />
+print state sequence by viterbi decoding<br />
+1 1 1 1 1 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0<br />
+log_p = -55.175868<br /></p>
+<p><br /></p>
+<p><strong><span style="COLOR: #5c7fb0;"><span style="FONT-SIZE: 12pt;">&nbsp;7</span><span style="FONT-SIZE: 12pt;"><span style="FONT-SIZE: 12pt;">.&nbsp; 파일로 학습데이터를 읽어서 HMM을 만드는 방법 - again</span></span></span></strong></p>
+<p><br /></p>
+<p>지금까지 살펴본 바에 의하면,</p>
+<p>패키지를 이용해서 model file을 읽어서 HMM 구조를 만들 수 있고, sequence file을 읽어서 viterbi decoding을 할 수 있다는 것을 알았다.</p>
+<p>그런데, sequence file만 읽어서 HMM 구조를 만드는 부분이 조금 미진하다.</p>
+<p>따라서, 이것을 테스트해보자.</p>
+<p><br /></p>
+<p>&nbsp;to be continued....</p>
+<p><br /></p>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p><a href="http://nandaro.tistory.com/entry/GHMM-%EC%82%AC%EC%9A%A9%EB%B2%95-%EA%B4%80%EB%A0%A8">http://nandaro.tistory.com/entry/GHMM-사용법-관련</a>-공부</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+
+
+
+</body>
+</html>

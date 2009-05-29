@@ -1,0 +1,88 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ko">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+<title>http://tweakbits.com/ManagedToUnmanagedCallback.cpp</title>
+
+	<link href="../xhtmlContentBody.css" media="screen" rel="Stylesheet" type="text/css" />
+
+</head>
+
+<body class="xhtmlEditorBody background_no" id="viewXhtml_body">
+<h1 class="printNxhtmlTitle hentry" style="display:none;"><a href="http://perpet.springnote.com/pages/302877" rel="bookmark">http://tweakbits.com/ManagedToUnmanagedCallback.cpp</a></h1>
+
+
+	<p>&nbsp;</p>
+<pre>
+// ManagedToUnmanagedCallback.cpp : main project file.
+
+#include "stdafx.h"
+#include &lt;vcclr.h&gt;
+#include &lt;iostream&gt;
+
+using namespace System;
+
+////////////////////////////////////////////
+
+#pragma managed
+
+public delegate void ManagedEvent(int arg);
+
+public ref class ManagedSender
+// event sender
+{
+public:
+        event ManagedEvent^ SomeEvent;
+        void FireEvent()
+        {
+                SomeEvent(10);
+        }
+};
+
+////////////////////////////////////////////
+
+#pragma unmanaged
+
+class UnmanagedReceiver
+// event receiver
+{
+public:
+        void HandleEvent(int arg)
+        {
+                std::cout &lt;&lt; arg &lt;&lt; "\n";
+        }
+};
+
+#pragma managed
+
+ref class Thunk
+// event forwarder
+{
+public:
+        Thunk(UnmanagedReceiver* A_ptr) : ptr(A_ptr) { }
+        void CallbackForwarder(int arg) { ptr-&gt;HandleEvent(arg); }
+private:
+        UnmanagedReceiver* ptr;
+};
+
+////////////////////////////////////////////
+
+#pragma managed
+
+int main(array&lt;String ^&gt; ^args)
+{
+        UnmanagedReceiver receiver;
+        ManagedSender^ sender = gcnew ManagedSender;
+        Thunk^ thunk = gcnew Thunk(&amp;receiver);
+        sender-&gt;SomeEvent += gcnew ManagedEvent(thunk, &amp;Thunk::CallbackForwarder);
+        sender-&gt;FireEvent();
+        return 0;
+}
+</pre>
+
+
+
+
+</body>
+</html>
