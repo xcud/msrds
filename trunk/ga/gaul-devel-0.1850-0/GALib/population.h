@@ -1,6 +1,7 @@
 #pragma once
 
 class ievaluate;
+class entity;
 
 class population
 {
@@ -10,7 +11,7 @@ public:
 
 	int		_max_size;		/* Current maximum population size. */
 	int _size;
-	enity * _entityList[128];
+	entity * _entityList[128];
 
 	ievaluate * _evaluate;
 
@@ -19,7 +20,7 @@ public:
 		
 	}
 
-	void AddEntity(enity * entity)
+	void AddEntity(entity * entity)
 	{
 		_entityList[_size] = entity;
 		_size++;
