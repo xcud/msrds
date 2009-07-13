@@ -68,17 +68,13 @@ public:
 	void struggle(population * pop , entity * entity)
 	{
 		entity->_fitness = 0.0;
+		
+		char* chromosome = (char*)entity->_chromosome;
 
 		for(int i = 0 ; i < _chromosomeLen;i++)
 		{
-			
-			{
-				if( target_text[i]
-				entity->_fitness 
-			}
+			entity->_fitness  += abs(target_text[i] - chromosome[i]);
 		}
-
-
 	}
 
 	bool survival(entity ** m,entity ** f )
@@ -95,7 +91,7 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	population * pop = new population;
 
-	pop->init(1000,new myWorld);
+	pop->Init(1000,new myWorld);
 
 	while(true)
 	{
