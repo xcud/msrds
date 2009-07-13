@@ -1,5 +1,7 @@
 #pragma once
 
+#include "world.h"
+
 class ievaluate;
 class entity;
 
@@ -14,10 +16,11 @@ public:
 	entity * _entityList[128];
 
 	ievaluate * _evaluate;
+	world * _world;
 
-	void Init(int size,ievaluate * evaluate)
+	void Init(int size,world * world)
 	{
-		
+		_world = world;
 	}
 
 	void AddEntity(entity * entity)
@@ -25,5 +28,11 @@ public:
 		_entityList[_size] = entity;
 		_size++;
 	}
+
+	void evaluate()
+	{
+		_world->
+	}
+
 
 };
