@@ -21,6 +21,14 @@ public:
 	void Init(int size,world * world)
 	{
 		_world = world;
+		_size = size;
+		for(int i = 0; i < _size;i++)
+		{
+			_entityList[i] = world->createEntity();
+		}
+
+
+
 	}
 
 	void AddEntity(entity * entity)
@@ -31,7 +39,33 @@ public:
 
 	void evaluate()
 	{
-		_world->
+
+		
+		//적합성 업데이트
+		for(int i = 0; i < _size;i++)
+		{
+			_world->struggle(_entityList,_entityList[i]);
+		}
+		
+		//랭킹설정
+
+		//미달제거
+
+		//
+		entity	*mother, *father;	/* Parent entities. */
+		entity	*daughter, *son;
+
+		for(int i = 0; i < _size;i++)
+		{
+			
+			_world->select(mother,father);
+			_world->crossover(mother,father,daughter, son);
+		}
+
+
+		
+
+
 	}
 
 
