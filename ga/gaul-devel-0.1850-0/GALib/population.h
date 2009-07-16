@@ -58,8 +58,8 @@ public:
 		for(int i = 0; i < _size;i++)
 		{
 			
-			_world->select(mother,father);
-			_world->crossover(mother,father,daughter, son);
+			_world->select(&mother,&father);
+			_world->crossover(&mother,&father,&daughter, &son);
 		}
 
 

@@ -9,7 +9,7 @@
 
 	static char *target_text="When we reflect on this struggle, we may console ourselves with the full belief, that the war of nature is not incessant, that no fear is felt, that death is generally prompt, and that the vigorous, the healthy, and the happy survive and multiply.";
 
-class myWorld : world
+class myWorld : public world
 {
 public:
 
@@ -24,7 +24,7 @@ public:
 	
 	int _chromosomeLen;
 
-	class myWorld()
+	myWorld()
 	{
 		_chromosomeLen	= strlen(target_text);
 	}
@@ -53,7 +53,7 @@ public:
 
 	}
 
-	bool crossover(entity ** mather,entity ** father)
+	bool crossover(entity ** mather,entity ** father,entity **daughter, entity **son) 
 	{
 		return true;
 	}
@@ -65,7 +65,7 @@ public:
 		return true;
 	}
 
-	void struggle(population * pop , entity * entity)
+	void struggle(entity ** entityList , entity * entity) 
 	{
 		entity->_fitness = 0.0;
 		
@@ -82,6 +82,11 @@ public:
 		
 		return true;
 	}
+
+	void select(entity ** mather,entity ** father)
+	{
+
+	}
 };
 
 
@@ -91,7 +96,7 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	population * pop = new population;
 
-	pop->Init(1000,new myWorld);
+	pop->Init(1000,new myWorld());
 
 	while(true)
 	{
