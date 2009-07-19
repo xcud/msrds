@@ -22,11 +22,10 @@ public:
 
 	//}
 	
-	int _chromosomeLen;
-
 	myWorld()
 	{
 		_chromosomeLen	= strlen(target_text);
+		_entitySize = 100;
 	}
 
 	entity * createEntity()
@@ -39,7 +38,10 @@ public:
 
 		for(int i =0 ; i < _chromosomeLen;i++)
 		{
-			chromosome[i] = (char)rand();
+			int v = rand();
+			v = v % ('~'-' ') +' ';
+			
+			chromosome[i] = (char)v;
 		}
 
 		pEntity->_chromosome = chromosome;
@@ -53,8 +55,25 @@ public:
 
 	}
 
-	bool crossover(entity ** mather,entity ** father,entity **daughter, entity **son) 
+	bool crossover(entity * mather,entity * father,entity **daughter, entity **son) 
 	{
+		for(int i =0;i < _chromosomeLen;i++)
+		{
+			int b = rand()%2;
+
+			if( b == 0)
+			{
+				(*daughter)->_chromosome[i] = mather->_chromosome[i];
+				(*son)->_chromosome[i] = father->_chromosome[i];
+			}else
+			{
+				(*daughter)->_chromosome[i] = father->_chromosome[i];
+				(*son)->_chromosome[i] = mather->_chromosome[i];
+
+			}
+
+		}
+
 		return true;
 	}
 
@@ -63,6 +82,11 @@ public:
 		
 
 		return true;
+	}
+
+	void rank(entity ** entityList , entity * entity)
+	{
+
 	}
 
 	void struggle(entity ** entityList , entity * entity) 
@@ -83,9 +107,10 @@ public:
 		return true;
 	}
 
-	void select(entity ** mather,entity ** father)
+	void select(entity ** entityList,entity ** mather,entity ** father)
 	{
-
+		*mather = entityList[rand()%_entitySize];
+		*father = entityList[rand()%_entitySize];
 	}
 };
 
@@ -96,13 +121,14 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	population * pop = new population;
 
-	pop->Init(1000,new myWorld());
+	pop->Init(new myWorld());
 
 	while(true)
 	{
 		pop->evaluate();
 	}
-
+	
+	
 	return 0;
 }
 
