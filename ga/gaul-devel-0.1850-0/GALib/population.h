@@ -14,7 +14,7 @@ public:
 	int		_max_size;		/* Current maximum population size. */
 	int _size;
 	entity * _entityList[512];
-
+	entity * _entityList2[512];
 	ievaluate * _evaluate;
 	world * _world;
 
@@ -25,6 +25,7 @@ public:
 		for(int i = 0; i < 512;i++)
 		{
 			_entityList[i] = world->createEntity();
+			_entityList2[i] = world->createEntity();
 		}
 
 
@@ -39,19 +40,33 @@ public:
 	
 	entity * pTemp;
 
-	void rank(int max)
+	void rank(entity ** entityList,int max)
 	{
 		for(int i = 0; i < max;i++)
 		{
 			for(int r = i+1; r < max;r++)
 			{
-				if( _entityList[r]->_fitness < _entityList[i]->_fitness)
+				if( entityList[r]->_fitness < entityList[i]->_fitness)
 				{
-					pTemp = _entityList[i];
-					_entityList[i] = _entityList[r];
-					_entityList[r] = pTemp;
+					pTemp = entityList[i];
+					entityList[i] = entityList[r];
+					entityList[r] = pTemp;
 				}
 			}
+		}
+
+	}
+
+
+	void swap(int count)
+	{
+		int j = 0;
+		for(int i = _size-count;i< _size;i++)
+		{
+			entity * temp = _entityList[i];
+			_entityList[i] = _entityList2[j];
+			_entityList2[j] = temp;
+			j++;
 		}
 
 	}
@@ -71,6 +86,7 @@ public:
 		
 
 		//_world->rank();
+		rank(_entityList,_size);
 
 		//미달제거
 
@@ -78,25 +94,27 @@ public:
 		entity	*mother, *father;	/* Parent entities. */
 		//entity	*daughter, *son;
 
-		int size = _size;
+		int size = 0;
 		int i = 0;
 
 		for(int i = 0; i< _size;i++)
 		{
 		
 			//선택시 골고루 잡아줘야한다.
+			//변이 추가
 			_world->select(_entityList,&mother,&father);
 			//_world->crossover(&(_entityList[i++]),&(_entityList[i++]),&(_entityList[size]),&(_entityList[size+1]));
-			_world->crossover(mother,father,&(_entityList[size]),&(_entityList[size+1]));
-			_world->struggle(_entityList,_entityList[size]);
-			_world->struggle(_entityList,_entityList[size+1]);
+			_world->crossover(mother,father,&(_entityList2[size]),&(_entityList2[size+1]));
+			_world->struggle(_entityList2,_entityList2[size]);
+			_world->struggle(_entityList2,_entityList2[size+1]);
 
 			size +=2;
 		}
 
-		rank(size);
+		rank(_entityList2,size);
+	
+		swap(10);
 
-		
 		printf("%f", _entityList[0]->_fitness);
 
 		
