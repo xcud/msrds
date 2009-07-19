@@ -369,7 +369,7 @@ void sort_population(population *pop)
         }
       last--;	/* The last one *MUST* be correct now. */
       }
-    }
+    }z
 
 #if GA_QSORT_DEBUG>1
 /* Check that the population is correctly sorted. */

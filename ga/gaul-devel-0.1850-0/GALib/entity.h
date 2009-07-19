@@ -6,6 +6,6 @@ public:
 	entity(void);
 	~entity(void);
 
-	void * _chromosome;
+	char * _chromosome;
 	double _fitness;
 };
