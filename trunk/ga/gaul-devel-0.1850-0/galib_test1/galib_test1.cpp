@@ -77,8 +77,18 @@ public:
 		return true;
 	}
 
-	bool mutation(entity **entity)
+	bool mutation(entity *entity)
 	{
+		int index = rand()%_chromosomeLen;
+
+		if((rand()%2)==0)
+		{
+			entity->_chromosome[index]++;
+		}else
+		{
+			entity->_chromosome[index]--;
+		}
+
 		
 
 		return true;
@@ -120,15 +130,24 @@ int _tmain(int argc, _TCHAR* argv[])
 {
 
 	population * pop = new population;
+	world * pWorld = new myWorld();
+	pop->Init(pWorld);
 
-	pop->Init(new myWorld());
-
-	while(true)
+	for(int i = 0;i< 5000;i++)
 	{
 		pop->evaluate();
 	}
+
+	printf("%s",target_text);
+
 	
-	
+	char * str = new char[pWorld->_chromosomeLen+1];
+	memcpy(str,pop->_entityList[0]->_chromosome,pWorld->_chromosomeLen);
+
+	str[pWorld->_chromosomeLen] = 0;
+
+	printf("%s",str);
+
 	return 0;
 }
 
