@@ -78,6 +78,7 @@ public:
 		//적합성 업데이트
 		for(int i = 0; i < _size;i++)
 		{
+			_world->mutation(_entityList[i]);
 			_world->struggle(_entityList,_entityList[i]);
 		}
 		
