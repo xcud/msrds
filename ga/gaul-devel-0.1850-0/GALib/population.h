@@ -116,8 +116,15 @@ public:
 	
 		swap(10);
 
-		printf("%f", _entityList[0]->_fitness);
+		for(int i = 0; i< _size;i++)
+		{
+			_world->update(_entityList[i]);
+		}
+		
 
+		printf("%f", _entityList[0]->_fitness);
+		
+		
 		
 
 	}

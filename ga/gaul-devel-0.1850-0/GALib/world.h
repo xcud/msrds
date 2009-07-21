@@ -19,4 +19,5 @@ public:
 	virtual void struggle(entity ** entityList , entity * entity) = 0;
 	virtual bool survival(entity ** m,entity ** f ) = 0;
 	virtual void select(entity ** entityList,entity ** mather,entity ** father) = 0;
+	virtual void update(entity ** entityList) =0;
 };

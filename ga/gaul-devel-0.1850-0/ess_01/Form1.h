@@ -10,6 +10,7 @@ namespace ess_01 {
 	using namespace System;
 	using namespace System::ComponentModel;
 	using namespace System::Collections;
+	using namespace System::Collections::Generic;
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
 	using namespace System::Drawing;
@@ -97,17 +98,47 @@ namespace ess_01 {
 #pragma endregion
 		essWorld * pWorld;
 		population * pop;
+		Graphics ^_g;
 	private: System::Void Form1_Load(System::Object^  sender, System::EventArgs^  e) {
 				 pop = new population();
 				pWorld = new essWorld();
 				pop->Init(pWorld);
 				this->timer1->Start();
 
+				_g = this->pictureBox1->CreateGraphics();
+				_BlackList = gcnew System::Collections::Generic::Queue<int>();
+				_BlueList = gcnew System::Collections::Generic::Queue<int>();
 			 }
+			 //cli::array<Point^,
+			 
+			 
+			 System::Collections::Generic::Queue<int> ^ _BlackList ;//= gcnew List<Point>();
+			 System::Collections::Generic::Queue<int> ^ _BlueList ;//= gcnew List<Point>();
+
+				void AddValue(int black,int blue)
+				{
+					_BlackList->Enqueue(black);
+					if( _BlackList->Count == 50)
+						_BlackList->Dequeue();
+					_BlueList->Enqueue(blue);
+					if( _BlueList->Count == 50)
+						_BlueList->Dequeue();
+
+				}
+
 	private: System::Void timer1_Tick(System::Object^  sender, System::EventArgs^  e) {
 
-
 				pop->evaluate();
+				
+				AddValue(pWorld->_blackCount,pWorld->_blueCount);
+
+				_g->Clear(Color::White);
+				cli::array<int> ^ black =	_BlackList->ToArray();
+
+					for(int i = 1 ; i < black->Length;i++)
+				{
+					_g->DrawLine(gcnew Pen(Color::Black),i-1,black[i-1],i,black[i]);
+				}
 
 			 }
 	};
