@@ -14,7 +14,9 @@ class essWorld : public world
 public:
 
 	~essWorld(void);
-
+	
+	int _blackCount;
+	int _blueCount;
 	
 	essWorld()
 	{
@@ -125,4 +127,10 @@ public:
 		*father = entityList[rand()%_entitySize];
 	}
 
+	void update(entity * entity)
+	{
+		entity->_chromosome[]
+	}
+
+	
 };
