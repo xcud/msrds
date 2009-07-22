@@ -48,6 +48,7 @@ namespace ess_01 {
 		}
 	private: System::Windows::Forms::PictureBox^  pictureBox1;
 	private: System::Windows::Forms::Timer^  timer1;
+	private: System::Windows::Forms::Button^  button1;
 	private: System::ComponentModel::IContainer^  components;
 	protected: 
 
@@ -67,14 +68,15 @@ namespace ess_01 {
 			this->components = (gcnew System::ComponentModel::Container());
 			this->pictureBox1 = (gcnew System::Windows::Forms::PictureBox());
 			this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
+			this->button1 = (gcnew System::Windows::Forms::Button());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox1))->BeginInit();
 			this->SuspendLayout();
 			// 
 			// pictureBox1
 			// 
-			this->pictureBox1->Location = System::Drawing::Point(168, 106);
+			this->pictureBox1->Location = System::Drawing::Point(212, 32);
 			this->pictureBox1->Name = L"pictureBox1";
-			this->pictureBox1->Size = System::Drawing::Size(372, 297);
+			this->pictureBox1->Size = System::Drawing::Size(434, 301);
 			this->pictureBox1->TabIndex = 0;
 			this->pictureBox1->TabStop = false;
 			// 
@@ -82,11 +84,22 @@ namespace ess_01 {
 			// 
 			this->timer1->Tick += gcnew System::EventHandler(this, &Form1::timer1_Tick);
 			// 
+			// button1
+			// 
+			this->button1->Location = System::Drawing::Point(582, 403);
+			this->button1->Name = L"button1";
+			this->button1->Size = System::Drawing::Size(75, 23);
+			this->button1->TabIndex = 1;
+			this->button1->Text = L"start";
+			this->button1->UseVisualStyleBackColor = true;
+			this->button1->Click += gcnew System::EventHandler(this, &Form1::button1_Click);
+			// 
 			// Form1
 			// 
-			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
+			this->AutoScaleDimensions = System::Drawing::SizeF(7, 12);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(682, 565);
+			this->ClientSize = System::Drawing::Size(796, 522);
+			this->Controls->Add(this->button1);
 			this->Controls->Add(this->pictureBox1);
 			this->Name = L"Form1";
 			this->Text = L"Form1";
@@ -103,7 +116,7 @@ namespace ess_01 {
 				 pop = new population();
 				pWorld = new essWorld();
 				pop->Init(pWorld);
-				this->timer1->Start();
+				//this->timer1->Start();
 
 				_g = this->pictureBox1->CreateGraphics();
 				_BlackList = gcnew System::Collections::Generic::Queue<int>();
@@ -131,16 +144,39 @@ namespace ess_01 {
 				pop->evaluate();
 				
 				AddValue(pWorld->_blackCount,pWorld->_blueCount);
+				
+				pWorld->_blackCount = 0;
+				pWorld->_blueCount = 0;
 
 				_g->Clear(Color::White);
-				cli::array<int> ^ black =	_BlackList->ToArray();
 
-					for(int i = 1 ; i < black->Length;i++)
+				cli::array<int> ^ black =	_BlackList->ToArray();
+				for(int i = 1 ; i < black->Length;i++)
 				{
-					_g->DrawLine(gcnew Pen(Color::Black),i-1,black[i-1],i,black[i]);
+					_g->DrawLine(gcnew Pen(Color::Red),(i-1)*3,300-black[i-1]*3,i*3,300-black[i]*3);
 				}
 
+				cli::array<int> ^ blue =	_BlueList->ToArray();
+				for(int i = 1 ; i < blue->Length;i++)
+				{
+					_g->DrawLine(gcnew Pen(Color::Black),(i-1)*3,300-blue[i-1]*3,i*3,300-blue[i]*3);
+				}
+				
 			 }
-	};
+	private: System::Void button1_Click(System::Object^  sender, System::EventArgs^  e) {
+				 
+				 if( this->button1->Text == "start")
+				 {
+					this->timer1->Start();
+					this->button1->Text = "stop";
+				 }else
+				 {
+					this->button1->Text = "start";
+					this->timer1->Stop();
+				 }
+				 
+
+			 }
+};
 }
 

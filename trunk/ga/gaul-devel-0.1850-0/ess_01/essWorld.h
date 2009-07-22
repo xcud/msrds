@@ -22,6 +22,8 @@ public:
 	{
 		_chromosomeLen	= 1;
 		_entitySize = 100;
+		_blackCount = 0;
+			_blueCount = 0;
 	}
 
 	entity * createEntity()
@@ -60,7 +62,9 @@ public:
 			int b = rand()%2;
 
 			(*daughter)->_chromosome[i] = mather->_chromosome[i];
+			(*daughter)->_fitness = mather->_fitness;
 			(*son)->_chromosome[i] = father->_chromosome[i];
+			(*son)->_fitness = father->_fitness;
 
 		}
 
@@ -71,7 +75,7 @@ public:
 	{
 		
 
-		if((rand()%100) < 10)
+		if((rand()%100) < 1)
 		{
 			entity->_chromosome[0] = 100;
 		}
@@ -88,27 +92,32 @@ public:
 	void struggle(entity ** entityList , entity * entity) 
 	{
 		entity->_fitness = 0.0;
-		for(int i = 0 ; i< 10;i++)
+		for(int i = 0 ; i< 100;i++)
 		{
 			int index = rand()%_entitySize;
-			// 착한사람
-			if( entity->_chromosome[0] == 0 
-				&& entityList[index]->_chromosome[0] == 0)
+			
+			if( entity->_chromosome[0] == 0 //비둘기
+				&& entityList[index]->_chromosome[0] == 0/*비둘기*/)
 			{
-				entity->_fitness	-= 2;
+				entity->_fitness	-= 40;
+				entityList[index]->_fitness += 10;
 			// 착한사람,속이는 사람
-			}else if(entity->_chromosome[0] == 0 
-				&& entityList[index]->_chromosome[0] == 1)
+			}else if(entity->_chromosome[0] == 0 //비둘기
+				&& entityList[index]->_chromosome[0] == 100/*매*/)
 			{
-				entity->_fitness	+= 1;
+				entity->_fitness	+= 0;
+				entityList[index]->_fitness -= 50;
 				// 
-			}else if(entity->_chromosome[0] == 1 
+			}else if(entity->_chromosome[0] == 100 
 				&& entityList[index]->_chromosome[0] == 0)
 			{
-				entity->_fitness	-= 1;
+				entity->_fitness	-= 50;
+				entityList[index]->_fitness += 0;
+
 			}else
 			{
-				entity->_fitness	+= 2;
+				entity->_fitness	+= 80;
+				entityList[index]->_fitness -= 50;
 			}
 		}
 
@@ -123,13 +132,19 @@ public:
 	void select(entity ** entityList,entity ** mather,entity ** father)
 	{
 		
-		*mather = entityList[rand()%_entitySize];
-		*father = entityList[rand()%_entitySize];
+		*mather = entityList[rand()%25];
+		*father = entityList[rand()%25];
 	}
 
 	void update(entity * entity)
 	{
-		entity->_chromosome[]
+		if( entity->_chromosome[0] == 0)
+		{
+			_blueCount++;	
+		}else
+		{
+			_blackCount++;
+		}
 	}
 
 	
