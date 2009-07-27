@@ -16,6 +16,7 @@
 #include "Timing.h"
 #include "Utilities.h"
 #include "SamplesVRDSettings.h"
+#include "creature.h"
 
 // Physics SDK globals
 NxPhysicsSDK*     gPhysicsSDK = NULL;
@@ -57,12 +58,6 @@ NxVec3 gForceVec(0,0,0);
 NxReal gForceStrength = 1000;
 bool bForceMode = true;
 
-// Limit globals
-NxReal gLinearLimit = 1.0f;
-NxReal gSwing1Limit = NxPiF32 / 180.0f * 90.0f;
-NxReal gSwing2Limit = NxPiF32 / 180.0f * 90.0f;
-NxReal gTwistLowLimit = NxPiF32 / 180.0f * -90.0f;
-NxReal gTwistHighLimit = NxPiF32 / 180.0f * 45.0f;
 
 // Keyboard globals
 #define MAX_KEYS 256
@@ -76,8 +71,8 @@ bool bDebugWireframeMode = false;
 
 // Actor globals
 NxActor* groundPlane = NULL;
-NxActor* capsule1 = NULL;
-NxActor* capsule2 = NULL;
+//NxActor* capsule1 = NULL;
+//NxActor* capsule2 = NULL;
 
 // Joint globals
 NxD6Joint* d6Joint = NULL;
@@ -142,46 +137,46 @@ void RefreshDisplayString()
 // Configurable joint - roll joint
 void ReconfigureD6Joint()
 {
-	NxActor* a0 = capsule1;
-	NxActor* a1 = capsule2;
-
-    NxD6JointDesc d6Desc;
-
-	d6Joint->saveToDesc(d6Desc);
-
-	// reset actor 1
-/*
-	NxMat33 orient;
-	orient.id();
-	a1->raiseBodyFlag(NX_BF_KINEMATIC);
-	a1->setGlobalOrientation(orient);
-	a1->setGlobalPosition(NxVec3(0,3,0));
-	a1->clearBodyFlag(NX_BF_KINEMATIC);
-*/
-	// set the DOF
-	d6Desc.xMotion = gJointMotion[0];
-	d6Desc.yMotion = gJointMotion[1];
-	d6Desc.zMotion = gJointMotion[2];
-
-	d6Desc.twistMotion = gJointMotion[3];
-	d6Desc.swing1Motion = gJointMotion[4];
-	d6Desc.swing2Motion = gJointMotion[5];
-
-	d6Joint->loadFromDesc(d6Desc);
-
-	// reconfig upper joint
-	d6JointUpper->saveToDesc(d6Desc);
-	if (bUpperJointLocked) {
-		d6Desc.twistMotion = NX_D6JOINT_MOTION_LOCKED;
-		d6Desc.swing1Motion = NX_D6JOINT_MOTION_LOCKED;
-		d6Desc.swing2Motion = NX_D6JOINT_MOTION_LOCKED;
-	}
-	else {
-		d6Desc.twistMotion = NX_D6JOINT_MOTION_FREE;
-		d6Desc.swing1Motion = NX_D6JOINT_MOTION_FREE;
-		d6Desc.swing2Motion = NX_D6JOINT_MOTION_FREE;
-	}
-	d6JointUpper->loadFromDesc(d6Desc);
+//	NxActor* a0 = capsule1;
+//	NxActor* a1 = capsule2;
+//
+//    NxD6JointDesc d6Desc;
+//
+//	d6Joint->saveToDesc(d6Desc);
+//
+//	// reset actor 1
+///*
+//	NxMat33 orient;
+//	orient.id();
+//	a1->raiseBodyFlag(NX_BF_KINEMATIC);
+//	a1->setGlobalOrientation(orient);
+//	a1->setGlobalPosition(NxVec3(0,3,0));
+//	a1->clearBodyFlag(NX_BF_KINEMATIC);
+//*/
+//	// set the DOF
+//	d6Desc.xMotion = gJointMotion[0];
+//	d6Desc.yMotion = gJointMotion[1];
+//	d6Desc.zMotion = gJointMotion[2];
+//
+//	d6Desc.twistMotion = gJointMotion[3];
+//	d6Desc.swing1Motion = gJointMotion[4];
+//	d6Desc.swing2Motion = gJointMotion[5];
+//
+//	d6Joint->loadFromDesc(d6Desc);
+//
+//	// reconfig upper joint
+//	d6JointUpper->saveToDesc(d6Desc);
+//	if (bUpperJointLocked) {
+//		d6Desc.twistMotion = NX_D6JOINT_MOTION_LOCKED;
+//		d6Desc.swing1Motion = NX_D6JOINT_MOTION_LOCKED;
+//		d6Desc.swing2Motion = NX_D6JOINT_MOTION_LOCKED;
+//	}
+//	else {
+//		d6Desc.twistMotion = NX_D6JOINT_MOTION_FREE;
+//		d6Desc.swing1Motion = NX_D6JOINT_MOTION_FREE;
+//		d6Desc.swing2Motion = NX_D6JOINT_MOTION_FREE;
+//	}
+//	d6JointUpper->loadFromDesc(d6Desc);
 }
 
 
@@ -485,59 +480,61 @@ enum NxD6JointMotion
 //    desc.setGlobalAnchor(globalPos);
 //
 //}
+//
+//NxD6Joint* CreateD6Joint(NxActor* a0, NxActor* a1, const NxVec3& globalAnchor, const NxVec3& globalAxis)
+//{
+//	NxD6JointDesc d6Desc;
+//	d6Desc.actor[0] = a0;
+//	d6Desc.actor[1] = a1;
+//	d6Desc.setGlobalAnchor(globalAnchor);
+//	d6Desc.setGlobalAxis(globalAxis);
+//
+//	d6Desc.twistMotion = NX_D6JOINT_MOTION_LOCKED;
+//	d6Desc.swing1Motion = NX_D6JOINT_MOTION_LIMITED;
+//	d6Desc.swing2Motion = NX_D6JOINT_MOTION_LIMITED;
+//
+//	d6Desc.xMotion = NX_D6JOINT_MOTION_LOCKED;
+//	d6Desc.yMotion = NX_D6JOINT_MOTION_LOCKED;
+//	d6Desc.zMotion = NX_D6JOINT_MOTION_LOCKED;
+//
+//	d6Desc.linearLimit.value = gLinearLimit;
+//	d6Desc.swing1Limit.value = gSwing1Limit;
+//	d6Desc.swing2Limit.value = gSwing2Limit;
+//	d6Desc.twistLimit.low.value =  gTwistLowLimit;
+//	d6Desc.twistLimit.high.value = gTwistHighLimit;
+//
+//	// drive test
+///*
+//	d6Desc.drivePosition.x = 0.5f;
+//	d6Desc.xDrive.spring = 1000.0f;
+//	d6Desc.xDrive.damping = 1.0f;
+//	d6Desc.xDrive.driveType.raiseFlagMask(NX_D6JOINT_DRIVE_POSITION);
+//
+//	d6Desc.driveLinearVelocity.z = 0.5f;
+//	d6Desc.zDrive.forceLimit = 1000.0f;
+//	d6Desc.zDrive.driveType.raiseFlagMask(NX_D6JOINT_DRIVE_VELOCITY);
+//
+//	d6Desc.swingDrive.driveType.raiseFlagMask(NX_D6JOINT_DRIVE_POSITION);
+//	d6Desc.swingDrive.spring = 100.0f;
+//	d6Desc.swingDrive.damping = 1.0f;
+//	d6Desc.driveOrientation.fromAngleAxis(-40.0f, NxVec3(0,1,1));
+//
+//	d6Desc.swingDrive.driveType.raiseFlagMask(NX_D6JOINT_DRIVE_VELOCITY);
+//	d6Desc.swingDrive.forceLimit = 1000.0f;
+//	d6Desc.driveAngularVelocity.y = 10.0f;
+//*/	
+//
+////	d6Desc.projectionMode = NX_JPM_NONE;
+//	d6Desc.projectionMode = NX_JPM_POINT_MINDIST;
+//
+////	d6Desc.jointFlags |= NX_JF_COLLISION_ENABLED;
+//
+//	NxJoint* d6Joint = gScene->createJoint(d6Desc);
+//
+//	return (NxD6Joint*)d6Joint->is(NX_JOINT_D6);
+//}
 
-NxD6Joint* CreateD6Joint(NxActor* a0, NxActor* a1, const NxVec3& globalAnchor, const NxVec3& globalAxis)
-{
-	NxD6JointDesc d6Desc;
-	d6Desc.actor[0] = a0;
-	d6Desc.actor[1] = a1;
-	d6Desc.setGlobalAnchor(globalAnchor);
-	d6Desc.setGlobalAxis(globalAxis);
-
-	d6Desc.twistMotion = NX_D6JOINT_MOTION_LOCKED;
-	d6Desc.swing1Motion = NX_D6JOINT_MOTION_LIMITED;
-	d6Desc.swing2Motion = NX_D6JOINT_MOTION_LIMITED;
-
-	d6Desc.xMotion = NX_D6JOINT_MOTION_LOCKED;
-	d6Desc.yMotion = NX_D6JOINT_MOTION_LOCKED;
-	d6Desc.zMotion = NX_D6JOINT_MOTION_LOCKED;
-
-	d6Desc.linearLimit.value = gLinearLimit;
-	d6Desc.swing1Limit.value = gSwing1Limit;
-	d6Desc.swing2Limit.value = gSwing2Limit;
-	d6Desc.twistLimit.low.value =  gTwistLowLimit;
-	d6Desc.twistLimit.high.value = gTwistHighLimit;
-
-	// drive test
-/*
-	d6Desc.drivePosition.x = 0.5f;
-	d6Desc.xDrive.spring = 1000.0f;
-	d6Desc.xDrive.damping = 1.0f;
-	d6Desc.xDrive.driveType.raiseFlagMask(NX_D6JOINT_DRIVE_POSITION);
-
-	d6Desc.driveLinearVelocity.z = 0.5f;
-	d6Desc.zDrive.forceLimit = 1000.0f;
-	d6Desc.zDrive.driveType.raiseFlagMask(NX_D6JOINT_DRIVE_VELOCITY);
-
-	d6Desc.swingDrive.driveType.raiseFlagMask(NX_D6JOINT_DRIVE_POSITION);
-	d6Desc.swingDrive.spring = 100.0f;
-	d6Desc.swingDrive.damping = 1.0f;
-	d6Desc.driveOrientation.fromAngleAxis(-40.0f, NxVec3(0,1,1));
-
-	d6Desc.swingDrive.driveType.raiseFlagMask(NX_D6JOINT_DRIVE_VELOCITY);
-	d6Desc.swingDrive.forceLimit = 1000.0f;
-	d6Desc.driveAngularVelocity.y = 10.0f;
-*/	
-
-//	d6Desc.projectionMode = NX_JPM_NONE;
-	d6Desc.projectionMode = NX_JPM_POINT_MINDIST;
-
-//	d6Desc.jointFlags |= NX_JF_COLLISION_ENABLED;
-
-	NxJoint* d6Joint = gScene->createJoint(d6Desc);
-
-	return (NxD6Joint*)d6Joint->is(NX_JOINT_D6);
-}
+Creature * pCreature;
 
 bool InitNx()
 {
@@ -585,10 +582,14 @@ bool InitNx()
 	// Create the objects in the scene
 	groundPlane = CreateGroundPlane();
 
-	capsule1 = CreateCapsule(NxVec3(0,5,0), 1, 0.5, 10);
+
+	pCreature = new Creature;
+	pCreature->Init();
+
+//	capsule1 = CreateCapsule(NxVec3(0,5,0), 1, 0.5, 10);
 //	capsule1->raiseBodyFlag(NX_BF_KINEMATIC);
-	capsule2 = CreateCapsule(NxVec3(0,3,0), 1, 0.5, 10);
-	capsule2->setLinearDamping(0.5);
+//	capsule2 = CreateCapsule(NxVec3(0,3,0), 1, 0.5, 10);
+//	capsule2->setLinearDamping(0.5);
 
 	NxVec3 globalAnchor = NxVec3(0,5,0);
 	NxVec3 globalAnchorUpper = NxVec3(0,7,0);
@@ -596,9 +597,9 @@ bool InitNx()
 	// upper joint
 	//d6JointUpper = CreateD6Joint(NULL, capsule1, globalAnchorUpper, globalAxis);
 	// lower test joint
-	d6Joint = CreateD6Joint(capsule1, capsule2, globalAnchor, globalAxis);
+//	d6Joint = CreateD6Joint(capsule1, capsule2, globalAnchor, globalAxis);
 
-	gSelectedActor = capsule2;
+//	gSelectedActor = capsule2;
 	UpdateTime();
 	RefreshDisplayString();
 
