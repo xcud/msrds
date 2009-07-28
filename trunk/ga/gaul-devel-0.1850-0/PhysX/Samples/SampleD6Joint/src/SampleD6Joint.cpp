@@ -25,6 +25,8 @@ NxScene*          gScene = NULL;
 NxVec3            gDefaultGravity(0,0,0);
 DebugRenderer gDebugRenderer;
 
+Creature * pCreature;
+
 // Time globals
 NxReal gTime;
 NxReal gLastTime;
@@ -289,6 +291,12 @@ void RenderCallback()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	ProcessKeys();
+
+	pCreature->Update();
+
+
+
+
 	SetupCamera();
  	RenderActors(bShadows);
 
@@ -534,7 +542,7 @@ enum NxD6JointMotion
 //	return (NxD6Joint*)d6Joint->is(NX_JOINT_D6);
 //}
 
-Creature * pCreature;
+
 
 bool InitNx()
 {
