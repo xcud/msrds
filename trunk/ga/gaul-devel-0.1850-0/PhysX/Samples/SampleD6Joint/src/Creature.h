@@ -24,7 +24,7 @@ public:
 
 
   NxActor* _capsuleList[5] ;
-  void Init()
+  void Init2()
   {
 	
 		int z = 15;	
@@ -32,7 +32,7 @@ public:
 
 	  for(int i = 0;i< 5;i++)
 	  {
-			_capsuleList[ i]  = CreateBox(NxVec3(0,z,0),NxVec3(0.5,1,0.5),20);
+			_capsuleList[ i]  = CreateBox(NxVec3(0,z,0),NxVec3(0.5,1,0.5),50);
 
 			//_capsuleList[ i]  = CreateCapsule(NxVec3(0,z,0), 1, 0.5, 10);
 			
@@ -45,16 +45,42 @@ public:
 	  }
 	}
 
+    void Init()
+	  {
+		
+			int z = 2;	
+			NxD6Joint* d6Joint;
+
+			_capsuleList[ 0]  = CreateBox(NxVec3(0,z,0),NxVec3(1,0.5,1),10);
+
+			_capsuleList[ 1]  = CreateBox(NxVec3(1,z-0.5,1),NxVec3(0.25,0.5,0.25),50);
+			CreateD6Joint(_capsuleList[ 0], _capsuleList[ 1], NxVec3(1,z,1), NxVec3(0,-1,0));
+
+			_capsuleList[ 2]  = CreateBox(NxVec3(1,z-0.5,-1),NxVec3(0.25,0.5,0.25),50);
+			CreateD6Joint(_capsuleList[ 0], _capsuleList[ 2], NxVec3(1,z,-1), NxVec3(0,-1,0));
+
+			_capsuleList[ 3]  = CreateBox(NxVec3(-1,z-0.5,1),NxVec3(0.25,0.5,0.25),50);
+			CreateD6Joint(_capsuleList[ 0], _capsuleList[ 3], NxVec3(-1,z,1), NxVec3(0,-1,0));
+
+			_capsuleList[ 4]  = CreateBox(NxVec3(-1,z-0.5,-1),NxVec3(0.25,0.5,0.25),50);
+			CreateD6Joint(_capsuleList[ 0], _capsuleList[ 4], NxVec3(-1,z,-1), NxVec3(0,-1,0));
+
+		}
+
 	void Update()
 	{
+
+		int f = 200;
+
 		for(int i =0;i< 5;i++)
 		{
-			int x = rand() % 50;
+			int x = rand() % f;
 			int y = rand() % 5;
-			int z = rand() % 50;
+			int z = rand() % f;
 
 
-			NxVec3 forceDir = NxVec3(x,0,z);
+			NxVec3 forceDir = NxVec3(x-f/2,0,z-f/2);
+			//_capsuleList[ i]->addForce(forceDir);
 			//_capsuleList[ i]->addLocalForce(forceDir);
 			//_capsuleList[ i]->addLocalTorque(forceDir);
 			_capsuleList[ i]->addTorque(forceDir);

@@ -2,8 +2,8 @@
 
 
 NxReal gLinearLimit = 1.0f;
-NxReal gSwing1Limit = NxPiF32 / 180.0f * 90.0f;
-NxReal gSwing2Limit = NxPiF32 / 180.0f * 90.0f;
+NxReal gSwing1Limit = NxPiF32 / 180.0f * 30.0f;
+NxReal gSwing2Limit = NxPiF32 / 180.0f * 30.0f;
 NxReal gTwistLowLimit = NxPiF32 / 180.0f * -90.0f;
 NxReal gTwistHighLimit = NxPiF32 / 180.0f * 45.0f;
 
