@@ -24,6 +24,10 @@ public:
 
 
   NxActor* _capsuleList[5] ;
+
+
+	NxVec3 _StartPos;
+
   void Init2()
   {
 	
@@ -70,7 +74,14 @@ public:
 	void Update()
 	{
 
-		int f = 200;
+		
+		NxReal  movement = _capsuleList[ 0]->getGlobalPosition().distance(_StartPos);
+
+		
+		
+			
+
+		int f = 500;
 
 		for(int i =0;i< 5;i++)
 		{
@@ -85,6 +96,10 @@ public:
 			//_capsuleList[ i]->addLocalTorque(forceDir);
 			_capsuleList[ i]->addTorque(forceDir);
 		}
+
+
+
+//		_capsuleList[ 0]->getpo
 	}
   
 	NxD6Joint* CreateD6Joint(NxActor* a0, NxActor* a1, const NxVec3& globalAnchor, const NxVec3& globalAxis);
