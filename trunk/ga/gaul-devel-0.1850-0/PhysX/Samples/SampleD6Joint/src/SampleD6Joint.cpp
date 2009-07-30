@@ -17,7 +17,8 @@
 #include "Utilities.h"
 #include "SamplesVRDSettings.h"
 #include "creature.h"
-
+#include "../../../../galib/population.h"
+#include "myworld.h"
 // Physics SDK globals
 NxPhysicsSDK*     gPhysicsSDK = NULL;
 NxScene*          gScene = NULL;
@@ -26,7 +27,7 @@ NxVec3            gDefaultGravity(0,0,0);
 DebugRenderer gDebugRenderer;
 
 Creature * pCreature;
-
+population * _pop;
 // Time globals
 NxReal gTime;
 NxReal gLastTime;
@@ -294,7 +295,7 @@ void RenderCallback()
 
 	pCreature->Update();
 
-
+	
 
 
 	SetupCamera();
@@ -542,6 +543,8 @@ enum NxD6JointMotion
 //	return (NxD6Joint*)d6Joint->is(NX_JOINT_D6);
 //}
 
+NxReal myTimestep = 1.0f/60.0f;
+
 
 
 bool InitNx()
@@ -594,6 +597,11 @@ bool InitNx()
 	pCreature = new Creature;
 	pCreature->Init();
 
+	_pop = new population();
+	_pop->Init(new MyWorld);
+	
+	
+
 //	capsule1 = CreateCapsule(NxVec3(0,5,0), 1, 0.5, 10);
 //	capsule1->raiseBodyFlag(NX_BF_KINEMATIC);
 //	capsule2 = CreateCapsule(NxVec3(0,3,0), 1, 0.5, 10);
@@ -608,6 +616,9 @@ bool InitNx()
 //	d6Joint = CreateD6Joint(capsule1, capsule2, globalAnchor, globalAxis);
 
 //	gSelectedActor = capsule2;
+
+	gScene->setTiming(myTimestep , 1, NX_TIMESTEP_FIXED);
+
 	UpdateTime();
 	RefreshDisplayString();
 
@@ -668,11 +679,17 @@ NxReal UpdateTime()
 
 void RunPhysics()
 {
+
+	_pop->evaluate();
+
 	// Update the time step
 	NxReal deltaTime = UpdateTime();
 
 	// Run collision and dynamics for delta time since the last frame
-	gScene->simulate(deltaTime);	
+	//gScene->simulate(deltaTime);	
+	gScene->simulate(myTimestep);	
+	
+
 	gScene->flushStream();
 	gScene->fetchResults(NX_RIGID_BODY_FINISHED, true);
 }
