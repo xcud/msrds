@@ -63,6 +63,9 @@ public:
 		int j = 0;
 		for(int i = _size-count;i< _size;i++)
 		{
+			//자식들이 기존애들보다 미달
+			if(_entityList[i]->_fitness < _entityList2[j]->_fitness)
+				return ;
 			entity * temp = _entityList[i];
 			_entityList[i] = _entityList2[j];
 			_entityList2[j] = temp;
@@ -98,7 +101,7 @@ public:
 		int size = 0;
 		int i = 0;
 
-		for(int i = 0; i< _size;i++)
+		for(int i = 0; i< 25;i++)
 		{
 		
 			//선택시 골고루 잡아줘야한다.
@@ -106,15 +109,15 @@ public:
 			_world->select(_entityList,&mother,&father);
 			//_world->crossover(&(_entityList[i++]),&(_entityList[i++]),&(_entityList[size]),&(_entityList[size+1]));
 			_world->crossover(mother,father,&(_entityList2[size]),&(_entityList2[size+1]));
-			_world->struggle(_entityList2,_entityList2[size]);
-			_world->struggle(_entityList2,_entityList2[size+1]);
+			//_world->struggle(_entityList,_entityList2[size]);
+			//_world->struggle(_entityList,_entityList2[size+1]);
 
 			size +=2;
 		}
 
 		rank(_entityList2,size);
 	
-		swap(10);
+		swap(1);
 
 		for(int i = 0; i< _size;i++)
 		{
