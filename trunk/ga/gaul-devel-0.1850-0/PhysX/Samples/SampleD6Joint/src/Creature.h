@@ -98,10 +98,32 @@ public:
 		}
 
 
-
-//		_capsuleList[ 0]->getpo
 	}
   
+
+	void GetPos(int index)
+	{
+		NxMat33 orient;
+		NxVec3 xaxis, yaxis, zaxis;
+		
+
+		orient = _capsuleList[ index]->getGlobalOrientation();
+		orient.getRow(0, xaxis);
+		orient.getRow(1, yaxis);
+		orient.getRow(2, zaxis);
+
+
+		xaxis.normalize();
+		yaxis.normalize();
+		zaxis.normalize();
+
+
+		NxReal xAngle = xaxis.dot(NxVec3(1,0,0));
+		NxReal yAngle = yaxis.dot(NxVec3(0,1,0));
+		NxReal zAngle = zaxis.dot(NxVec3(0,0,1));
+
+	}
+
 	NxD6Joint* CreateD6Joint(NxActor* a0, NxActor* a1, const NxVec3& globalAnchor, const NxVec3& globalAxis);
 
 };
