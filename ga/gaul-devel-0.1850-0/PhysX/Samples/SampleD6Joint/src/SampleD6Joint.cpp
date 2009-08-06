@@ -293,6 +293,8 @@ void RenderCallback()
 
 	ProcessKeys();
 
+	pCreature->GetPos(1);
+
 	pCreature->Update();
 
 	
