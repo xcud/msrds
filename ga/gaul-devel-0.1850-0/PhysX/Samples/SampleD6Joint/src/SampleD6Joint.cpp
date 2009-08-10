@@ -682,7 +682,7 @@ NxReal UpdateTime()
 void RunPhysics()
 {
 
-	_pop->evaluate();
+//	_pop->evaluate();
 
 	// Update the time step
 	NxReal deltaTime = UpdateTime();
