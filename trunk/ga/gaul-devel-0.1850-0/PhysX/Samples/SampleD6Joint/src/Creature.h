@@ -101,7 +101,7 @@ public:
 	}
   
 
-	void GetPos(int index)
+	void GetPos(int index,NxReal [] xyz)
 	{
 		NxMat33 orient;
 		NxVec3 xaxis, yaxis, zaxis;
@@ -118,9 +118,9 @@ public:
 		zaxis.normalize();
 
 
-		NxReal xAngle = xaxis.dot(NxVec3(1,0,0));
-		NxReal yAngle = yaxis.dot(NxVec3(0,1,0));
-		NxReal zAngle = zaxis.dot(NxVec3(0,0,1));
+		xyz[0] = xaxis.dot(NxVec3(1,0,0));
+		xyz[1] = yaxis.dot(NxVec3(0,1,0));
+		xyz[2] = zaxis.dot(NxVec3(0,0,1));
 
 	}
 
