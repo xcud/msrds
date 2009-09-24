@@ -17,7 +17,7 @@ YIELD 키워드(lua coroutine)
  
 다음코드를 보자
 
-Demo00
+Demo0
  
 
 우선 이 yield 키워드가 어떠한 일을 하는지 보고 이것을 가지고 어떠한 곳에서 사용할수있는지 보자.
@@ -50,17 +50,50 @@ http://www.lutzroeder.com/dotnet/
 
 
 
-그렇다면 이것으로 어떤 표현이 가능한지 보자.
+그렇다면 이것으로 간단한 퀘스트를 짜보자 
+
+Demo2 
+
+우선 퀘스트 코드를 보자 
+
 
  
-
-gpg5권에 루아로 표현된 코드를 c#으로 표현한다면.
-
- 테스트입니다.
-
-일반적인 프로그램으로 저 코드가 작동되는것을 구현하고 비교해봄으로 무엇이 편하고 직관적인지 느낄수있을거다.
+        public IEnumerator GetEnumerator()
+        {
 
 
+
+            if (_Owner._QuestInfo.Contains(1))
+            {
+                yield return new NCondition.WaitMessage("여기서 뭐하나", 2);
+
+                yield break;
+            }
+
+            NCondition.WaitMessage msg = new NCondition.WaitMessage("반갑군. 내부탁을 들어줄수있나?", 0);
+
+            yield return msg;
+
+            if (msg.Ret() == "OK")
+            {
+                _Owner._QuestInfo.Add(1);
+
+                yield return new NCondition.WaitMessage("고맙군 어서 친구를 찾아주게 ", 2);
+            }
+            else
+            {
+                yield return new NCondition.WaitMessage("실망일세 꺼지라우", 2);
+
+                yield break;
+            }
+
+            yield return new NCondition.WaitClickEvent(1);
+
+            yield return new NCondition.WaitMessage("반갑군 자네가 그친구인가? 너무늦었네... ", 5);
+
+
+            yield break;
+        }
 
 
 
@@ -68,29 +101,7 @@ gpg5권에 루아로 표현된 코드를 c#으로 표현한다면.
 
 
 한마디로 yield 로 표현된 코드는 우리가 일일히 스테이트관리를 해야하는작업을 코드가 알아서 만들어준다고 보면된다.
-우리는 귀찮은 스테이트 관리와 리소스 관리를 컴파일러에게 넘겨주고 우리가 필요한 컨텐츠 코드작성만 하면되는것이다.
-
-마지막으로 yield 로 스킬이나 퀘스트 같은 것을 코드로 표현해봄으로서 순차적인 코드가 필요할때 어떻게 쓸수있는지 보여준다
+우리는 귀찮은 스테이트 관리와 데이타 관리를 컴파일러에게 넘겨주고 우리가 필요한 컨텐츠 코드작성만 하면되는것이다.
 
 
-다음에는 이 yield 프로그래밍을 가지고 분산프로그램을 구현하는것을 보여주겠다.
-
-
-
-
-
-
-
-
-
-
-
- 
-
- 
-
- c#으로 스크립트로 작성되는구조라면 한번쯤 yield 키워드를 이용한 스크립트를 제공해보는것도 좋을것같다.
-
- 
-
- 
+다음에는 이 yield 프로그래밍을 가지고 분산프로그램을 쉡게 구현할수있는 방법을 소개해 보겠다.
