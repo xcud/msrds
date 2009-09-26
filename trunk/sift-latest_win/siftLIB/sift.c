@@ -178,8 +178,8 @@ IplImage* create_init_img( IplImage* img, int img_dbl, double sigma )
 		sig_diff = sqrt( sigma * sigma - SIFT_INIT_SIGMA * SIFT_INIT_SIGMA * 4 );
 		dbl = cvCreateImage( cvSize( img->width*2, img->height*2 ),
 			IPL_DEPTH_32F, 1 );
-		cvResize( gray, dbl, CV_INTER_CUBIC );
-		cvSmooth( dbl, dbl, CV_GAUSSIAN, 0, 0, sig_diff, sig_diff );
+		cvResize( gray, dbl, CV_INTER_CUBIC );// x 축 y축 2배로 큐빅방식? 으로 리사이징
+		cvSmooth( dbl, dbl, CV_GAUSSIAN, 0, 0, sig_diff, sig_diff ); // 이미지 다듬기 ? 가우시안 방식으로 파라미터 주고
 		cvReleaseImage( &gray );
 		return dbl;
 	}
@@ -259,11 +259,11 @@ IplImage*** build_gauss_pyr( IplImage* base, int octvs,
 	for( o = 0; o < octvs; o++ )
 		for( i = 0; i < intvls + 3; i++ )
 		{
-			if( o == 0  &&  i == 0 )
+			if( o == 0  &&  i == 0 ) // 첫이미지는 원본복사
 				gauss_pyr[o][i] = cvCloneImage(base);
 
 			/* base of new octvave is halved image from end of previous octave */
-			else if( i == 0 )
+			else if( i == 0 ) // 
 				gauss_pyr[o][i] = downsample( gauss_pyr[o-1][intvls] );
 
 			/* blur the current octave's last image to create the next one */
@@ -272,7 +272,7 @@ IplImage*** build_gauss_pyr( IplImage* base, int octvs,
 				gauss_pyr[o][i] = cvCreateImage( cvGetSize(gauss_pyr[o][i-1]),
 					IPL_DEPTH_32F, 1 );
 				cvSmooth( gauss_pyr[o][i-1], gauss_pyr[o][i],
-					CV_GAUSSIAN, 0, 0, sig[i], sig[i] );
+					CV_GAUSSIAN, 0, 0, sig[i], sig[i] );// 뭔지는 모르겠다 하여간 시그마값을 바꾸어가면서 만든다.
 			}
 		}
 

@@ -25,8 +25,8 @@ Version: 1.1.1-20070913
 
 /******************************** Globals ************************************/
 
-char* img_file_name = "..\\beaver.png";
-char* out_file_name  = "..\\beaver.sift";;
+char* img_file_name = "beaver.png";
+char* out_file_name  = "beaver.sift";;
 char* out_img_name = NULL;
 int display = 1;
 int intvls = SIFT_INTVLS;
