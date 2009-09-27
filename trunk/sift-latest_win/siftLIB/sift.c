@@ -172,7 +172,13 @@ IplImage* create_init_img( IplImage* img, int img_dbl, double sigma )
 	IplImage* gray, * dbl;
 	float sig_diff;
 
+	
+
 	gray = convert_to_gray32( img );
+
+	
+
+
 	if( img_dbl )
 	{
 		sig_diff = sqrt( sigma * sigma - SIFT_INIT_SIGMA * SIFT_INIT_SIGMA * 4 );
@@ -237,8 +243,14 @@ IplImage*** build_gauss_pyr( IplImage* base, int octvs,
 	double* sig = calloc( intvls + 3, sizeof(double));
 	double sig_total, sig_prev, k;
 	int i, o;
+	char fileName[1024];
+	IplImage* pTemp;
 
 	gauss_pyr = calloc( octvs, sizeof( IplImage** ) );
+
+	
+
+
 	for( i = 0; i < octvs; i++ )
 		gauss_pyr[i] = calloc( intvls + 3, sizeof( IplImage* ) );
 
@@ -260,7 +272,12 @@ IplImage*** build_gauss_pyr( IplImage* base, int octvs,
 		for( i = 0; i < intvls + 3; i++ )
 		{
 			if( o == 0  &&  i == 0 ) // 첫이미지는 원본복사
+			{
+				
+
+
 				gauss_pyr[o][i] = cvCloneImage(base);
+			}
 
 			/* base of new octvave is halved image from end of previous octave */
 			else if( i == 0 ) // 
@@ -273,6 +290,16 @@ IplImage*** build_gauss_pyr( IplImage* base, int octvs,
 					IPL_DEPTH_32F, 1 );
 				cvSmooth( gauss_pyr[o][i-1], gauss_pyr[o][i],
 					CV_GAUSSIAN, 0, 0, sig[i], sig[i] );// 뭔지는 모르겠다 하여간 시그마값을 바꾸어가면서 만든다.
+
+
+				// 중간단계저장
+				
+
+				sprintf(fileName,"gauss_pyr_%d_%d.bmp",o,i);
+				pTemp = cvCloneImage(gauss_pyr[o][i]);
+				cvSaveImage( fileName, pTemp );
+
+				
 			}
 		}
 
