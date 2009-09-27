@@ -25,7 +25,7 @@ Version: 1.1.1-20070913
 
 /******************************** Globals ************************************/
 
-char* img_file_name = "beaver.png";
+char* img_file_name = "beaver.bmp";
 char* out_file_name  = "beaver.sift";;
 char* out_img_name = NULL;
 int display = 1;
@@ -53,6 +53,12 @@ int main( int argc, char** argv )
 		fprintf( stderr, "unable to load image from %s", img_file_name );
 		exit( 1 );
 	}
+	
+	//cvSaveImage( "ASd", img );
+
+	
+
+
 	n = _sift_features( img, &features, intvls, sigma, contr_thr, curv_thr,
 						img_dbl, descr_width, descr_hist_bins );
 	fprintf( stderr, "Found %d features.\n", n );
