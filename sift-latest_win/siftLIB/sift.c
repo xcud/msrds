@@ -225,6 +225,19 @@ IplImage* convert_to_gray32( IplImage* img )
 }
 
 
+IplImage* convert_to_gray8( IplImage* img )
+{
+	IplImage* gray8, * gray32;
+
+	gray8 = cvCreateImage( cvGetSize(img), IPL_DEPTH_8U, 1 );
+
+	cvConvertScale( img, gray8,   255.0 , 0 );
+
+	return gray8;
+}
+
+
+
 
 /*
 Builds Gaussian scale space pyramid from an image
@@ -286,20 +299,22 @@ IplImage*** build_gauss_pyr( IplImage* base, int octvs,
 			/* blur the current octave's last image to create the next one */
 			else
 			{
-				gauss_pyr[o][i] = cvCreateImage( cvGetSize(gauss_pyr[o][i-1]),
-					IPL_DEPTH_32F, 1 );
-				cvSmooth( gauss_pyr[o][i-1], gauss_pyr[o][i],
-					CV_GAUSSIAN, 0, 0, sig[i], sig[i] );// 뭔지는 모르겠다 하여간 시그마값을 바꾸어가면서 만든다.
+				gauss_pyr[o][i] = cvCreateImage( cvGetSize(gauss_pyr[o][i-1]),IPL_DEPTH_32F, 1 );
 
+				pTemp = cvCreateImage( cvGetSize(gauss_pyr[o][i-1]),IPL_DEPTH_8U, 1 );
 
+				// 뭔지는 모르겠다 하여간 시그마값을 바꾸어가면서 만든다.
+				cvSmooth( gauss_pyr[o][i-1], gauss_pyr[o][i],CV_GAUSSIAN, 0, 0, sig[i], sig[i] );
+
+				
+				
+#ifdef GAUUS_SAVE				
 				// 중간단계저장
-				
-
-				sprintf(fileName,"gauss_pyr_%d_%d.bmp",o,i);
-				pTemp = cvCloneImage(gauss_pyr[o][i]);
-				cvSaveImage( fileName, pTemp );
-
-				
+				pTemp = convert_to_gray8( gauss_pyr[o][i]);
+				sprintf(fileName,"gauss_pyr_%d_%d.BMP",o,i);
+				cvSaveImage( fileName, pTemp);
+				cvReleaseImage(&pTemp);
+#endif				
 			}
 		}
 
@@ -342,8 +357,9 @@ intervals of a Gaussian pyramid
 IplImage*** build_dog_pyr( IplImage*** gauss_pyr, int octvs, int intvls )
 {
 	IplImage*** dog_pyr;
+	IplImage*pTemp;
 	int i, o;
-
+	char fileName[1024];
 	dog_pyr = calloc( octvs, sizeof( IplImage** ) );
 	for( i = 0; i < octvs; i++ )
 		dog_pyr[i] = calloc( intvls + 2, sizeof(IplImage*) );
@@ -354,6 +370,18 @@ IplImage*** build_dog_pyr( IplImage*** gauss_pyr, int octvs, int intvls )
 			dog_pyr[o][i] = cvCreateImage( cvGetSize(gauss_pyr[o][i]),
 				IPL_DEPTH_32F, 1 );
 			cvSub( gauss_pyr[o][i+1], gauss_pyr[o][i], dog_pyr[o][i], NULL );
+
+
+				
+#ifdef DOG_SAVE
+				// 중간단계저장
+				pTemp = convert_to_gray8( dog_pyr[o][i]);
+				sprintf(fileName,"dog_pyr_%d_%d.BMP",o,i);
+				cvSaveImage( fileName, pTemp);
+				cvReleaseImage(&pTemp);
+#endif			
+
+
 		}
 
 	return dog_pyr;

@@ -25,7 +25,7 @@ Version: 1.1.1-20070913
 
 /******************************** Globals ************************************/
 
-char* img_file_name = "beaver.bmp";
+char* img_file_name = "beaver.png";
 char* out_file_name  = "beaver.sift";;
 char* out_img_name = NULL;
 int display = 1;
@@ -54,7 +54,7 @@ int main( int argc, char** argv )
 		exit( 1 );
 	}
 	
-	//cvSaveImage( "ASd", img );
+	cvSaveImage( "ASd.png", img );
 
 	
 
