@@ -420,6 +420,7 @@ CvSeq* scale_space_extrema( IplImage*** dog_pyr, int octvs, int intvls,
 				for(c = SIFT_IMG_BORDER; c < dog_pyr[o][0]->width-SIFT_IMG_BORDER; c++)
 					/* perform preliminary check on contrast */
 					if( ABS( pixval32f( dog_pyr[o][i], r, c ) ) > prelim_contr_thr )
+						// 28곳 중가장크거나 작거나하냐
 						if( is_extremum( dog_pyr, o, i, r, c ) )
 						{
 							feat = interp_extremum(dog_pyr, o, i, r, c, intvls, contr_thr);
