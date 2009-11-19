@@ -1,0 +1,412 @@
+3
+9 20 1 
+
+linear
+sigmoid
+sigmoid
+
+0		1
+0		1
+0		1
+0		1
+0		1
+0		1
+0		1
+0		1
+0		1
+
+-1.76706
+16.3839
+-3.42387
+-58.2517
+-3.83277
+21.235
+-17.7784
+-3.00522
+-1.47211
+5.03012
+-3.44942
+-9.55961
+-2.37726
+-0.885331
+-3.55939
+-2.16015
+-1.93656
+-3.13594
+-2.47814
+-0.234572
+-3.5077
+-5.10334
+1.84478
+-0.774984
+-2.84628
+-1.54344
+0.532109
+-4.3653
+-5.16196
+1.02357
+0.291813
+3.48224
+-1.37768
+0.508798
+-1.37593
+7.17649
+5.69803
+2.06311
+14.2065
+1.9381
+-3.94769
+0.985169
+1.17251
+-0.67296
+0.72296
+1.15166
+-0.0631145
+-0.260436
+-0.136171
+-0.414991
+-3.993
+-2.17059
+1.0619
+-0.994046
+-1.86398
+-1.39081
+0.291875
+-1.59224
+-1.15163
+0.304495
+-3.89743
+0.819203
+-0.479493
+-0.749068
+0.666519
+0.763876
+0.0830232
+-1.83323
+-1.35337
+1.08925
+-1.79796
+18.8291
+-1.31293
+-14.9109
+-20.2993
+-36.8276
+10.3605
+-6.81802
+-6.39509
+-7.21295
+-3.57803
+-4.505
+1.1132
+-0.806336
+-2.01394
+-1.46655
+-0.152429
+-3.04404
+-1.87945
+0.793312
+-2.96514
+1.38964
+0.579572
+-0.89809
+-0.433378
+2.27439
+0.449841
+-0.994466
+0.260543
+0.772819
+-3.57613
+-1.14264
+0.421665
+-0.532694
+0.00706874
+0.617765
+0.0944817
+-0.767488
+0.456953
+0.762455
+-0.953169
+4.30319
+2.09043
+-0.46172
+-4.70709
+-3.55851
+9.16339
+-10.0027
+-3.34744
+3.49855
+-1.83144
+2.39958
+-4.07131
+48.4385
+7.74509
+2.38107
+7.40306
+-11.0597
+-8.76971
+1.31112
+-1.9156
+0.249818
+0.304222
+0.812353
+-0.294756
+3.20153
+2.28451
+0.475819
+3.40014
+2.35663
+0.209812
+-38.0129
+7.13538
+5.21626
+-6.62089
+-2.20444
+-0.782905
+-7.96736
+-6.02955
+2.57465
+-4.04884
+-1.10072
+2.01395
+-0.544508
+-1.07551
+-1.40199
+0.120226
+-2.13182
+-1.94589
+-0.59529
+-0.615769
+2.15642
+28.5531
+9.46905
+8.92695
+5.48752
+3.44412
+50.2434
+8.70605
+39.1789
+-4.13816
+0.275202
+-27.2725
+-3.15587
+7.80455
+6.91799
+12.504
+2.66937
+34.0465
+-21.7976
+-3.01541
+0.553212
+-0.978101
+1.16473
+-0.997997
+0.810712
+1.18963
+-0.790659
+1.56267
+-0.0800684
+-1.26765
+4.73039
+8.51773
+26.5492
+-30.407
+-8.41916
+-20.4702
+21.0359
+21.1687
+2.05365
+
+-0.308392
+-16.8746
+2.82375
+1.82661
+5.58358
+-0.424193
+0.54416
+-0.438728
+2.8766
+1.89852
+1.14216
+0.794218
+-7.17135
+-10.378
+2.61784
+4.00585
+-0.436718
+-4.17517
+-4.95462
+1.26044
+-4.78985
+
+
+
+ann1dn t scr.nn scr void 100  void void 0.5 3
+
+
+TRAINING SET: 22124
+
+
+VALIDATION SET: 11344
+
+
+TEST SET: 11911
+ÿ
+
+loading data...
+ cls1: 3783  cls2: 41596  files loaded.  size: 9 samples
+ validaton size: 945 10399
+ validaton size: 993 10918
+training...
+  epoch: 1   out: 0.590971 0.424062   max acur: 0.36 (epoch 1)   se:67.51 sp:74.66 ac:74.07
+  epoch: 2   out: 0.626271 0.388114   max acur: 0.41 (epoch 2)   se:88.78 sp:65.84 ac:67.75
+  epoch: 3   out: 0.654111 0.356167   max acur: 0.43 (epoch 3)   se:68.57 sp:82.82 ac:81.63
+  epoch: 4   out: 0.664120 0.344222   max acur: 0.43 (epoch 4)   se:85.19 sp:71.87 ac:72.98
+  epoch: 5   out: 0.669783 0.336609   max acur: 0.44 (epoch 5)   se:77.78 sp:78.49 ac:78.43
+  epoch: 6   out: 0.672402 0.331287   max acur: 0.44 (epoch 6)   se:82.86 sp:75.38 ac:76.00
+  epoch: 7   out: 0.675660 0.325724   max acur: 0.44 (epoch 6)   se:82.86 sp:75.38 ac:76.00
+  epoch: 8   out: 0.676120 0.322305   max acur: 0.44 (epoch 6)   se:82.86 sp:75.38 ac:76.00
+  epoch: 9   out: 0.676545 0.320643   max acur: 0.44 (epoch 6)   se:82.86 sp:75.38 ac:76.00
+  epoch: 10   out: 0.677496 0.317063   max acur: 0.44 (epoch 6)   se:82.86 sp:75.38 ac:76.00
+  epoch: 11   out: 0.679167 0.314940   max acur: 0.45 (epoch 11)   se:79.68 sp:78.27 ac:78.39
+  epoch: 12   out: 0.679816 0.311532   max acur: 0.45 (epoch 11)   se:79.68 sp:78.27 ac:78.39
+  epoch: 13   out: 0.680772 0.309135   max acur: 0.45 (epoch 13)   se:80.85 sp:77.56 ac:77.83
+  epoch: 14   out: 0.681868 0.307442   max acur: 0.45 (epoch 14)   se:76.40 sp:80.97 ac:80.59
+  epoch: 15   out: 0.683549 0.304948   max acur: 0.45 (epoch 14)   se:76.40 sp:80.97 ac:80.59
+  epoch: 16   out: 0.685103 0.302413   max acur: 0.46 (epoch 16)   se:77.78 sp:81.44 ac:81.14
+  epoch: 17   out: 0.687450 0.298523   max acur: 0.46 (epoch 16)   se:77.78 sp:81.44 ac:81.14
+  epoch: 18   out: 0.690640 0.294301   max acur: 0.46 (epoch 16)   se:77.78 sp:81.44 ac:81.14
+  epoch: 19   out: 0.693083 0.291997   max acur: 0.46 (epoch 19)   se:77.99 sp:81.40 ac:81.12
+  epoch: 20   out: 0.694952 0.286754   max acur: 0.47 (epoch 20)   se:77.04 sp:82.35 ac:81.91
+  epoch: 21   out: 0.698589 0.283626   max acur: 0.47 (epoch 20)   se:77.04 sp:82.35 ac:81.91
+  epoch: 22   out: 0.701088 0.279121   max acur: 0.49 (epoch 22)   se:79.37 sp:83.08 ac:82.77
+  epoch: 23   out: 0.702914 0.275465   max acur: 0.49 (epoch 22)   se:79.37 sp:83.08 ac:82.77
+  epoch: 24   out: 0.705061 0.273011   max acur: 0.49 (epoch 24)   se:86.98 sp:79.26 ac:79.90
+  epoch: 25   out: 0.709251 0.269930   max acur: 0.49 (epoch 24)   se:86.98 sp:79.26 ac:79.90
+  epoch: 26   out: 0.710537 0.268056   max acur: 0.49 (epoch 24)   se:86.98 sp:79.26 ac:79.90
+  epoch: 27   out: 0.712179 0.264967   max acur: 0.49 (epoch 24)   se:86.98 sp:79.26 ac:79.90
+  epoch: 28   out: 0.714116 0.264807   max acur: 0.50 (epoch 28)   se:83.17 sp:82.10 ac:82.19
+  epoch: 29   out: 0.714868 0.263367   max acur: 0.50 (epoch 29)   se:76.08 sp:86.10 ac:85.27
+  epoch: 30   out: 0.716167 0.262060   max acur: 0.50 (epoch 29)   se:76.08 sp:86.10 ac:85.27
+  epoch: 31   out: 0.716720 0.259194   max acur: 0.50 (epoch 31)   se:80.42 sp:84.21 ac:83.89
+  epoch: 32   out: 0.718967 0.257622   max acur: 0.50 (epoch 31)   se:80.42 sp:84.21 ac:83.89
+  epoch: 33   out: 0.719321 0.256468   max acur: 0.50 (epoch 31)   se:80.42 sp:84.21 ac:83.89
+  epoch: 34   out: 0.721020 0.254859   max acur: 0.50 (epoch 31)   se:80.42 sp:84.21 ac:83.89
+  epoch: 35   out: 0.722875 0.252977   max acur: 0.50 (epoch 31)   se:80.42 sp:84.21 ac:83.89
+  epoch: 36   out: 0.724357 0.250190   max acur: 0.50 (epoch 31)   se:80.42 sp:84.21 ac:83.89
+  epoch: 37   out: 0.725662 0.250527   max acur: 0.50 (epoch 31)   se:80.42 sp:84.21 ac:83.89
+  epoch: 38   out: 0.725826 0.248467   max acur: 0.51 (epoch 38)   se:87.83 sp:80.62 ac:81.22
+  epoch: 39   out: 0.727616 0.247788   max acur: 0.52 (epoch 39)   se:82.75 sp:84.21 ac:84.09
+  epoch: 40   out: 0.728664 0.246175   max acur: 0.55 (epoch 40)   se:70.48 sp:91.22 ac:89.49
+  epoch: 41   out: 0.729155 0.245032   max acur: 0.55 (epoch 40)   se:70.48 sp:91.22 ac:89.49
+  epoch: 42   out: 0.730138 0.244570   max acur: 0.55 (epoch 40)   se:70.48 sp:91.22 ac:89.49
+  epoch: 43   out: 0.730340 0.243020   max acur: 0.55 (epoch 40)   se:70.48 sp:91.22 ac:89.49
+  epoch: 44   out: 0.732746 0.240310   max acur: 0.55 (epoch 40)   se:70.48 sp:91.22 ac:89.49
+  epoch: 45   out: 0.732530 0.239268   max acur: 0.55 (epoch 40)   se:70.48 sp:91.22 ac:89.49
+  epoch: 46   out: 0.733254 0.239695   max acur: 0.55 (epoch 40)   se:70.48 sp:91.22 ac:89.49
+  epoch: 47   out: 0.734472 0.238675   max acur: 0.55 (epoch 40)   se:70.48 sp:91.22 ac:89.49
+  epoch: 48   out: 0.735261 0.236562   max acur: 0.55 (epoch 40)   se:70.48 sp:91.22 ac:89.49
+  epoch: 49   out: 0.735479 0.235572   max acur: 0.55 (epoch 40)   se:70.48 sp:91.22 ac:89.49
+  epoch: 50   out: 0.735512 0.235368   max acur: 0.55 (epoch 40)   se:70.48 sp:91.22 ac:89.49
+  epoch: 51   out: 0.736366 0.235036   max acur: 0.55 (epoch 40)   se:70.48 sp:91.22 ac:89.49
+  epoch: 52   out: 0.737268 0.234640   max acur: 0.55 (epoch 40)   se:70.48 sp:91.22 ac:89.49
+  epoch: 53   out: 0.737865 0.232786   max acur: 0.56 (epoch 53)   se:68.36 sp:92.53 ac:90.51
+  epoch: 54   out: 0.739558 0.233744   max acur: 0.56 (epoch 53)   se:68.36 sp:92.53 ac:90.51
+  epoch: 55   out: 0.739232 0.232519   max acur: 0.56 (epoch 53)   se:68.36 sp:92.53 ac:90.51
+  epoch: 56   out: 0.739685 0.231908   max acur: 0.56 (epoch 53)   se:68.36 sp:92.53 ac:90.51
+  epoch: 57   out: 0.740419 0.231223   max acur: 0.56 (epoch 53)   se:68.36 sp:92.53 ac:90.51
+  epoch: 58   out: 0.739895 0.230081   max acur: 0.56 (epoch 53)   se:68.36 sp:92.53 ac:90.51
+  epoch: 59   out: 0.740124 0.230140   max acur: 0.56 (epoch 53)   se:68.36 sp:92.53 ac:90.51
+  epoch: 60   out: 0.740409 0.229889   max acur: 0.56 (epoch 53)   se:68.36 sp:92.53 ac:90.51
+  epoch: 61   out: 0.741031 0.230116   max acur: 0.56 (epoch 53)   se:68.36 sp:92.53 ac:90.51
+  epoch: 62   out: 0.742979 0.227877   max acur: 0.56 (epoch 53)   se:68.36 sp:92.53 ac:90.51
+  epoch: 63   out: 0.742636 0.227618   max acur: 0.56 (epoch 53)   se:68.36 sp:92.53 ac:90.51
+  epoch: 64   out: 0.742180 0.228158   max acur: 0.56 (epoch 64)   se:77.88 sp:89.68 ac:88.70
+  epoch: 65   out: 0.742447 0.226109   max acur: 0.56 (epoch 64)   se:77.88 sp:89.68 ac:88.70
+  epoch: 66   out: 0.743530 0.226475   max acur: 0.56 (epoch 64)   se:77.88 sp:89.68 ac:88.70
+  epoch: 67   out: 0.744424 0.225962   max acur: 0.56 (epoch 64)   se:77.88 sp:89.68 ac:88.70
+  epoch: 68   out: 0.744658 0.226156   max acur: 0.56 (epoch 64)   se:77.88 sp:89.68 ac:88.70
+  epoch: 69   out: 0.745264 0.225721   max acur: 0.56 (epoch 64)   se:77.88 sp:89.68 ac:88.70
+  epoch: 70   out: 0.746085 0.225425   max acur: 0.56 (epoch 64)   se:77.88 sp:89.68 ac:88.70
+  epoch: 71   out: 0.747295 0.224012   max acur: 0.56 (epoch 64)   se:77.88 sp:89.68 ac:88.70
+  epoch: 72   out: 0.745810 0.224947   max acur: 0.56 (epoch 64)   se:77.88 sp:89.68 ac:88.70
+  epoch: 73   out: 0.746667 0.225101   max acur: 0.56 (epoch 64)   se:77.88 sp:89.68 ac:88.70
+  epoch: 74   out: 0.747821 0.224458   max acur: 0.56 (epoch 64)   se:77.88 sp:89.68 ac:88.70
+  epoch: 75   out: 0.746848 0.225270   max acur: 0.56 (epoch 64)   se:77.88 sp:89.68 ac:88.70
+  epoch: 76   out: 0.749001 0.223133   max acur: 0.56 (epoch 64)   se:77.88 sp:89.68 ac:88.70
+  epoch: 77   out: 0.748198 0.222536   max acur: 0.56 (epoch 64)   se:77.88 sp:89.68 ac:88.70
+  epoch: 78   out: 0.748718 0.223121   max acur: 0.56 (epoch 64)   se:77.88 sp:89.68 ac:88.70
+  epoch: 79   out: 0.749079 0.221765   max acur: 0.56 (epoch 64)   se:77.88 sp:89.68 ac:88.70
+  epoch: 80   out: 0.751048 0.222541   max acur: 0.56 (epoch 64)   se:77.88 sp:89.68 ac:88.70
+  epoch: 81   out: 0.749537 0.220804   max acur: 0.56 (epoch 64)   se:77.88 sp:89.68 ac:88.70
+  epoch: 82   out: 0.750763 0.220537   max acur: 0.58 (epoch 82)   se:74.92 sp:91.43 ac:90.06
+  epoch: 83   out: 0.751314 0.219786   max acur: 0.58 (epoch 82)   se:74.92 sp:91.43 ac:90.06
+  epoch: 84   out: 0.750850 0.220083   max acur: 0.58 (epoch 82)   se:74.92 sp:91.43 ac:90.06
+  epoch: 85   out: 0.750696 0.220275   max acur: 0.58 (epoch 82)   se:74.92 sp:91.43 ac:90.06
+  epoch: 86   out: 0.751940 0.219052   max acur: 0.58 (epoch 82)   se:74.92 sp:91.43 ac:90.06
+  epoch: 87   out: 0.751207 0.219080   max acur: 0.58 (epoch 82)   se:74.92 sp:91.43 ac:90.06
+  epoch: 88   out: 0.752032 0.218135   max acur: 0.58 (epoch 82)   se:74.92 sp:91.43 ac:90.06
+  epoch: 89   out: 0.753847 0.217144   max acur: 0.58 (epoch 82)   se:74.92 sp:91.43 ac:90.06
+  epoch: 90   out: 0.753533 0.216876   max acur: 0.58 (epoch 82)   se:74.92 sp:91.43 ac:90.06
+  epoch: 91   out: 0.754235 0.216849   max acur: 0.58 (epoch 82)   se:74.92 sp:91.43 ac:90.06
+  epoch: 92   out: 0.752468 0.216891   max acur: 0.58 (epoch 82)   se:74.92 sp:91.43 ac:90.06
+  epoch: 93   out: 0.752891 0.216773   max acur: 0.58 (epoch 82)   se:74.92 sp:91.43 ac:90.06
+  epoch: 94   out: 0.753344 0.217151   max acur: 0.58 (epoch 82)   se:74.92 sp:91.43 ac:90.06
+  epoch: 95   out: 0.755030 0.216035   max acur: 0.58 (epoch 82)   se:74.92 sp:91.43 ac:90.06
+  epoch: 96   out: 0.754009 0.215461   max acur: 0.58 (epoch 82)   se:74.92 sp:91.43 ac:90.06
+  epoch: 97   out: 0.754161 0.215419   max acur: 0.58 (epoch 82)   se:74.92 sp:91.43 ac:90.06
+  epoch: 98   out: 0.755179 0.214890   max acur: 0.58 (epoch 82)   se:74.92 sp:91.43 ac:90.06
+  epoch: 99   out: 0.755273 0.214204   max acur: 0.58 (epoch 82)   se:74.92 sp:91.43 ac:90.06
+  epoch: 100   out: 0.754746 0.215043   max acur: 0.58 (epoch 82)   se:74.92 sp:91.43 ac:90.06
+training time: 00:04:55:172
+
+classification results: maxacur.nn
+ 
+ train set: 1845 20279
+   sensitivity: 78.97
+   specificity: 91.86
+   +predictive: 46.89
+   -predictive: 97.96
+      accuracy: 90.79
+ 
+ validation set: 945 10399
+   sensitivity: 74.92
+   specificity: 91.43
+   +predictive: 44.28
+   -predictive: 97.57
+      accuracy: 90.06
+ 
+ test set: 993 10918
+   sensitivity: 76.64
+   specificity: 91.61
+   +predictive: 45.38
+   -predictive: 97.73
+      accuracy: 90.36
+
+classification results: scr.nn
+ 
+ train set: 1845 20279
+   sensitivity: 83.90
+   specificity: 90.00
+   +predictive: 43.29
+   -predictive: 98.40
+      accuracy: 89.49
+ 
+ validation set: 945 10399
+   sensitivity: 79.58
+   specificity: 89.52
+   +predictive: 40.83
+   -predictive: 97.97
+      accuracy: 88.69
+ 
+ test set: 993 10918
+   sensitivity: 82.18
+   specificity: 89.99
+   +predictive: 42.74
+   -predictive: 98.23
+      accuracy: 89.34
+ÿ
+
+
+
+maxacur.nn
+
