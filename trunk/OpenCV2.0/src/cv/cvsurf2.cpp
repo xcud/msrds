@@ -656,9 +656,15 @@ flannFindPairs( const CvSeq*, const CvSeq* objectDescriptors,
 		 this->_compareTime = this->_compareTime/(cvGetTickFrequency()*1000.);
 
 
+		
+		 
+	// 5등분한다.
+		 this->_CX = dst_corners[0].x + (dst_corners[2].x - dst_corners[0].x)/2 ;
+		 this->_CY = dst_corners[0].y + (dst_corners[2].y - dst_corners[0].y)/2;
 
-		 this->_CX = dst_corners[2].x /2;
-		 this->_CY = dst_corners[2].y /2;
+
+		 this->_CX /= (image_color->width /5);
+		 this->_CY /= (image_color->height /5);
 
 
 		 return true;
