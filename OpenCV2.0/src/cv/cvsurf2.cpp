@@ -444,15 +444,6 @@ flannFindPairs( const CvSeq*, const CvSeq* objectDescriptors,
 
 
 
-	SURF2::~SURF2()
-	{
-		if( _storage != NULL)
-		{
-			cvReleaseMemStorage( &_storage );
-			cvReleaseImage(&_image);
-		}
-	}
-
 	void SURF2::InitResource()
 	{
 		_storage = cvCreateMemStorage(0);
@@ -479,6 +470,9 @@ flannFindPairs( const CvSeq*, const CvSeq* objectDescriptors,
 		if( _storage == NULL)
 			InitResource();
 
+		_ObjectX = object->width;
+		_ObjectY = object->height;
+
 		cvExtractSURF( object, 0, &_objectKeypoints, &_objectDescriptors, _storage, _params ,0);
 	}
 
@@ -490,7 +484,16 @@ flannFindPairs( const CvSeq*, const CvSeq* objectDescriptors,
 		cvExtractSURF( object, 0, &_objectKeypoints, &_objectDescriptors, _storage, _params ,0);
 	}
 
-	void  SURF2::Compare(IplImage* image_color)
+
+	class ComparePoint
+	{
+	public:
+		int _X;
+		int _Y;
+		int _Count;
+	};
+
+	bool  SURF2::Compare(IplImage* image_color)
 	{
 		
 		    static CvScalar colors[] = 
@@ -505,23 +508,23 @@ flannFindPairs( const CvSeq*, const CvSeq* objectDescriptors,
 				{{255,0,255}},
 				{{255,255,255}}
 			};
-		
+		 
 
 		double scale;
 
 		if(_image == NULL)
 		{
-			_image = cvCreateImage(cvSize(160,120),8,1);
-			_imageResize = cvCreateImage(cvSize(160,120),8,3);
-			//_image = cvCreateImage(CvGetSize(image_color),8,1);
+			//_image = cvCreateImage(cvSize(160,120),8,1);
+			//_imageResize = cvCreateImage(cvSize(160,120),8,3);
+			_image = cvCreateImage(cvGetSize(image_color),8,1);
 		}
 		
-		scale = image_color->width / 160;
+		scale = 1;//image_color->width / 160;
 
-		cvResize(image_color,_imageResize,CV_INTER_CUBIC); 
+		//cvResize(image_color,_imageResize,CV_INTER_CUBIC); 
 
 
-		cvCvtColor( _imageResize, _image, CV_RGB2GRAY );
+		cvCvtColor( image_color, _image, CV_RGB2GRAY );
 
 
 		//image = cvCreateImage(cvSize(w, h) , 8, 3);
@@ -535,31 +538,114 @@ flannFindPairs( const CvSeq*, const CvSeq* objectDescriptors,
 		cvExtractSURF( _image, 0, &imageKeypoints, &imageDescriptors, s, _params ,0);
 
 
-		vector<int> ptpairs;
+		
 
 
 		this->_compareTime = (double) cvGetTickCount();
 
+		vector<int> ptpairs;
+
+
 		flannFindPairs( _objectKeypoints, _objectDescriptors, imageKeypoints, imageDescriptors, ptpairs );
+
+
+
+		
+		int n = ptpairs.size()/2;
+		if( n < 4 )
+		{
+
+
+			cvClearMemStorage(s);
+			cvReleaseMemStorage(&s);
+			return 0;
+		}
+
+
+		vector<CvPoint2D32f> pt1, pt2;
+		CvMat _pt1, _pt2;
+
+		CvPoint dst_corners[4];
+		
+
+	    pt1.resize(n);
+	    pt2.resize(n);
+
+		double h[9];
+		CvMat _h = cvMat(3, 3, CV_64F, h);
+
+
+    
+
+
+		vector<ComparePoint> cpArr;
+		
+		//int cx,cy;
+		
+		ComparePoint cp;
 
 	    for(int i = 0; i < (int)ptpairs.size(); i += 2 )
 		{
-			//CvSURFPoint* r1 = (CvSURFPoint*)cvGetSeqElem( objectKeypoints, ptpairs[i] );
-			CvSURFPoint* r = (CvSURFPoint*)cvGetSeqElem( imageKeypoints, ptpairs[i+1] );
+			CvSURFPoint* r1 = (CvSURFPoint*)cvGetSeqElem( _objectKeypoints, ptpairs[i] );
+			CvSURFPoint* r2 = (CvSURFPoint*)cvGetSeqElem( imageKeypoints, ptpairs[i+1] );
+
+
+			r2->pt.x *= scale;
+			r2->pt.y *= scale;
+
+
 			CvPoint center;
 			int radius;
-	        center.x = cvRound(r->pt.x * scale);
-		    center.y = cvRound(r->pt.y * scale);
-			radius = cvRound(r->size*1.2/9.*2);
+	        center.x = cvRound(r2->pt.x );
+		    center.y = cvRound(r2->pt.y);
+			radius = cvRound(r2->size*1.2/9.*2);
 
 			cvCircle( image_color, center, radius, colors[0], 1, 8, 0 );
 
-			//cvLine( correspond, cvPointFrom32f(r1->pt),
-			//	cvPoint(cvRound(r2->pt.x), cvRound(r2->pt.y+object->height)), colors[8] );
-		}
+		
+		
+			pt1[i/2] = r1->pt;
+			pt2[i/2] = r2->pt;
 		
 
+		}
 		
+		
+
+		_pt1 = cvMat(1, n, CV_32FC2, &pt1[0] );
+		_pt2 = cvMat(1, n, CV_32FC2, &pt2[0] );
+
+		if( !cvFindHomography( &_pt1, &_pt2, &_h, CV_RANSAC, 5 ))
+		{
+			
+
+			cvClearMemStorage(s);
+			cvReleaseMemStorage(&s);
+		
+			return false;
+		}
+
+		CvPoint src_corners[4] = {{0,0}, {_ObjectX,0}, {_ObjectX, _ObjectY}, {0, _ObjectY}};
+
+		for(int i = 0; i < 4; i++ )
+		{
+			double x = src_corners[i].x; 
+			double y = src_corners[i].y;
+			double Z = 1./(h[6]*x + h[7]*y + h[8]);
+			double X = (h[0]*x + h[1]*y + h[2])*Z;
+			double Y = (h[3]*x + h[4]*y + h[5])*Z;
+			dst_corners[i] = cvPoint(cvRound(X), cvRound(Y)) ;
+		}
+
+
+		 for(int i = 0; i < 4; i++ )
+        {
+            CvPoint r1 = dst_corners[i%4];
+            CvPoint r2 = dst_corners[(i+1)%4];
+            cvLine( image_color, cvPoint(r1.x, r1.y),
+                cvPoint(r2.x, r2.y ), colors[8] );
+        }
+
 
 		cvClearMemStorage(s);
 		cvReleaseMemStorage(&s);
@@ -568,6 +654,14 @@ flannFindPairs( const CvSeq*, const CvSeq* objectDescriptors,
 		this->_compareTime = (double) cvGetTickCount()  - this->_compareTime;
 	
 		 this->_compareTime = this->_compareTime/(cvGetTickFrequency()*1000.);
+
+
+
+		 this->_CX = dst_corners[2].x /2;
+		 this->_CY = dst_corners[2].y /2;
+
+
+		 return true;
 
 		//imageKeypoints->cl
 		//icvReleaseSeq(

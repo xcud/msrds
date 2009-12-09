@@ -331,12 +331,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sharp", "Sharp", "{1434E9D2
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenCvSharp", "..\..\opencvsharp\2.0\OpenCvSharp\OpenCvSharp.csproj", "{4C2356B8-1A1E-4F92-A51C-A49CA116867F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenCVForm", "..\..\opencvsharp\2.0\OpenCVForm\OpenCVForm.csproj", "{943C250C-8B44-4EF3-B986-234F505D0A34}"
-	ProjectSection(ProjectDependencies) = postProject
-		{CCC1F5BD-A327-43D2-9F2D-0DD017EFB555} = {CCC1F5BD-A327-43D2-9F2D-0DD017EFB555}
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenCvSharp.UserInterface", "..\..\opencvsharp\2.0\OpenCvSharp.UserInterface\OpenCvSharp.UserInterface.csproj", "{DB12E2F1-1A50-4D12-A92F-4C3D705ECC1F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenCVForm", "..\OpenCVForm\OpenCVForm.csproj", "{943C250C-8B44-4EF3-B986-234F505D0A34}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -987,29 +984,6 @@ Global
 		{4C2356B8-1A1E-4F92-A51C-A49CA116867F}.Release|x64.Build.0 = Release|x64
 		{4C2356B8-1A1E-4F92-A51C-A49CA116867F}.Release|x86.ActiveCfg = Release|x86
 		{4C2356B8-1A1E-4F92-A51C-A49CA116867F}.Release|x86.Build.0 = Release|x86
-		{943C250C-8B44-4EF3-B986-234F505D0A34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{943C250C-8B44-4EF3-B986-234F505D0A34}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{943C250C-8B44-4EF3-B986-234F505D0A34}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{943C250C-8B44-4EF3-B986-234F505D0A34}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{943C250C-8B44-4EF3-B986-234F505D0A34}.Debug|Win32.ActiveCfg = Debug|x86
-		{943C250C-8B44-4EF3-B986-234F505D0A34}.Debug|x64.ActiveCfg = Debug|x86
-		{943C250C-8B44-4EF3-B986-234F505D0A34}.Debug|x86.ActiveCfg = Debug|x86
-		{943C250C-8B44-4EF3-B986-234F505D0A34}.Debug|x86.Build.0 = Debug|x86
-		{943C250C-8B44-4EF3-B986-234F505D0A34}.Release JP|Any CPU.ActiveCfg = Release|x86
-		{943C250C-8B44-4EF3-B986-234F505D0A34}.Release JP|Mixed Platforms.ActiveCfg = Release|x86
-		{943C250C-8B44-4EF3-B986-234F505D0A34}.Release JP|Mixed Platforms.Build.0 = Release|x86
-		{943C250C-8B44-4EF3-B986-234F505D0A34}.Release JP|Win32.ActiveCfg = Release|x86
-		{943C250C-8B44-4EF3-B986-234F505D0A34}.Release JP|x64.ActiveCfg = Release|x86
-		{943C250C-8B44-4EF3-B986-234F505D0A34}.Release JP|x86.ActiveCfg = Release|x86
-		{943C250C-8B44-4EF3-B986-234F505D0A34}.Release JP|x86.Build.0 = Release|x86
-		{943C250C-8B44-4EF3-B986-234F505D0A34}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{943C250C-8B44-4EF3-B986-234F505D0A34}.Release|Any CPU.Build.0 = Release|Any CPU
-		{943C250C-8B44-4EF3-B986-234F505D0A34}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{943C250C-8B44-4EF3-B986-234F505D0A34}.Release|Mixed Platforms.Build.0 = Release|x86
-		{943C250C-8B44-4EF3-B986-234F505D0A34}.Release|Win32.ActiveCfg = Release|x86
-		{943C250C-8B44-4EF3-B986-234F505D0A34}.Release|x64.ActiveCfg = Release|x86
-		{943C250C-8B44-4EF3-B986-234F505D0A34}.Release|x86.ActiveCfg = Release|x86
-		{943C250C-8B44-4EF3-B986-234F505D0A34}.Release|x86.Build.0 = Release|x86
 		{DB12E2F1-1A50-4D12-A92F-4C3D705ECC1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DB12E2F1-1A50-4D12-A92F-4C3D705ECC1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DB12E2F1-1A50-4D12-A92F-4C3D705ECC1F}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
@@ -1037,13 +1011,36 @@ Global
 		{DB12E2F1-1A50-4D12-A92F-4C3D705ECC1F}.Release|x64.Build.0 = Release|x64
 		{DB12E2F1-1A50-4D12-A92F-4C3D705ECC1F}.Release|x86.ActiveCfg = Release|x86
 		{DB12E2F1-1A50-4D12-A92F-4C3D705ECC1F}.Release|x86.Build.0 = Release|x86
+		{943C250C-8B44-4EF3-B986-234F505D0A34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{943C250C-8B44-4EF3-B986-234F505D0A34}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{943C250C-8B44-4EF3-B986-234F505D0A34}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{943C250C-8B44-4EF3-B986-234F505D0A34}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{943C250C-8B44-4EF3-B986-234F505D0A34}.Debug|Win32.ActiveCfg = Debug|x86
+		{943C250C-8B44-4EF3-B986-234F505D0A34}.Debug|x64.ActiveCfg = Debug|x86
+		{943C250C-8B44-4EF3-B986-234F505D0A34}.Debug|x86.ActiveCfg = Debug|x86
+		{943C250C-8B44-4EF3-B986-234F505D0A34}.Debug|x86.Build.0 = Debug|x86
+		{943C250C-8B44-4EF3-B986-234F505D0A34}.Release JP|Any CPU.ActiveCfg = Release|x86
+		{943C250C-8B44-4EF3-B986-234F505D0A34}.Release JP|Mixed Platforms.ActiveCfg = Release|x86
+		{943C250C-8B44-4EF3-B986-234F505D0A34}.Release JP|Mixed Platforms.Build.0 = Release|x86
+		{943C250C-8B44-4EF3-B986-234F505D0A34}.Release JP|Win32.ActiveCfg = Release|x86
+		{943C250C-8B44-4EF3-B986-234F505D0A34}.Release JP|x64.ActiveCfg = Release|x86
+		{943C250C-8B44-4EF3-B986-234F505D0A34}.Release JP|x86.ActiveCfg = Release|x86
+		{943C250C-8B44-4EF3-B986-234F505D0A34}.Release JP|x86.Build.0 = Release|x86
+		{943C250C-8B44-4EF3-B986-234F505D0A34}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{943C250C-8B44-4EF3-B986-234F505D0A34}.Release|Any CPU.Build.0 = Release|Any CPU
+		{943C250C-8B44-4EF3-B986-234F505D0A34}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{943C250C-8B44-4EF3-B986-234F505D0A34}.Release|Mixed Platforms.Build.0 = Release|x86
+		{943C250C-8B44-4EF3-B986-234F505D0A34}.Release|Win32.ActiveCfg = Release|x86
+		{943C250C-8B44-4EF3-B986-234F505D0A34}.Release|x64.ActiveCfg = Release|x86
+		{943C250C-8B44-4EF3-B986-234F505D0A34}.Release|x86.ActiveCfg = Release|x86
+		{943C250C-8B44-4EF3-B986-234F505D0A34}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{4C2356B8-1A1E-4F92-A51C-A49CA116867F} = {1434E9D2-1CAB-495D-9338-F6DC03ED8498}
-		{943C250C-8B44-4EF3-B986-234F505D0A34} = {1434E9D2-1CAB-495D-9338-F6DC03ED8498}
 		{DB12E2F1-1A50-4D12-A92F-4C3D705ECC1F} = {1434E9D2-1CAB-495D-9338-F6DC03ED8498}
+		{943C250C-8B44-4EF3-B986-234F505D0A34} = {1434E9D2-1CAB-495D-9338-F6DC03ED8498}
 	EndGlobalSection
 EndGlobal
