@@ -48,8 +48,10 @@ namespace OpenCVForm
             {
                 _tick = Environment.TickCount;
                MDIParent1.Log(string.Format("TICK COUNT({0}) E({1}) D({2}) C({3})",_tickCount,_surf.GetExtremaTime(),_surf.GetDescriptorTime(),_surf.GetCompareTime()));
+               MDIParent1.Log(string.Format("CX({0}) CY({1})",_surf.GetCX(), _surf.GetCY()));
                 _tickCount = 0;
             }
+
 
             
 
