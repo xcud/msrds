@@ -647,6 +647,14 @@ flannFindPairs( const CvSeq*, const CvSeq* objectDescriptors,
         }
 
 
+		 for(int i = 1; i < 5;i++)
+		 {
+			cvLine( image_color, cvPoint(image_color->width*i/5, 0), cvPoint(image_color->width*i/5, image_color->height ), colors[6] );
+			cvLine( image_color, cvPoint(0, image_color->height *i/5), cvPoint(image_color->width, image_color->height*i/5 ), colors[6] );
+			
+		 }
+
+
 		cvClearMemStorage(s);
 		cvReleaseMemStorage(&s);
 		
@@ -666,6 +674,8 @@ flannFindPairs( const CvSeq*, const CvSeq* objectDescriptors,
 		 this->_CX /= (image_color->width /5);
 		 this->_CY /= (image_color->height /5);
 
+
+		 this->_CS = (float)(dst_corners[2].x - dst_corners[0].x) / image_color->width;
 
 		 return true;
 

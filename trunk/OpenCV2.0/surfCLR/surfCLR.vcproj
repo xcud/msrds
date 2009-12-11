@@ -65,6 +65,8 @@
 				GenerateDebugInformation="true"
 				AssemblyDebug="1"
 				TargetMachine="1"
+				KeyFile="mrisamples.snk"
+				DelaySign="false"
 			/>
 			<Tool
 				Name="VCALinkTool"
