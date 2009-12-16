@@ -15,6 +15,10 @@ namespace MySimulation
     {
         public IntPtr _Ptr;
         public int _Len;
+        public int _W;
+        public int _H;
+
+
     };
 
     public delegate void CameraEventHandler(GrabberInfo e);
