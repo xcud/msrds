@@ -108,7 +108,7 @@ namespace MySimulation
         {
 
 
-            Texture2D t = _surf.UpdateFrameToTexture(e._Ptr, e._Len); 
+            Texture2D t = _surf.UpdateFrameToTexture(e._Ptr, e._Len,e._W,e._H); 
             GraphicsDevice.Textures[0] = null;
             _imageTex = t;
 

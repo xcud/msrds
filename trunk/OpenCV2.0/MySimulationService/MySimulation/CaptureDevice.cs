@@ -220,6 +220,8 @@ namespace MySimulation
 
                 sourceBase = (IBaseFilter)sourceObj;
 
+                
+
                 // Get type for sample grabber
                 srvType = Type.GetTypeFromCLSID(Clsid.SampleGrabber);
                 if (srvType == null)
@@ -230,15 +232,30 @@ namespace MySimulation
                 sg = (ISampleGrabber)grabberObj;
                 grabberBase = (IBaseFilter)grabberObj;
 
+
+                
+
                 // add source filter to graph
                 graph.AddFilter(sourceBase, "source");
                 graph.AddFilter(grabberBase, "grabber");
 
                 // set media type
                 AMMediaType mt = new AMMediaType();
+                
                 mt.majorType = MediaType.Video;
                 mt.subType = MediaSubType.RGB32;
+
+                //VideoInfoHeader vih = (VideoInfoHeader)Marshal.PtrToStructure(mt.formatPtr, typeof(VideoInfoHeader));
+
+
+
+                
+
+                //mt.formatSize
+
                 sg.SetMediaType(mt);
+
+                
 
                 // connect pins
                 if (graph.Connect(DSTools.GetOutPin(sourceBase, 0), DSTools.GetInPin(grabberBase, 0)) < 0)
@@ -247,11 +264,22 @@ namespace MySimulation
                 // get media type
                 if (sg.GetConnectedMediaType(mt) == 0)
                 {
-                    VideoInfoHeader vih = (VideoInfoHeader)Marshal.PtrToStructure(mt.formatPtr, typeof(VideoInfoHeader));
+                    VideoInfoHeader  vih = (VideoInfoHeader)Marshal.PtrToStructure(mt.formatPtr, typeof(VideoInfoHeader));
+
+                    //vih.BmiHeader.Width = 320;
+                    //vih.BmiHeader.Height = 240;
+
+                    //Marshal.StructureToPtr(vih, mt.formatPtr, true);
+
+                    //sg.SetMediaType(mt);
 
                     System.Diagnostics.Debug.WriteLine("width = " + vih.BmiHeader.Width + ", height = " + vih.BmiHeader.Height);
                     grabber.Width = vih.BmiHeader.Width;
                     grabber.Height = vih.BmiHeader.Height;
+
+
+                    
+
                     mt.Dispose();
                 }
 
@@ -391,6 +419,8 @@ namespace MySimulation
                 GrabberInfo gi = new GrabberInfo();
                 gi._Ptr = pBuffer;
                 gi._Len = BufferLen;
+                gi._W = width;
+                gi._H = height;
 
                 parent.NewFrame(gi);
                 return 0;
