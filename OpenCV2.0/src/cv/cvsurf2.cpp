@@ -493,7 +493,7 @@ flannFindPairs( const CvSeq*, const CvSeq* objectDescriptors,
 		int _Count;
 	};
 
-	bool  SURF2::Compare(IplImage* image_color)
+	bool  SURF2::_Compare(IplImage* image_color,IplImage* _image)
 	{
 		
 		    static CvScalar colors[] = 
@@ -508,25 +508,10 @@ flannFindPairs( const CvSeq*, const CvSeq* objectDescriptors,
 				{{255,0,255}},
 				{{255,255,255}}
 			};
-		 
 
-		double scale;
+			double scale = 1;
 
-		if(_image == NULL)
-		{
-			//_image = cvCreateImage(cvSize(160,120),8,1);
-			//_imageResize = cvCreateImage(cvSize(160,120),8,3);
-			_image = cvCreateImage(cvGetSize(image_color),8,1);
-		}
-		
-		scale = 1;//image_color->width / 160;
-
-		//cvResize(image_color,_imageResize,CV_INTER_CUBIC); 
-
-
-		cvCvtColor( image_color, _image, CV_RGB2GRAY );
-
-
+			
 		//image = cvCreateImage(cvSize(w, h) , 8, 3);
 
 		CvSeq *imageKeypoints = 0, *imageDescriptors = 0;
@@ -661,7 +646,7 @@ flannFindPairs( const CvSeq*, const CvSeq* objectDescriptors,
 
 		this->_compareTime = (double) cvGetTickCount()  - this->_compareTime;
 	
-		 this->_compareTime = this->_compareTime/(cvGetTickFrequency()*1000.);
+		this->_compareTime = this->_compareTime/(cvGetTickFrequency()*1000.);
 
 
 		
@@ -675,10 +660,49 @@ flannFindPairs( const CvSeq*, const CvSeq* objectDescriptors,
 		 this->_CY /= (image_color->height /5);
 
 
-		 this->_CS = (float)(dst_corners[2].x - dst_corners[0].x) / image_color->width;
+		 this->_CS = (float)(dst_corners[2].x - dst_corners[0].x) / _ObjectX;
 
 		 return true;
 
+	}
+
+	bool  SURF2::Compare32(IplImage* image_color)
+	{
+		
+
+		if(_image == NULL)
+		{
+			//_image = cvCreateImage(cvSize(160,120),8,1);
+			//_imageResize = cvCreateImage(cvSize(160,120),8,3);
+			_image = cvCreateImage(cvGetSize(image_color),8,1);
+		}
+		
+
+		cvCvtColor( image_color, _image, CV_BGR2GRAY );
+
+		return  _Compare(image_color,_image);
+		//imageKeypoints->cl
+		//icvReleaseSeq(
+	}
+
+
+
+	bool  SURF2::Compare(IplImage* image_color)
+	{
+		
+
+		if(_image == NULL)
+		{
+			//_image = cvCreateImage(cvSize(160,120),8,1);
+			//_imageResize = cvCreateImage(cvSize(160,120),8,3);
+			_image = cvCreateImage(cvGetSize(image_color),8,1);
+		}
+		
+
+		cvCvtColor( image_color, _image, CV_BGR2GRAY );
+
+
+		return  _Compare(image_color,_image);
 		//imageKeypoints->cl
 		//icvReleaseSeq(
 	}
