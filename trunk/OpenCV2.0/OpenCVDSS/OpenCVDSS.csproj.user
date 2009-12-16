@@ -1,0 +1,27 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <StartAction>Program</StartAction>
+    <StartWorkingDirectory>C:\Users\perpet\Microsoft Robotics Dev Studio 2008 R2 Express\</StartWorkingDirectory>
+    <StartProgram>C:\Users\perpet\Microsoft Robotics Dev Studio 2008 R2 Express\bin\dsshost.exe</StartProgram>
+    <StartArguments>/p:50000 /t:50001 /m:"D:/ccr/msrds/OpenCV2.0/OpenCVDSS/OpenCVDSS.manifest.xml"</StartArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <StartAction>Program</StartAction>
+    <StartWorkingDirectory>C:\Users\perpet\Microsoft Robotics Dev Studio 2008 R2 Express\</StartWorkingDirectory>
+    <StartProgram>C:\Users\perpet\Microsoft Robotics Dev Studio 2008 R2 Express\bin\dsshost.exe</StartProgram>
+    <StartArguments>/p:50000 /t:50001 /m:"D:/ccr/msrds/OpenCV2.0/OpenCVDSS/OpenCVDSS.manifest.xml"</StartArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <StartProgram>C:\Users\perpet\Microsoft Robotics Dev Studio 2008 R2 Express\bin\dsshost.exe</StartProgram>
+    <StartWorkingDirectory>C:\Users\perpet\Microsoft Robotics Dev Studio 2008 R2 Express\</StartWorkingDirectory>
+    <StartArguments>/p:50000 /t:50001 /m:"D:/ccr/msrds/OpenCV2.0/OpenCVDSS/OpenCVDSS.manifest.xml"</StartArguments>
+    <StartAction>Program</StartAction>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <StartProgram>C:\Users\perpet\Microsoft Robotics Dev Studio 2008 R2 Express\bin\dsshost32.exe</StartProgram>
+    <StartWorkingDirectory>C:\Users\perpet\Microsoft Robotics Dev Studio 2008 R2 Express\bin</StartWorkingDirectory>
+    <StartArguments>/p:50000 /t:50001 /m:"D:/ccr/msrds/OpenCV2.0/OpenCVDSS/OpenCVDSS.manifest.xml"</StartArguments>
+    <StartAction>Program</StartAction>
+    <EnableUnmanagedDebugging>true</EnableUnmanagedDebugging>
+  </PropertyGroup>
+</Project>
