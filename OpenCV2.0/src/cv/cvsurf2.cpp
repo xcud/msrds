@@ -537,13 +537,13 @@ flannFindPairs( const CvSeq*, const CvSeq* objectDescriptors,
 
 		
 		int n = ptpairs.size()/2;
-		if( n < 4 )
+		if( n < 8 )
 		{
 
 
 			cvClearMemStorage(s);
 			cvReleaseMemStorage(&s);
-			return 0;
+			return false;
 		}
 
 
@@ -623,6 +623,11 @@ flannFindPairs( const CvSeq*, const CvSeq* objectDescriptors,
 		}
 
 
+
+
+
+		
+
 		 for(int i = 0; i < 4; i++ )
         {
             CvPoint r1 = dst_corners[i%4];
@@ -630,7 +635,8 @@ flannFindPairs( const CvSeq*, const CvSeq* objectDescriptors,
             cvLine( image_color, cvPoint(r1.x, r1.y),
                 cvPoint(r2.x, r2.y ), colors[8] );
         }
-
+		
+		 
 
 		 for(int i = 1; i < 5;i++)
 		 {
