@@ -4,6 +4,7 @@
 	Version="9.00"
 	Name="cv"
 	ProjectGUID="{CCC1F5BD-A327-43D2-9F2D-0DD017EFB555}"
+	RootNamespace="cv"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="0"
 	>
@@ -157,7 +158,7 @@
 				Optimization="2"
 				InlineFunctionExpansion="2"
 				AdditionalIncludeDirectories="..\..\..\.;..\..;..\..\..\include;..\..\..\include\opencv;..\..\..\src\cv\..\..\include\opencv;..\..\..\src\cv;.;"
-				PreprocessorDefinitions="WIN32,_WINDOWS,_CRT_SECURE_NO_DEPRECATE,_CRT_NONSTDC_NO_DEPRECATE,_SCL_SECURE_NO_WARNINGS,_BIND_TO_CURRENT_CRT_VERSION=1,_BIND_TO_CURRENT_VCLIBS_VERSION=1,NDEBUG,HAVE_CONFIG_H,CVAPI_EXPORTS,CMAKE_INTDIR=\&quot;Release\&quot;,cv_EXPORTS"
+				PreprocessorDefinitions="WIN32;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_SCL_SECURE_NO_WARNINGS;_BIND_TO_CURRENT_CRT_VERSION=1;_BIND_TO_CURRENT_VCLIBS_VERSION=1;NDEBUG;HAVE_CONFIG_H;CVAPI_EXPORTS;CMAKE_INTDIR=\&quot;Release\&quot;;cv_EXPORTS;CV_OPENMP"
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
