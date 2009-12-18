@@ -622,9 +622,24 @@ flannFindPairs( const CvSeq*, const CvSeq* objectDescriptors,
 			dst_corners[i] = cvPoint(cvRound(X), cvRound(Y)) ;
 		}
 
+		int tx = dst_corners[1].x - dst_corners[0].x;
+		int ty = dst_corners[3].y - dst_corners[0].y;
+
+		int bx = dst_corners[2].x - dst_corners[3].x;
+		int by = dst_corners[2].y - dst_corners[1].y;
 
 
+		if( tx < _ObjectX * 0.5 || _ObjectX * 1.5  < tx 
+			|| ty < _ObjectY * 0.5 || _ObjectY * 1.5  < ty 
+			|| bx < _ObjectX * 0.5 || _ObjectX * 1.5  < bx 
+			|| by < _ObjectY * 0.5 || _ObjectY * 1.5  < by )
+		{
+			cvClearMemStorage(s);
+			cvReleaseMemStorage(&s);
+		
+			return false;
 
+		}
 
 		
 

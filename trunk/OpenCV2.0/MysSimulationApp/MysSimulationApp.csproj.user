@@ -17,6 +17,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <StartWorkingDirectory>D:\ccr\msrds\OpenCV2.0\build\bin\Debug</StartWorkingDirectory>
+    <EnableUnmanagedDebugging>true</EnableUnmanagedDebugging>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <StartWorkingDirectory>D:\ccr\msrds\OpenCV2.0\build\bin\Release</StartWorkingDirectory>

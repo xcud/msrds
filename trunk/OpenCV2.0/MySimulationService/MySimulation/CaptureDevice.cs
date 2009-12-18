@@ -247,8 +247,6 @@ namespace MySimulation
 
                 //VideoInfoHeader vih = (VideoInfoHeader)Marshal.PtrToStructure(mt.formatPtr, typeof(VideoInfoHeader));
 
-
-
                 
 
                 //mt.formatSize
@@ -266,6 +264,16 @@ namespace MySimulation
                 {
                     VideoInfoHeader  vih = (VideoInfoHeader)Marshal.PtrToStructure(mt.formatPtr, typeof(VideoInfoHeader));
 
+
+                    vih.BmiHeader.Width = 160;
+                    vih.BmiHeader.Height = 120;
+
+
+                    Marshal.StructureToPtr(vih, mt.formatPtr, false);
+
+
+                    sg.SetMediaType(mt);
+
                     //vih.BmiHeader.Width = 320;
                     //vih.BmiHeader.Height = 240;
 
@@ -282,6 +290,8 @@ namespace MySimulation
 
                     mt.Dispose();
                 }
+
+
 
                 // render
                 graph.Render(DSTools.GetOutPin(grabberBase, 0));

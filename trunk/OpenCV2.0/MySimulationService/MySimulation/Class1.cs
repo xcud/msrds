@@ -108,7 +108,11 @@ namespace MySimulation
         {
 
 
-            Texture2D t = _surf.UpdateFrameToTexture(e._Ptr, e._Len,e._W,e._H); 
+            Texture2D t = _surf.UpdateFrameToTexture(e._Ptr, e._Len,e._W,e._H);
+
+            if (t == null)
+                return;
+
             GraphicsDevice.Textures[0] = null;
             _imageTex = t;
 
@@ -171,7 +175,7 @@ namespace MySimulation
             }
 
 
-            spriteBatch.DrawString(_Font1,string.Format("{0}",_UpdateFrame++),new Vector2(10,20), Color.Blue);
+            spriteBatch.DrawString(_Font1,string.Format("{0}",_UpdateFrame++),new Vector2(10,30), Color.Blue);
 
             spriteBatch.End();
             
