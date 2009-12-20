@@ -8,6 +8,8 @@ using Microsoft.Dss.ServiceModel.DsspServiceBase;
 using W3C.Soap;
 using submgr = Microsoft.Dss.Services.SubscriptionManager;
 
+using Microsoft.Ccr.Adapters.WinForms;
+
 namespace MySimulationService
 {
     [Contract(Contract.Identifier)]
@@ -43,20 +45,35 @@ namespace MySimulationService
         /// </summary>
         protected override void Start()
         {
-
+             
             // 
             // Add service specific initialization here
             // 
 
             base.Start();
 
+            
+            
+        }
 
-            MySimulation.Game1 g = new MySimulation.Game1();
+        MySimulationDSS _s;
 
-            g._EventOnDetected += new MySimulation.Game1.OnDetected(g__EventOnDetected);
+        IEnumerator<ITask> xnaTask()
+        {
 
-            g.Run();
 
+            //MySimulation.Game1 _g = new MySimulation.Game1();
+
+            //_g._EventOnDetected += new MySimulation.Game1.OnDetected(g__EventOnDetected);
+            //_g.Run();
+
+            _s = new MySimulationDSS(ServiceForwarder<MySimulationServiceOperations>(ServiceInfo.Service));
+            _s.Run();
+              
+
+
+            //_s.Run();
+            yield break;
         }
 
         void g__EventOnDetected(surfCLR.SURF surf)
@@ -64,9 +81,9 @@ namespace MySimulationService
             MySimulationServiceState s = new MySimulationServiceState();
             s._CX = surf.GetCX();
             s._CY = surf.GetCY();
-            s._CS = surf.GetCS();
+            //s._CS = surf.GetCS();
 
-            _mainPort.Post(new  OnDetected(s));
+            //_mainPort.Post(new OnDetected(s));
 
 
         }
@@ -79,14 +96,57 @@ namespace MySimulationService
         /// <param name="replace"></param>
         /// <returns></returns>
         [ServiceHandler(ServiceHandlerBehavior.Exclusive)]
-        public virtual IEnumerator<ITask> ReplaceHandler(OnDetected buttonRelease)
+        public virtual IEnumerator<ITask> StartHandler(Start2 start)
         {
 
-            //replace.ResponsePort.Post(DefaultReplaceResponseType.Instance);
 
-            SendNotification(_submgrPort, buttonRelease);
+            SpawnIterator(xnaTask);
+            //_s  = new MySimulationDSS(_mainPort);
+
+            //_s.Run();
+           
+            
+            //_state._CX = 100;
+
+            //start.ResponsePort.Post(_state);
+
             yield break;
         }
+
+
+        [ServiceHandler(ServiceHandlerBehavior.Exclusive)]
+        public virtual IEnumerator<ITask> TurnLeftHandler(TurnRight turnLeft)
+        {
+
+            SendNotification(_submgrPort, turnLeft);
+            yield break;
+        }
+
+
+
+        [ServiceHandler(ServiceHandlerBehavior.Exclusive)]
+        public virtual IEnumerator<ITask> TurnLeftHandler(Scale scale)
+        {
+
+            SendNotification(_submgrPort, scale);
+            yield break;
+        }
+
+
+        ///// <summary>
+        ///// Replace Handler
+        ///// </summary>
+        ///// <param name="replace"></param>
+        ///// <returns></returns>
+        //[ServiceHandler(ServiceHandlerBehavior.Exclusive)]
+        //public virtual IEnumerator<ITask> ReplaceHandler(OnDetected buttonRelease)
+        //{
+
+        //    //replace.ResponsePort.Post(DefaultReplaceResponseType.Instance);
+
+        //    SendNotification(_submgrPort, buttonRelease);
+        //    yield break;
+        //}
 
         /// <summary>
         /// Handles Subscribe messages

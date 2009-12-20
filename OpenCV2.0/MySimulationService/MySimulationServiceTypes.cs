@@ -32,7 +32,7 @@ namespace MySimulationService
         [DataMember]
         public int _CY;
         [DataMember]
-        public float _CS;
+        public int _CS;
 
     }
 
@@ -40,23 +40,80 @@ namespace MySimulationService
     /// MySimulationService main operations port
     /// </summary>
     [ServicePort]
-    public class MySimulationServiceOperations : PortSet<DsspDefaultLookup, DsspDefaultDrop, Get, Subscribe, OnDetected>
+    public class MySimulationServiceOperations : PortSet<DsspDefaultLookup, DsspDefaultDrop, Get, Subscribe, Start2, TurnRight, Scale>
     {
     }
+
+
+    public class Scale : Update<MySimulationServiceState, PortSet<DefaultSubmitResponseType, Fault>>
+    {
+        public Scale()
+            : base(new MySimulationServiceState())
+        {
+        }
+
+        public Scale(MySimulationServiceState body)
+            : base(body)
+        {
+
+        }
+
+    }
+
+    public class TurnRight : Update<MySimulationServiceState, PortSet<DefaultSubmitResponseType, Fault>>
+    {
+        public TurnRight()
+            : base(new MySimulationServiceState())
+        {
+        }
+
+        public TurnRight(MySimulationServiceState body)
+            : base(body)
+        {
+
+        }
+
+    }
+
+     
+    ///// <summary>
+    ///// ButtonRleases - Message sent when a button is released
+    ///// </summary>
+    //[DisplayName("(User) ButtonRelease")]
+    //[Description("Indicates when a button in the dialog is released.")]
+    //public class OnDetected : Update<MySimulationServiceState, PortSet<DefaultUpdateResponseType, Fault>>
+    //{
+    //    /// <summary>
+    //    /// Constructor
+    //    /// </summary>
+    //    public OnDetected()
+    //    {
+    //    }
+
+    //    /// <summary>
+    //    /// Constructor
+    //    /// </summary>
+    //    /// <param name="body">Button release request message</param>
+    //    public OnDetected(MySimulationServiceState body)
+    //        : base(body)
+    //    {
+    //    }
+    //}
+
 
 
 
     /// <summary>
     /// ButtonRleases - Message sent when a button is released
     /// </summary>
-    [DisplayName("(User) ButtonRelease")]
+    [DisplayName("Star22xxt")]
     [Description("Indicates when a button in the dialog is released.")]
-    public class OnDetected : Update<MySimulationServiceState, PortSet<DefaultUpdateResponseType, Fault>>
+    public class Start2 : Get<GetRequestType, PortSet<MySimulationServiceState, Fault>>
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public OnDetected()
+        public Start2()
         {
         }
 
@@ -64,13 +121,23 @@ namespace MySimulationService
         /// Constructor
         /// </summary>
         /// <param name="body">Button release request message</param>
-        public OnDetected(MySimulationServiceState body)
+        public Start2(GetRequestType body)
             : base(body)
         {
         }
+
+
+        
+        /// <summary>
+        /// Creates a new instance of Get
+        /// </summary>
+        /// <param name="body">the request message body</param>
+        /// <param name="responsePort">the response port for the request</param>
+        public Start2(GetRequestType body, PortSet<MySimulationServiceState, Fault> responsePort)
+            : base(body, responsePort)
+        {
+        }
     }
-
-
 
 
 

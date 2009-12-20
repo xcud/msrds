@@ -18,13 +18,15 @@ namespace MySimulation
 {
     public class Game1 : Microsoft.Xna.Framework.Game
     {
-        GraphicsDeviceManager graphics;
+        GraphicsDeviceManager graphics;  
         SpriteBatch spriteBatch;
 
 
         public delegate void OnDetected(surfCLR.SURF surf);
+        public delegate void OnDetected2(int s);
         
         public event OnDetected _EventOnDetected;
+        public event OnDetected2 _EventOnDetected2;
 
 
         public Game1()
@@ -104,6 +106,9 @@ namespace MySimulation
             // TODO: use this.Content to load your game content here
         }
 
+        public int _OldX = -2;
+        public int _OldS = 0;
+
         void _cam_NewFrame(GrabberInfo e)
         {
 
@@ -116,12 +121,71 @@ namespace MySimulation
             GraphicsDevice.Textures[0] = null;
             _imageTex = t;
 
-            if (_EventOnDetected != null)
+
+
+
+
+
+
+
+            if (_surf.GetCX() != -1)
             {
+
+                if (1.3 < _surf.GetCS())
+                {
+                    if (_OldS != 1)
+                    {
+                        _OldS = 1;
+                        _EventOnDetected2(_OldS);
+                    }
+                }
+                else if (1.0 < _surf.GetCS())
+                {
+                    if (_OldS != 0)
+                    {
+                        _OldS = 0;
+                        _EventOnDetected2(_OldS);
+                    }
+
+
+                }
+                else
+                {
+                    if (_OldS != -1)
+                    {
+                        _OldS = -1;
+                        _EventOnDetected2(_OldS);
+                    }
+
+                }
+
+             
+
+
+            }
+
+
+            if (_OldX == -2)
+            {
+                if (_surf.GetCX() == 2)
+                {
+                    _OldX = _surf.GetCX();
+
+                    _EventOnDetected(_surf);
+                }
+
+
+                return;
+            }
+            
+            if (_EventOnDetected != null && _OldX != _surf.GetCX())
+            {
+                _OldX = _surf.GetCX();
+
                 _EventOnDetected(_surf);
             }
 
-        }
+        } 
 
         /// <summary>
         /// UnloadContent will be called once per game and is the place to unload
@@ -184,3 +248,4 @@ namespace MySimulation
         }
     }
 }
+

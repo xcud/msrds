@@ -15,7 +15,7 @@ icvCalcHaarPattern( const int* origin, const CvSurfHF* f, int n )
         d += (origin[f[k].p0] + origin[f[k].p3] - origin[f[k].p1] - origin[f[k].p2])*f[k].w;
     return (float)d;
 }
-
+ 
 static void
 icvResizeHaarPattern( const int src[][5], CvSurfHF* dst, int n, int oldSize, int newSize, int widthStep )
 {
@@ -509,9 +509,10 @@ flannFindPairs( const CvSeq*, const CvSeq* objectDescriptors,
 				{{255,255,255}}
 			};
 
-			double scale = 1;
+		double scale = image_color->width / 320;
 
-			
+			this->_CX = -1;
+
 		//image = cvCreateImage(cvSize(w, h) , 8, 3);
 
 		CvSeq *imageKeypoints = 0, *imageDescriptors = 0;
@@ -629,10 +630,10 @@ flannFindPairs( const CvSeq*, const CvSeq* objectDescriptors,
 		int by = dst_corners[2].y - dst_corners[1].y;
 
 
-		if( tx < _ObjectX * 0.5 || _ObjectX * 1.5  < tx 
-			|| ty < _ObjectY * 0.5 || _ObjectY * 1.5  < ty 
-			|| bx < _ObjectX * 0.5 || _ObjectX * 1.5  < bx 
-			|| by < _ObjectY * 0.5 || _ObjectY * 1.5  < by )
+		if( tx < _ObjectX * 0.2 * scale || _ObjectX * 1.5  * scale< tx 
+			|| ty < _ObjectY * 0.2 * scale|| _ObjectY * 1.5  * scale< ty 
+			|| bx < _ObjectX * 0.2 * scale|| _ObjectX * 1.5  * scale< bx 
+			|| by < _ObjectY * 0.2 * scale|| _ObjectY * 1.5  * scale< by )
 		{
 			cvClearMemStorage(s);
 			cvReleaseMemStorage(&s);
@@ -689,17 +690,25 @@ flannFindPairs( const CvSeq*, const CvSeq* objectDescriptors,
 
 	bool  SURF2::Compare32(IplImage* image_color)
 	{
-		
-
+		 
+ 
 		if(_image == NULL)
 		{
 			//_image = cvCreateImage(cvSize(160,120),8,1);
-			//_imageResize = cvCreateImage(cvSize(160,120),8,3);
-			_image = cvCreateImage(cvGetSize(image_color),8,1);
+			_imageResize = cvCreateImage(cvSize(320,240),IPL_DEPTH_8U,4);
+			_image = cvCreateImage(cvSize(320,240),8,1);
 		}
-		
+		 
+		if( image_color->width != 320)
+		{
+			  cvResize( image_color, _imageResize, CV_INTER_LINEAR );
+			  cvCvtColor( _imageResize, _image, CV_BGR2GRAY );
+		}else
+		{
+			cvCvtColor( image_color, _image, CV_BGR2GRAY );
+		}
 
-		cvCvtColor( image_color, _image, CV_BGR2GRAY );
+		
 
 		return  _Compare(image_color,_image);
 		//imageKeypoints->cl

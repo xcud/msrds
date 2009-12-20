@@ -189,11 +189,6 @@
 			AssemblyName="Microsoft.Xna.Framework, Version=3.1.0.0, PublicKeyToken=6d5c3888ef60e27d, processorArchitecture=x86"
 			MinFrameworkVersion="131072"
 		/>
-		<AssemblyReference
-			RelativePath="Microsoft.Xna.Framework.Game.dll"
-			AssemblyName="Microsoft.Xna.Framework.Game, Version=3.1.0.0, PublicKeyToken=6d5c3888ef60e27d, processorArchitecture=IA64"
-			MinFrameworkVersion="131072"
-		/>
 	</References>
 	<Files>
 		<Filter
