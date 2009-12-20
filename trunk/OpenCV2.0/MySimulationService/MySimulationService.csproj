@@ -80,7 +80,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <OutputPath>bin\x86\Release\</OutputPath>
+    <OutputPath>C:\Users\perpet\Microsoft Robotics Dev Studio 2008 R2 Express\bin\</OutputPath>
     <DefineConstants>TRACE;INSTRUMENTED</DefineConstants>
     <BaseAddress>285212672</BaseAddress>
     <Optimize>true</Optimize>
@@ -91,6 +91,7 @@
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Ccr.Adapters.WinForms, Version=2.1.61.2, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Dss.Runtime.Proxy, Version=2.1.61.2">
       <SpecificVersion>false</SpecificVersion>
       <Private>False</Private>
@@ -116,12 +117,14 @@
       <SpecificVersion>False</SpecificVersion>
       <Private>False</Private>
     </Reference>
+    <Reference Include="System.Data" />
     <Reference Include="System.Xml">
       <SpecificVersion>False</SpecificVersion>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MySimulationDSS.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MySimulationService.cs" />
     <Compile Include="MySimulationServiceTypes.cs" />

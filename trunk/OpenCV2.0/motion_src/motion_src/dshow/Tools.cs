@@ -33,7 +33,7 @@ namespace dshow
 						if (num == 0)
 							return pin[0];
 						num--;
-					}
+					} 
 
 					Marshal.ReleaseComObject(pin[0]);
 					pin[0] = null;

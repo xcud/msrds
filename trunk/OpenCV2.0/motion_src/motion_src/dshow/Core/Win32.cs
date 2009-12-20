@@ -11,8 +11,8 @@ namespace dshow.Core
 	{
 		// memcpy - copy a block of memery
 		[DllImport("ntdll.dll")]
-		public unsafe static extern
-			int memcpy(int *dst, int *src, int count);
+		public static extern
+			int memcpy(int dst, int src, int count);
 
 		// Supplies a pointer to an implementation of IBindCtx
 		[DllImport("ole32.dll")]
@@ -38,7 +38,5 @@ namespace dshow.Core
 			CHILD	= 0x40000000,
 			VISIBLE	= 0x10000000
 		}
-
-
 	}
 }

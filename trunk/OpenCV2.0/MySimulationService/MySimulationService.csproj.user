@@ -18,7 +18,7 @@
     <StartAction>Program</StartAction>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <StartProgram>C:\Users\perpet\Microsoft Robotics Dev Studio 2008 R2 Express\bin\dsshost.exe</StartProgram>
+    <StartProgram>C:\Users\perpet\Microsoft Robotics Dev Studio 2008 R2 Express\bin\dsshost32.exe</StartProgram>
     <StartWorkingDirectory>C:\Users\perpet\Microsoft Robotics Dev Studio 2008 R2 Express\</StartWorkingDirectory>
     <StartArguments>/p:50000 /t:50001 /m:"D:/ccr/msrds/OpenCV2.0/MySimulationService/MySimulationService.manifest.xml"</StartArguments>
     <StartAction>Program</StartAction>
