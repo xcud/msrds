@@ -125,7 +125,7 @@ namespace MySimulationService
 
 
         [ServiceHandler(ServiceHandlerBehavior.Exclusive)]
-        public virtual IEnumerator<ITask> TurnLeftHandler(Scale scale)
+        public virtual IEnumerator<ITask> ScaleHandler(Scale scale)
         {
 
             SendNotification(_submgrPort, scale);
