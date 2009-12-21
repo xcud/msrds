@@ -32,7 +32,7 @@ namespace MySimulationService
         [DataMember]
         public int _CY;
         [DataMember]
-        public int _CS;
+        public float _CS;
 
     }
 
