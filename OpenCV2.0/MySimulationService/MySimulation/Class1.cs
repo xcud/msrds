@@ -108,7 +108,7 @@ namespace MySimulation
 
         public int _OldX = -2;
         public int _OldS = 0;
-
+        public int _Tick = Environment.TickCount;
         void _cam_NewFrame(GrabberInfo e)
         {
 
@@ -123,46 +123,50 @@ namespace MySimulation
 
 
 
-
-
-
-
-
-            if (_surf.GetCX() != -1)
+            if (Environment.TickCount < (_Tick + 500) )
             {
+                return;
+            }
 
-                if (1.3 < _surf.GetCS())
-                {
-                    if (_OldS != 1)
-                    {
-                        _OldS = 1;
-                        _EventOnDetected2(_OldS);
-                    }
-                }
-                else if (1.0 < _surf.GetCS())
-                {
-                    if (_OldS != 0)
-                    {
-                        _OldS = 0;
-                        _EventOnDetected2(_OldS);
-                    }
+            _Tick = Environment.TickCount;
 
 
-                }
-                else
-                {
-                    if (_OldS != -1)
-                    {
-                        _OldS = -1;
-                        _EventOnDetected2(_OldS);
-                    }
 
-                }
+            //if (_surf.GetCX() != -1)
+            //{
+
+            //    if (1.3 < _surf.GetCS())
+            //    {
+            //        if (_OldS != 1)
+            //        {
+            //            _OldS = 1;
+            //            _EventOnDetected2(_OldS);
+            //        }
+            //    }
+            //    else if (1.0 < _surf.GetCS())
+            //    {
+            //        if (_OldS != 0)
+            //        {
+            //            _OldS = 0;
+            //            _EventOnDetected2(_OldS);
+            //        }
+
+
+            //    }
+            //    else
+            //    {
+            //        if (_OldS != -1)
+            //        {
+            //            _OldS = -1;
+            //            _EventOnDetected2(_OldS);
+            //        }
+
+            //    }
 
              
 
 
-            }
+            //}
 
 
             if (_OldX == -2)
@@ -178,7 +182,7 @@ namespace MySimulation
                 return;
             }
             
-            if (_EventOnDetected != null && _OldX != _surf.GetCX())
+            //if (_EventOnDetected != null && _OldX != _surf.GetCX())
             {
                 _OldX = _surf.GetCX();
 
