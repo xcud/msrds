@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="AForge">
+</Property><Property Name="Solution File" Value="D:\ccr\msrds\wavelets\neuro_src\neuro_src\Sources\AForge.sln">
+</Property><Property Name="Date" Value="2010년 1월 11일 월요일">
+</Property><Property Name="Time" Value="오후 23:14">
+</Property></Properties><Event ErrorLevel="0" Project="" Source="AForge.sln" Description="File successfully backed up as D:\ccr\msrds\wavelets\neuro_src\neuro_src\Sources\Backup\AForge.sln">
+</Event><Event ErrorLevel="0" Project="Core" Source="Core\Core.csproj" Description="Project file successfully backed up as D:\ccr\msrds\wavelets\neuro_src\neuro_src\Sources\Backup\Core\Core.csproj">
+</Event><Event ErrorLevel="0" Project="Core" Source="Core\AssemblyInfo.cs" Description="File successfully backed up as D:\ccr\msrds\wavelets\neuro_src\neuro_src\Sources\Backup\Core\AssemblyInfo.cs">
+</Event><Event ErrorLevel="0" Project="Core" Source="Core\DoubleRange.cs" Description="File successfully backed up as D:\ccr\msrds\wavelets\neuro_src\neuro_src\Sources\Backup\Core\DoubleRange.cs">
+</Event><Event ErrorLevel="0" Project="Core" Source="Core\IntRange.cs" Description="File successfully backed up as D:\ccr\msrds\wavelets\neuro_src\neuro_src\Sources\Backup\Core\IntRange.cs">
+</Event><Event ErrorLevel="0" Project="Core" Source="Core\PolishExpression.cs" Description="File successfully backed up as D:\ccr\msrds\wavelets\neuro_src\neuro_src\Sources\Backup\Core\PolishExpression.cs">
+</Event><Event ErrorLevel="0" Project="Core" Source="Core\Copyright.txt" Description="File successfully backed up as D:\ccr\msrds\wavelets\neuro_src\neuro_src\Sources\Backup\Core\Copyright.txt">
+</Event><Event ErrorLevel="0" Project="Core" Source="Core\Version.txt" Description="File successfully backed up as D:\ccr\msrds\wavelets\neuro_src\neuro_src\Sources\Backup\Core\Version.txt">
+</Event><Event ErrorLevel="0" Project="Core" Source="Core\Core.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="Core" Source="Core\Core.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="Neuro" Source="Neuro\Neuro.csproj" Description="Project file successfully backed up as D:\ccr\msrds\wavelets\neuro_src\neuro_src\Sources\Backup\Neuro\Neuro.csproj">
+</Event><Event ErrorLevel="0" Project="Neuro" Source="Neuro\Activation Functions\BipolarSigmoidFunction.cs" Description="File successfully backed up as D:\ccr\msrds\wavelets\neuro_src\neuro_src\Sources\Backup\Neuro\Activation Functions\BipolarSigmoidFunction.cs">
+</Event><Event ErrorLevel="0" Project="Neuro" Source="Neuro\Activation Functions\IActivationFunction.cs" Description="File successfully backed up as D:\ccr\msrds\wavelets\neuro_src\neuro_src\Sources\Backup\Neuro\Activation Functions\IActivationFunction.cs">
+</Event><Event ErrorLevel="0" Project="Neuro" Source="Neuro\Activation Functions\SigmoidFunction.cs" Description="File successfully backed up as D:\ccr\msrds\wavelets\neuro_src\neuro_src\Sources\Backup\Neuro\Activation Functions\SigmoidFunction.cs">
+</Event><Event ErrorLevel="0" Project="Neuro" Source="Neuro\Activation Functions\ThresholdFunction.cs" Description="File successfully backed up as D:\ccr\msrds\wavelets\neuro_src\neuro_src\Sources\Backup\Neuro\Activation Functions\ThresholdFunction.cs">
+</Event><Event ErrorLevel="0" Project="Neuro" Source="Neuro\AssemblyInfo.cs" Description="File successfully backed up as D:\ccr\msrds\wavelets\neuro_src\neuro_src\Sources\Backup\Neuro\AssemblyInfo.cs">
+</Event><Event ErrorLevel="0" Project="Neuro" Source="Neuro\Layers\ActivationLayer.cs" Description="File successfully backed up as D:\ccr\msrds\wavelets\neuro_src\neuro_src\Sources\Backup\Neuro\Layers\ActivationLayer.cs">
+</Event><Event ErrorLevel="0" Project="Neuro" Source="Neuro\Layers\DistanceLayer.cs" Description="File successfully backed up as D:\ccr\msrds\wavelets\neuro_src\neuro_src\Sources\Backup\Neuro\Layers\DistanceLayer.cs">
+</Event><Event ErrorLevel="0" Project="Neuro" Source="Neuro\Layers\Layer.cs" Description="File successfully backed up as D:\ccr\msrds\wavelets\neuro_src\neuro_src\Sources\Backup\Neuro\Layers\Layer.cs">
+</Event><Event ErrorLevel="0" Project="Neuro" Source="Neuro\Learning\BackPropagationLearning.cs" Description="File successfully backed up as D:\ccr\msrds\wavelets\neuro_src\neuro_src\Sources\Backup\Neuro\Learning\BackPropagationLearning.cs">
+</Event><Event ErrorLevel="0" Project="Neuro" Source="Neuro\Learning\DeltaRuleLearning.cs" Description="File successfully backed up as D:\ccr\msrds\wavelets\neuro_src\neuro_src\Sources\Backup\Neuro\Learning\DeltaRuleLearning.cs">
+</Event><Event ErrorLevel="0" Project="Neuro" Source="Neuro\Learning\ElasticNetworkLearning.cs" Description="File successfully backed up as D:\ccr\msrds\wavelets\neuro_src\neuro_src\Sources\Backup\Neuro\Learning\ElasticNetworkLearning.cs">
+</Event><Event ErrorLevel="0" Project="Neuro" Source="Neuro\Learning\ISupervisedLearning.cs" Description="File successfully backed up as D:\ccr\msrds\wavelets\neuro_src\neuro_src\Sources\Backup\Neuro\Learning\ISupervisedLearning.cs">
+</Event><Event ErrorLevel="0" Project="Neuro" Source="Neuro\Learning\IUnsupervisedLearning.cs" Description="File successfully backed up as D:\ccr\msrds\wavelets\neuro_src\neuro_src\Sources\Backup\Neuro\Learning\IUnsupervisedLearning.cs">
+</Event><Event ErrorLevel="0" Project="Neuro" Source="Neuro\Learning\PerceptronLearning.cs" Description="File successfully backed up as D:\ccr\msrds\wavelets\neuro_src\neuro_src\Sources\Backup\Neuro\Learning\PerceptronLearning.cs">
+</Event><Event ErrorLevel="0" Project="Neuro" Source="Neuro\Learning\SOMLearning.cs" Description="File successfully backed up as D:\ccr\msrds\wavelets\neuro_src\neuro_src\Sources\Backup\Neuro\Learning\SOMLearning.cs">
+</Event><Event ErrorLevel="0" Project="Neuro" Source="Neuro\Networks\ActivationNetwork.cs" Description="File successfully backed up as D:\ccr\msrds\wavelets\neuro_src\neuro_src\Sources\Backup\Neuro\Networks\ActivationNetwork.cs">
+</Event><Event ErrorLevel="0" Project="Neuro" Source="Neuro\Networks\DistanceNetwork.cs" Description="File successfully backed up as D:\ccr\msrds\wavelets\neuro_src\neuro_src\Sources\Backup\Neuro\Networks\DistanceNetwork.cs">
+</Event><Event ErrorLevel="0" Project="Neuro" Source="Neuro\Networks\Network.cs" Description="File successfully backed up as D:\ccr\msrds\wavelets\neuro_src\neuro_src\Sources\Backup\Neuro\Networks\Network.cs">
+</Event><Event ErrorLevel="0" Project="Neuro" Source="Neuro\Neurons\ActivationNeuron.cs" Description="File successfully backed up as D:\ccr\msrds\wavelets\neuro_src\neuro_src\Sources\Backup\Neuro\Neurons\ActivationNeuron.cs">
+</Event><Event ErrorLevel="0" Project="Neuro" Source="Neuro\Neurons\DistanceNeuron.cs" Description="File successfully backed up as D:\ccr\msrds\wavelets\neuro_src\neuro_src\Sources\Backup\Neuro\Neurons\DistanceNeuron.cs">
+</Event><Event ErrorLevel="0" Project="Neuro" Source="Neuro\Neurons\Neuron.cs" Description="File successfully backed up as D:\ccr\msrds\wavelets\neuro_src\neuro_src\Sources\Backup\Neuro\Neurons\Neuron.cs">
+</Event><Event ErrorLevel="0" Project="Neuro" Source="Neuro\Copyright.txt" Description="File successfully backed up as D:\ccr\msrds\wavelets\neuro_src\neuro_src\Sources\Backup\Neuro\Copyright.txt">
+</Event><Event ErrorLevel="0" Project="Neuro" Source="Neuro\Version.txt" Description="File successfully backed up as D:\ccr\msrds\wavelets\neuro_src\neuro_src\Sources\Backup\Neuro\Version.txt">
+</Event><Event ErrorLevel="0" Project="Neuro" Source="Neuro\Neuro.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="Neuro" Source="Neuro\Neuro.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="Controls" Source="Controls\Controls.csproj" Description="Project file successfully backed up as D:\ccr\msrds\wavelets\neuro_src\neuro_src\Sources\Backup\Controls\Controls.csproj">
+</Event><Event ErrorLevel="0" Project="Controls" Source="Controls\AssemblyInfo.cs" Description="File successfully backed up as D:\ccr\msrds\wavelets\neuro_src\neuro_src\Sources\Backup\Controls\AssemblyInfo.cs">
+</Event><Event ErrorLevel="0" Project="Controls" Source="Controls\Chart.cs" Description="File successfully backed up as D:\ccr\msrds\wavelets\neuro_src\neuro_src\Sources\Backup\Controls\Chart.cs">
+</Event><Event ErrorLevel="0" Project="Controls" Source="Controls\Copyright.txt" Description="File successfully backed up as D:\ccr\msrds\wavelets\neuro_src\neuro_src\Sources\Backup\Controls\Copyright.txt">
+</Event><Event ErrorLevel="0" Project="Controls" Source="Controls\Version.txt" Description="File successfully backed up as D:\ccr\msrds\wavelets\neuro_src\neuro_src\Sources\Backup\Controls\Version.txt">
+</Event><Event ErrorLevel="0" Project="Controls" Source="Controls\Chart.resx" Description="File successfully backed up as D:\ccr\msrds\wavelets\neuro_src\neuro_src\Sources\Backup\Controls\Chart.resx">
+</Event><Event ErrorLevel="0" Project="Controls" Source="Controls\Controls.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="Controls" Source="Controls\Controls.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="" Source="AForge.sln" Description="Solution converted successfully">
+</Event><Event ErrorLevel="3" Project="" Source="AForge.sln" Description="Converted">
+</Event><Event ErrorLevel="0" Project="Core" Source="Core\Core.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event><Event ErrorLevel="0" Project="Neuro" Source="Neuro\Neuro.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event><Event ErrorLevel="0" Project="Controls" Source="Controls\Controls.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event></UpgradeLog>
