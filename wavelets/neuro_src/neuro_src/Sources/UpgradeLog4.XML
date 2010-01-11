@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="AForge">
+</Property><Property Name="Solution File" Value="D:\ccr\msrds\wavelets\neuro_src\neuro_src\Sources\AForge.sln">
+</Property><Property Name="Date" Value="2010년 1월 12일 화요일">
+</Property><Property Name="Time" Value="오전 0:53:12">
+</Property><Property Name="Log Number" Value="4">
+</Property></Properties><Event ErrorLevel="0" Project="XORProblem" Source="..\Samples\Neuro\Back Propagation\XORProblem\XORProblem.csproj" Description="Project file successfully backed up as D:\ccr\msrds\wavelets\neuro_src\neuro_src\Sources\Backup3\XORProblem.csproj">
+</Event><Event ErrorLevel="0" Project="XORProblem" Source="..\Samples\Neuro\Back Propagation\XORProblem\AssemblyInfo.cs" Description="File successfully backed up as D:\ccr\msrds\wavelets\neuro_src\neuro_src\Sources\Backup3\AssemblyInfo.cs">
+</Event><Event ErrorLevel="0" Project="XORProblem" Source="..\Samples\Neuro\Back Propagation\XORProblem\MainForm.cs" Description="File successfully backed up as D:\ccr\msrds\wavelets\neuro_src\neuro_src\Sources\Backup3\MainForm.cs">
+</Event><Event ErrorLevel="0" Project="XORProblem" Source="..\Samples\Neuro\Back Propagation\XORProblem\App.ico" Description="File successfully backed up as D:\ccr\msrds\wavelets\neuro_src\neuro_src\Sources\Backup3\App.ico">
+</Event><Event ErrorLevel="0" Project="XORProblem" Source="..\Samples\Neuro\Back Propagation\XORProblem\MainForm.resx" Description="File successfully backed up as D:\ccr\msrds\wavelets\neuro_src\neuro_src\Sources\Backup3\MainForm.resx">
+</Event><Event ErrorLevel="0" Project="XORProblem" Source="..\Samples\Neuro\Back Propagation\XORProblem\XORProblem.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="XORProblem" Source="..\Samples\Neuro\Back Propagation\XORProblem\XORProblem.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="XORProblem" Source="..\Samples\Neuro\Back Propagation\XORProblem\XORProblem.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event></UpgradeLog>

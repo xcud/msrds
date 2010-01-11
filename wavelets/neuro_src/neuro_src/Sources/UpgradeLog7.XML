@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="AForge">
+</Property><Property Name="Solution File" Value="D:\ccr\msrds\wavelets\neuro_src\neuro_src\Sources\AForge.sln">
+</Property><Property Name="Date" Value="2010년 1월 12일 화요일">
+</Property><Property Name="Time" Value="오전 0:59:00">
+</Property><Property Name="Log Number" Value="7">
+</Property></Properties><Event ErrorLevel="0" Project="Classifier3" Source="..\Samples\Neuro\Simple\Perceptron Classifier\Classifier3.csproj" Description="Project file successfully backed up as D:\ccr\msrds\wavelets\neuro_src\neuro_src\Sources\Backup6\Classifier3.csproj">
+</Event><Event ErrorLevel="0" Project="Classifier3" Source="..\Samples\Neuro\Simple\Perceptron Classifier\AssemblyInfo.cs" Description="File successfully backed up as D:\ccr\msrds\wavelets\neuro_src\neuro_src\Sources\Backup6\AssemblyInfo.cs">
+</Event><Event ErrorLevel="0" Project="Classifier3" Source="..\Samples\Neuro\Simple\Perceptron Classifier\MainForm.cs" Description="File successfully backed up as D:\ccr\msrds\wavelets\neuro_src\neuro_src\Sources\Backup6\MainForm.cs">
+</Event><Event ErrorLevel="0" Project="Classifier3" Source="..\Samples\Neuro\Simple\Perceptron Classifier\App.ico" Description="File successfully backed up as D:\ccr\msrds\wavelets\neuro_src\neuro_src\Sources\Backup6\App.ico">
+</Event><Event ErrorLevel="0" Project="Classifier3" Source="..\Samples\Neuro\Simple\Perceptron Classifier\MainForm.resx" Description="File successfully backed up as D:\ccr\msrds\wavelets\neuro_src\neuro_src\Sources\Backup6\MainForm.resx">
+</Event><Event ErrorLevel="0" Project="Classifier3" Source="..\Samples\Neuro\Simple\Perceptron Classifier\Classifier3.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="Classifier3" Source="..\Samples\Neuro\Simple\Perceptron Classifier\Classifier3.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="Classifier3" Source="..\Samples\Neuro\Simple\Perceptron Classifier\Classifier3.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event></UpgradeLog>
