@@ -1,7 +1,7 @@
 // AForge Framework
 // Color Clustering using Kohonen SOM
 //
-// Copyright © Andrew Kirillov, 2006
+// Copyright ?Andrew Kirillov, 2006
 // andrew.kirillov@gmail.com
 //
 
@@ -14,7 +14,7 @@ using System.Windows.Forms;
 using System.Data;
 using System.Threading;
 
-using AForge;
+//using AForge;
 using AForge.Neuro;
 using AForge.Neuro.Learning;
 
