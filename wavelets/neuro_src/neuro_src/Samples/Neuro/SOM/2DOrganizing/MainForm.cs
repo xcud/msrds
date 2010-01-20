@@ -1,7 +1,7 @@
 // AForge Framework
 // Kohonen SOM 2D Organizing
 //
-// Copyright © Andrew Kirillov, 2006
+// Copyright ?Andrew Kirillov, 2006
 // andrew.kirillov@gmail.com
 //
 
@@ -54,7 +54,7 @@ namespace SOMOrganizing
 
 
 		private const int	groupRadius = 20;
-		private const int	pointsCount = 100;
+		private const int	pointsCount = 10;
 		private int[,]		points = new int[pointsCount, 2];	// x, y
 		private double[][]	trainingSet = new double[pointsCount][];
 		private int[,,]		map;
