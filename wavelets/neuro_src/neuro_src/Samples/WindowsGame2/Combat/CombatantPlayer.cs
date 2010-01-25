@@ -63,6 +63,14 @@ namespace RolePlaying
                 player.State = value;
                 switch (player.State)
                 {
+                    case RolePlayingGameData.Character.CharacterState.Attack2:
+                        CombatSprite.PlayAnimation("Attack2");
+                        break;
+
+                    case RolePlayingGameData.Character.CharacterState.Attack:
+                        CombatSprite.PlayAnimation("Attack");
+                        break;
+
                     case RolePlayingGameData.Character.CharacterState.Walking:
                         CombatSprite.PlayAnimation("Walk");
                         break;
@@ -225,6 +233,10 @@ namespace RolePlaying
         #region Updating
 
 
+
+
+        int _LastDir = 0;
+
         /// <summary>
         /// Update the player for this frame.
         /// </summary>
@@ -232,20 +244,24 @@ namespace RolePlaying
         {
             base.Update(gameTime);
 
-
+            if (CombatSprite.GetcurrentAnimation() != null && CombatSprite.GetcurrentAnimation().IsLoop == false)
+            {
+                if( CombatSprite.IsPlaybackComplete == false)
+                    return;
+            }
 
             Vector2 movePos = new Vector2(0, 0);
 
             if (Keyboard.GetState(PlayerIndex.One).IsKeyDown(Keys.Left))
             {
-                
+                _LastDir = 0;
 
                 movePos += new Vector2(-1, 0);
 
             }
             if (Keyboard.GetState(PlayerIndex.One).IsKeyDown(Keys.Right))
             {
-
+                _LastDir = 1;
                 movePos += new Vector2(1, 0);
             }
             if (Keyboard.GetState(PlayerIndex.One).IsKeyDown(Keys.Up))
@@ -269,8 +285,13 @@ namespace RolePlaying
             }
             else
             {
+
+                //if( this.CombatSprite.currentAnimation == null
+                //    || this.CombatSprite.currentAnimation.IsLoop == false)
+
                 State = RolePlayingGameData.Character.CharacterState.Idle;
             }
+            
             
 
             if (Keyboard.GetState(PlayerIndex.One).IsKeyDown(Keys.Space))
@@ -280,6 +301,16 @@ namespace RolePlaying
                 //_Player.CombatSprite.PlayAnimation("Hit");
             }
 
+
+            if (Keyboard.GetState(PlayerIndex.One).IsKeyDown(Keys.LeftControl))
+            {
+
+                if( _LastDir == 0)
+                    State = RolePlayingGameData.Character.CharacterState.Attack;
+                else
+                    State = RolePlayingGameData.Character.CharacterState.Attack2;
+                //_Player.CombatSprite.PlayAnimation("Hit");
+            }
 
 
 
