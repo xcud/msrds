@@ -651,7 +651,7 @@ namespace RolePlayingGameData
             {
                 combatSprite.AddAnimation(new Animation("Idle", 37, 42,
                     CombatAnimationInterval, true));
-                combatSprite.AddAnimation(new Animation("Walk", 25, 30,
+                combatSprite.AddAnimation(new Animation("Walking", 25, 30,
                     CombatAnimationInterval, true));
                 combatSprite.AddAnimation(new Animation("Attack", 1, 6,
                     CombatAnimationInterval, false));
@@ -663,8 +663,29 @@ namespace RolePlayingGameData
                     CombatAnimationInterval, false));
                 combatSprite.AddAnimation(new Animation("Hit", 19, 24,
                     CombatAnimationInterval, false));
-                combatSprite.AddAnimation(new Animation("Die", 7, 12,
+                combatSprite.AddAnimation(new Animation("Dying", 7, 12,
                     CombatAnimationInterval, false));
+
+                combatSprite.AddAnimation(new Animation("Idle2", 79, 84,
+                    CombatAnimationInterval, true));
+                combatSprite.AddAnimation(new Animation("Walking2", 67, 72,
+                    CombatAnimationInterval, true));
+
+                combatSprite.AddAnimation(new Animation("Attack2", 43, 48,
+                    CombatAnimationInterval, false));
+
+                combatSprite.AddAnimation(new Animation("SpellCast2", 73, 78,
+                    CombatAnimationInterval, false));
+                combatSprite.AddAnimation(new Animation("Defend2", 55, 60,
+                    CombatAnimationInterval, false));
+                combatSprite.AddAnimation(new Animation("Dodge2", 55, 60,
+                    CombatAnimationInterval, false));
+                combatSprite.AddAnimation(new Animation("Hit2", 61, 66,
+                    CombatAnimationInterval, false));
+                combatSprite.AddAnimation(new Animation("Dying2", 49, 54,
+                    CombatAnimationInterval, false));
+
+                 
             }
         }
 

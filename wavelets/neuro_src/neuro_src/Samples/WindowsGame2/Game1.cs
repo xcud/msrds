@@ -26,6 +26,11 @@ namespace WindowsGame2
 
         RolePlayingGameData.Player _Player = new RolePlayingGameData.Player();
         RolePlaying.CombatantPlayer _CPlayer;
+
+        //List<RolePlaying.CombatantPlayer> _PlayerList = new List<RolePlaying.CombatantPlayer>();
+
+        
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -58,11 +63,24 @@ namespace WindowsGame2
 
 
 
-            _Player = Content.Load<RolePlayingGameData.Player>(@"Characters\Players\Kolatt");
+            _Player = Content.Load<RolePlayingGameData.Player>(@"Characters\Players\Kolatt").Clone() as RolePlayingGameData.Player;
             _CPlayer = new RolePlaying.CombatantPlayer(_Player);
+
 
             _CPlayer.Position = new Vector2(100, 100);
 
+            RolePlaying.CombatantEx._CombatantList.Add(_CPlayer);
+
+            
+
+            RolePlaying.CombatantMonster _Mob = new RolePlaying.CombatantMonster(Content.Load<RolePlayingGameData.Player>(@"Characters\Players\Kolatt").Clone() as RolePlayingGameData.Player);
+
+
+            _Mob.Position = new Vector2(100,100);
+
+            RolePlaying.CombatantEx._CombatantList.Add(_Mob);
+
+            
             // TODO: use this.Content to load your game content here
         }
 
@@ -90,7 +108,15 @@ namespace WindowsGame2
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
-            _CPlayer.Update(gameTime);
+
+            foreach (var obj in RolePlaying.CombatantEx._CombatantList)
+            {
+
+                obj.Update( gameTime);
+            }
+
+
+            
             // TODO: Add your update logic here
 
             base.Update(gameTime);
@@ -110,8 +136,13 @@ namespace WindowsGame2
 
             spriteBatch.Begin();
 
+            foreach (var obj in RolePlaying.CombatantEx._CombatantList)
+            {
 
-            _CPlayer.Draw(spriteBatch,gameTime);
+                obj.Draw(spriteBatch, gameTime);
+            }
+
+            
             //_Player.CombatSprite.UpdateAnimation(elapsedSeconds);
 
             //if (_Player.CombatSprite.IsPlaybackComplete)
