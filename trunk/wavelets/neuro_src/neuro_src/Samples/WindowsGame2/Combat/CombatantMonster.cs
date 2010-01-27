@@ -1,6 +1,6 @@
 #region File Description
 //-----------------------------------------------------------------------------
-// CombatantMonster.cs
+// CombatantPlayer.cs
 //
 // Microsoft XNA Community Game Platform
 // Copyright (C) Microsoft Corporation. All rights reserved.
@@ -9,32 +9,31 @@
 
 #region Using Statements
 using System;
-using RolePlayingGameData;
 using Microsoft.Xna.Framework;
+using RolePlayingGameData;
 #endregion
+
+
+using Microsoft.Xna.Framework.Input;
 
 namespace RolePlaying
 {
     /// <summary>
-    /// Encapsulates all of the combat-runtime data for a particular monster combatant.
+    /// Encapsulates all of the combat-runtime data for a particular player combatant.
     /// </summary>
-    /// <remarks>
-    /// There may be many of a particular Monster in combat.  This class adds the 
-    /// statistics and AI data that are particular to this particular combatant.
-    /// </remarks>
-    class CombatantMonster : Combatant
+    public class CombatantMonster : CombatantEx
     {
         /// <summary>
-        /// The monster content object that this combatant uses.
+        /// The Player object encapsulated by this object.
         /// </summary>
-        private Monster monster;
+        private Player player;
 
         /// <summary>
-        /// The monster content object that this combatant uses.
+        /// The Player object encapsulated by this object.
         /// </summary>
-        public Monster Monster
+        public Player Player
         {
-            get { return monster; }
+            get { return player; }
         }
 
         /// <summary>
@@ -42,48 +41,12 @@ namespace RolePlaying
         /// </summary>
         public override FightingCharacter Character
         {
-            get { return monster as FightingCharacter; }
+            get { return player as FightingCharacter; }
         }
 
 
-        #region State
+        #region State Data
 
-        /// <summary>
-        /// The current state of this combatant.
-        /// </summary>
-        private Character.CharacterState state;
-
-
-        /// <summary>
-        /// The current state of this combatant.
-        /// </summary>
-        public override Character.CharacterState State
-        {
-            get { return state; }
-            set
-            {
-                if (value == state)
-                {
-                    return;
-                }
-                state = value;
-                switch (state)
-                {
-                    case RolePlayingGameData.Character.CharacterState.Idle:
-                        CombatSprite.PlayAnimation("Idle");
-                        break;
-
-                    case RolePlayingGameData.Character.CharacterState.Hit:
-                        CombatSprite.PlayAnimation("Hit");
-                        break;
-
-                    case RolePlayingGameData.Character.CharacterState.Dying:
-                        statistics.HealthPoints = 0;
-                        CombatSprite.PlayAnimation("Die");
-                        break;
-                }
-            }
-        }
 
 
         #endregion
@@ -93,16 +56,11 @@ namespace RolePlaying
 
 
         /// <summary>
-        /// The combat sprite for this combatant, copied from the monster.
-        /// </summary>
-        private AnimatingSprite combatSprite;
-
-        /// <summary>
         /// Accessor for the combat sprite for this combatant.
         /// </summary>
         public override AnimatingSprite CombatSprite
         {
-            get { return combatSprite; }
+            get { return player.CombatSprite; }
         }
 
 
@@ -113,16 +71,11 @@ namespace RolePlaying
 
 
         /// <summary>
-        /// The statistics for this particular combatant.
-        /// </summary>
-        private StatisticsValue statistics = new StatisticsValue();
-
-        /// <summary>
         /// The current statistics of this combatant.
         /// </summary>
         public override StatisticsValue Statistics
         {
-            get { return statistics + CombatEffects.TotalStatistics; }
+            get { return player.CurrentStatistics + CombatEffects.TotalStatistics; }
         }
 
 
@@ -137,8 +90,8 @@ namespace RolePlaying
             }
             else
             {
-                statistics += healingStatistics;
-                statistics.ApplyMaximum(monster.CharacterStatistics);
+                player.StatisticsModifiers += healingStatistics;
+                player.StatisticsModifiers.ApplyMaximum(new StatisticsValue());
             }
             base.Heal(healingStatistics, duration);
         }
@@ -156,8 +109,8 @@ namespace RolePlaying
             }
             else
             {
-                statistics -= damageStatistics;
-                statistics.ApplyMaximum(monster.CharacterStatistics);
+                player.StatisticsModifiers -= damageStatistics;
+                player.StatisticsModifiers.ApplyMaximum(new StatisticsValue());
             }
             base.Damage(damageStatistics, duration);
         }
@@ -182,30 +135,10 @@ namespace RolePlaying
             }
 
             // reduce the player's magic points by the spell's cost
-            statistics.MagicPoints -= spell.MagicPointCost;
+            player.StatisticsModifiers.MagicPoints -= spell.MagicPointCost;
 
             return true;
         }
-
-
-        #endregion
-
-
-        #region Artificial Intelligence
-
-
-        ///// <summary>
-        ///// The artificial intelligence data for this particular combatant.
-        ///// </summary>
-        //private ArtificialIntelligence artificialIntelligence;
-
-        ///// <summary>
-        ///// The artificial intelligence data for this particular combatant.
-        ///// </summary>
-        //public ArtificialIntelligence ArtificialIntelligence
-        //{
-        //    get { return artificialIntelligence; }
-        //}
 
 
         #endregion
@@ -215,27 +148,38 @@ namespace RolePlaying
 
 
         /// <summary>
-        /// Create a new CombatMonster object containing the given monster.
+        /// Construct a new CombatantPlayer object containing the given player.
         /// </summary>
-        /// <param name="monster"></param>
-        public CombatantMonster(Monster monster)
+        public CombatantMonster(Player player)
             : base()
         {
             // check the parameter
-            if (monster == null)
+            if (player == null)
             {
-                throw new ArgumentNullException("monster");
+                throw new ArgumentNullException("player");
             }
 
             // assign the parameters
-            this.monster = monster;
-            this.statistics += monster.CharacterStatistics;
-            this.combatSprite = monster.CombatSprite.Clone() as AnimatingSprite;
-            this.State = RolePlayingGameData.Character.CharacterState.Idle;
-            this.CombatSprite.PlayAnimation("Idle");
+            this.player = player;
 
-            // create the AI data
-            //this.artificialIntelligence = new ArtificialIntelligence(this);
+            // if the player starts dead, make sure the sprite is already "dead"
+            if (IsDeadOrDying)
+            {
+                if (Statistics.HealthPoints > 0)
+                {
+                    State = RolePlayingGameData.Character.CharacterState.Idle;
+                }
+                else
+                {
+                    CombatSprite.PlayAnimation("Die");
+                    CombatSprite.AdvanceToEnd();
+                }
+            }
+            else
+            {
+                State = RolePlayingGameData.Character.CharacterState.Idle;
+                CombatSprite.PlayAnimation("Idle");
+            }
         }
 
 
@@ -245,20 +189,9 @@ namespace RolePlaying
         #region Updating
 
 
-        /// <summary>
-        /// Update the monster for this frame.
-        /// </summary>
-        public override void Update(GameTime gameTime)
-        {
-            // start any waiting action immediately
-            if ((CombatAction != null) &&
-                (CombatAction.Stage == CombatAction.CombatActionStage.NotStarted))
-            {
-                CombatAction.Start();
-            }
 
-            base.Update(gameTime);
-        }
+
+
 
 
         #endregion

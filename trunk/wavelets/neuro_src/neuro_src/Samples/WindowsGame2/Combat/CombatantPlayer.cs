@@ -21,7 +21,7 @@ namespace RolePlaying
     /// <summary>
     /// Encapsulates all of the combat-runtime data for a particular player combatant.
     /// </summary>
-    public class CombatantPlayer : Combatant
+    public class CombatantPlayer : CombatantEx
     {
         /// <summary>
         /// The Player object encapsulated by this object.
@@ -47,50 +47,6 @@ namespace RolePlaying
 
         #region State Data
 
-
-        /// <summary>
-        /// The current state of this combatant.
-        /// </summary>
-        public override Character.CharacterState State
-        {
-            get { return player.State; }
-            set
-            {
-                if (value == player.State)
-                {
-                    return;
-                }
-                player.State = value;
-                switch (player.State)
-                {
-                    case RolePlayingGameData.Character.CharacterState.Attack2:
-                        CombatSprite.PlayAnimation("Attack2");
-                        break;
-
-                    case RolePlayingGameData.Character.CharacterState.Attack:
-                        CombatSprite.PlayAnimation("Attack");
-                        break;
-
-                    case RolePlayingGameData.Character.CharacterState.Walking:
-                        CombatSprite.PlayAnimation("Walk");
-                        break;
-
-                    case RolePlayingGameData.Character.CharacterState.Idle:
-                        CombatSprite.PlayAnimation("Idle");
-                        break;
-
-                    case RolePlayingGameData.Character.CharacterState.Hit:
-                        CombatSprite.PlayAnimation("Hit");
-                        break;
-
-                    case RolePlayingGameData.Character.CharacterState.Dying:
-                        player.StatisticsModifiers.HealthPoints =
-                            -1 * player.CharacterStatistics.HealthPoints;
-                        CombatSprite.PlayAnimation("Die");
-                        break;
-                }
-            }
-        }
 
 
         #endregion
@@ -235,7 +191,7 @@ namespace RolePlaying
 
 
 
-        int _LastDir = 0;
+        
 
         /// <summary>
         /// Update the player for this frame.
@@ -254,7 +210,7 @@ namespace RolePlaying
 
             if (Keyboard.GetState(PlayerIndex.One).IsKeyDown(Keys.Left))
             {
-                _LastDir = 0;
+                _LastDir = -1;
 
                 movePos += new Vector2(-1, 0);
 
@@ -280,7 +236,14 @@ namespace RolePlaying
 
             if (movePos.Length()  != 0)
             {
+                
                 State = RolePlayingGameData.Character.CharacterState.Walking;
+                
+                    
+
+
+
+                
                 Position += movePos;
             }
             else
@@ -305,10 +268,8 @@ namespace RolePlaying
             if (Keyboard.GetState(PlayerIndex.One).IsKeyDown(Keys.LeftControl))
             {
 
-                if( _LastDir == 0)
-                    State = RolePlayingGameData.Character.CharacterState.Attack;
-                else
-                    State = RolePlayingGameData.Character.CharacterState.Attack2;
+                
+                State = RolePlayingGameData.Character.CharacterState.Attack;
                 //_Player.CombatSprite.PlayAnimation("Hit");
             }
 

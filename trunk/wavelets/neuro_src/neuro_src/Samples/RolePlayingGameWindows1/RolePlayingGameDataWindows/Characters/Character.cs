@@ -42,7 +42,8 @@ namespace RolePlayingGameData
             /// Walking in the world.
             /// </summary>
             Walking,
-
+            
+             
             /// <summary>
             /// In defense mode
             /// </summary>
@@ -69,7 +70,7 @@ namespace RolePlayingGameData
             Dead,
 
             Attack,
-            Attack2
+            
         }
 
 
