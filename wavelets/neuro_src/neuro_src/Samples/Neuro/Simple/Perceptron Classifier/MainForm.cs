@@ -1,7 +1,7 @@
 // AForge Framework
 // Perceptron Classifier
 //
-// Copyright © Andrew Kirillov, 2006
+// Copyright ?Andrew Kirillov, 2006
 // andrew.kirillov@gmail.com
 //
 
@@ -54,8 +54,13 @@ namespace Classifier
 
 		private int			samples = 0;
 		private int			variables = 0;
-		private double[,]	data = null;
-		private int[]		classes = null;
+
+
+        KNeural _Neural = new KNeural();
+
+		//private string[,]	data = null;
+
+		//private int[]		classes = null;
 
 		private double		learningRate = 0.1;
 		private bool		saveStatisticsToFiles = false;
@@ -367,81 +372,10 @@ namespace Classifier
 			// data file format:
 			// X1, X2, ... Xn, class (0|1)
 
-			// show file selection dialog
-			if ( openFileDialog.ShowDialog( ) == DialogResult.OK )
-			{
-				StreamReader reader = null;
-
-				// temp buffers (for 50 samples only)
-				double[,]	tempData = null;
-				int[]		tempClasses = new int[50];
-
-				// min and max X values
-				double minX = double.MaxValue;
-				double maxX = double.MinValue;
-
-				// samples count
-				samples = 0;
-
-				try
-				{
-					string	str = null;
-
-					// open selected file
-					reader = File.OpenText( openFileDialog.FileName );
-
-					// read the data
-					while ( ( samples < 50 ) && ( ( str = reader.ReadLine( ) ) != null ) )
-					{
-						// split the string
-						string[] strs = str.Split( ';' );
-						if ( strs.Length == 1 )
-							strs = str.Split( ',' );
-
-						// allocate data array
-						if ( samples == 0 )
-						{
-							variables = strs.Length - 1;
-							tempData = new double[50, variables];
-						}
-
-						// parse data
-						for ( int j = 0; j < variables; j++ )
-						{
-							tempData[samples, j] = double.Parse( strs[j] );
-						}
-						tempClasses[samples] = int.Parse( strs[variables] );
-
-						// search for min value
-						if ( tempData[samples, 0] < minX )
-							minX = tempData[samples, 0];
-						// search for max value
-						if ( tempData[samples, 0] > maxX )
-							maxX = tempData[samples, 0];
-
-						samples++;
-					}
-
-					// allocate and set data
-					data = new double[samples, variables];
-					Array.Copy( tempData, 0, data, 0, samples * variables );
-					classes = new int[samples];
-					Array.Copy( tempClasses, 0, classes, 0, samples );
+            _Neural.LoadData();
 
 					// clear current result
-					ClearCurrentSolution( );
-				}
-				catch ( Exception )
-				{
-					MessageBox.Show( "Failed reading the file", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error );
-					return;
-				}
-				finally
-				{
-					// close file
-					if ( reader != null )
-						reader.Close( );
-				}
+			ClearCurrentSolution( );
 
 				// update list and chart
 				UpdateDataListView( );
@@ -449,18 +383,18 @@ namespace Classifier
 				// show chart or not
 				bool showChart = ( variables == 2 );
 
-				if ( showChart )
-				{
-					chart.RangeX = new DoubleRange( minX, maxX );
-					ShowTrainingData( );
-				}
+                //if ( showChart )
+                //{
+                //    chart.RangeX = new DoubleRange( minX, maxX );
+                //    ShowTrainingData( );
+                //}
 
 				chart.Visible = showChart;
 				noVisualizationLabel.Visible = !showChart;
 
 				// enable start button
 				startButton.Enabled = true;
-			}
+			
 		}
 
 		// Update settings controls
@@ -477,7 +411,7 @@ namespace Classifier
 			dataList.Columns.Clear( );
 
 			// add columns
-			for ( int i = 0, n = variables; i < n; i++ )
+			for ( int i = 0, n = _Neural._Data[0]._InputList.Count ; i < n; i++ )
 			{
 				dataList.Columns.Add( string.Format( "X{0}", i + 1 ),
 					50, HorizontalAlignment.Left );
@@ -485,60 +419,74 @@ namespace Classifier
 			dataList.Columns.Add( "Class", 50, HorizontalAlignment.Left );
 
 			// add items
-			for ( int i = 0; i < samples; i++ )
-			{
-				dataList.Items.Add( data[i, 0].ToString( ) );
 
-				for ( int j = 1; j < variables; j++ )
-				{
-					dataList.Items[i].SubItems.Add( data[i, j].ToString( ) );
-				}
-				dataList.Items[i].SubItems.Add( classes[i].ToString( ) );
-			}
+            for (int i = 0; i < _Neural._Data.Count;i++)
+            {
+                KData d = _Neural._Data[i];
+
+                
+
+                for (int j = 0; j < d._InputList.Count; j++)
+                {
+                    if (j == 0)
+                    {
+                        dataList.Items.Add(d._InputList[j]);
+                    }
+                    else
+                    {
+                        dataList.Items[i].SubItems.Add(d._InputList[j]);    
+                    }
+
+                    
+                }
+
+                dataList.Items[i].SubItems.Add(d._Output);    
+            }
+
 		}
 
-		// Show training data on chart
-		private void ShowTrainingData( )
-		{
-			int class1Size = 0;
-			int class2Size = 0;
+        //// Show training data on chart
+        //private void ShowTrainingData( )
+        //{
+        //    int class1Size = 0;
+        //    int class2Size = 0;
 
-			// calculate number of samples in each class
-			for ( int i = 0, n = samples; i < n; i++ )
-			{
-				if ( classes[i] == 0 )
-					class1Size++;
-				else
-					class2Size++;
-			}
+        //    // calculate number of samples in each class
+        //    for ( int i = 0, n = samples; i < n; i++ )
+        //    {
+        //        if ( classes[i] == 0 )
+        //            class1Size++;
+        //        else
+        //            class2Size++;
+        //    }
 
-			// allocate classes arrays
-			double[,] class1 = new double[class1Size, 2];
-			double[,] class2 = new double[class2Size, 2];
+        //    // allocate classes arrays
+        //    double[,] class1 = new double[class1Size, 2];
+        //    double[,] class2 = new double[class2Size, 2];
 
-			// fill classes arrays
-			for ( int i = 0, c1 = 0, c2 = 0; i < samples; i++ )
-			{
-				if ( classes[i] == 0 )
-				{
-					// class 1
-					class1[c1, 0] = data[i, 0];
-					class1[c1, 1] = data[i, 1];
-					c1++;
-				}
-				else
-				{
-					// class 2
-					class2[c2, 0] = data[i, 0];
-					class2[c2, 1] = data[i, 1];
-					c2++;
-				}
-			}
+        //    // fill classes arrays
+        //    for ( int i = 0, c1 = 0, c2 = 0; i < samples; i++ )
+        //    {
+        //        if ( classes[i] == 0 )
+        //        {
+        //            // class 1
+        //            class1[c1, 0] = data[i, 0];
+        //            class1[c1, 1] = data[i, 1];
+        //            c1++;
+        //        }
+        //        else
+        //        {
+        //            // class 2
+        //            class2[c2, 0] = data[i, 0];
+        //            class2[c2, 1] = data[i, 1];
+        //            c2++;
+        //        }
+        //    }
 
-			// updata chart control
-			chart.UpdateDataSeries( "class1", class1 );
-			chart.UpdateDataSeries( "class2", class2 );
-		}
+        //    // updata chart control
+        //    chart.UpdateDataSeries( "class1", class1 );
+        //    chart.UpdateDataSeries( "class2", class2 );
+        //}
 
 		// Enable/disale controls
 		private void EnableControls( bool enable )
@@ -558,9 +506,18 @@ namespace Classifier
 			weightsList.Items.Clear( );
 		}
 
+
 		// On button "Start" - start learning procedure
 		private void startButton_Click(object sender, System.EventArgs e)
 		{
+
+            //Directory.GetCurrentDirectory();
+
+
+            
+
+
+
 			// get learning rate
 			try
 			{
@@ -580,7 +537,7 @@ namespace Classifier
 
 			// run worker thread
 			needToStop = false;
-			workerThread = new Thread( new ThreadStart( SearchSolution ) );
+			//workerThread = new Thread( new ThreadStart( SearchSolution ) );
 			workerThread.Start( );
 		}
 
@@ -593,138 +550,138 @@ namespace Classifier
 			workerThread = null;
 		}
 
-		// Worker thread
-		void SearchSolution( )
-		{
-			// prepare learning data
-			double[][] input = new double[samples][];
-			double[][] output = new double[samples][];
+        //// Worker thread
+        //void SearchSolution( )
+        //{
+        //    // prepare learning data
+        //    double[][] input = new double[samples][];
+        //    double[][] output = new double[samples][];
 
-			for ( int i = 0; i < samples; i++ )
-			{
-				input[i] = new double[variables];
-				output[i] = new double[1];
+        //    for ( int i = 0; i < samples; i++ )
+        //    {
+        //        input[i] = new double[variables];
+        //        output[i] = new double[1];
 
-				// copy input
-				for ( int j = 0; j < variables; j++ )
-					input[i][j] = data[i, j];
-				// copy output
-				output[i][0] = classes[i];
-			}
+        //        // copy input
+        //        for ( int j = 0; j < variables; j++ )
+        //            input[i][j] = data[i, j];
+        //        // copy output
+        //        output[i][0] = classes[i];
+        //    }
 
-			// create perceptron
-			ActivationNetwork	network = new ActivationNetwork( new ThresholdFunction( ), variables, 1 );
-			ActivationNeuron	neuron = network[0][0];
-			// create teacher
-			PerceptronLearning teacher = new PerceptronLearning( network );
-			// set learning rate
-			teacher.LearningRate = learningRate;
+        //    // create perceptron
+        //    ActivationNetwork	network = new ActivationNetwork( new ThresholdFunction( ), variables, 1 );
+        //    ActivationNeuron	neuron = network[0][0];
+        //    // create teacher
+        //    PerceptronLearning teacher = new PerceptronLearning( network );
+        //    // set learning rate
+        //    teacher.LearningRate = learningRate;
 
-			// iterations
-			int iteration = 1;
+        //    // iterations
+        //    int iteration = 1;
 
-			// statistic files
-			StreamWriter errorsFile = null;
-			StreamWriter weightsFile = null;
+        //    // statistic files
+        //    StreamWriter errorsFile = null;
+        //    StreamWriter weightsFile = null;
 
-			try
-			{
-				// check if we need to save statistics to files
-				if ( saveStatisticsToFiles )
-				{
-					// open files
-					errorsFile	= File.CreateText( "errors.csv" );
-					weightsFile	= File.CreateText( "weights.csv" );
-				}
+        //    try
+        //    {
+        //        // check if we need to save statistics to files
+        //        if ( saveStatisticsToFiles )
+        //        {
+        //            // open files
+        //            errorsFile	= File.CreateText( "errors.csv" );
+        //            weightsFile	= File.CreateText( "weights.csv" );
+        //        }
 
-				// erros list
-				ArrayList errorsList = new ArrayList( );
+        //        // erros list
+        //        ArrayList errorsList = new ArrayList( );
 
-				// loop
-				while ( !needToStop )
-				{
-					// save current weights
-					if ( weightsFile != null )
-					{
-						for ( int i = 0; i < variables; i++ )
-						{
-							weightsFile.Write( neuron[i] + ";" );
-						}
-						weightsFile.WriteLine( neuron.Threshold );
-					}
+        //        // loop
+        //        while ( !needToStop )
+        //        {
+        //            // save current weights
+        //            if ( weightsFile != null )
+        //            {
+        //                for ( int i = 0; i < variables; i++ )
+        //                {
+        //                    weightsFile.Write( neuron[i] + ";" );
+        //                }
+        //                weightsFile.WriteLine( neuron.Threshold );
+        //            }
 
-					// run epoch of learning procedure
-					double error = teacher.RunEpoch( input, output );
-					errorsList.Add( error );
+        //            // run epoch of learning procedure
+        //            double error = teacher.RunEpoch( input, output );
+        //            errorsList.Add( error );
 
-					// show current iteration
-					iterationsBox.Text = iteration.ToString( );
+        //            // show current iteration
+        //            iterationsBox.Text = iteration.ToString( );
 
-					// save current error
-					if ( errorsFile != null )
-					{
-						errorsFile.WriteLine( error );
-					}				
+        //            // save current error
+        //            if ( errorsFile != null )
+        //            {
+        //                errorsFile.WriteLine( error );
+        //            }				
 
-					// show classifier in the case of 2 dimensional data
-					if ( ( neuron.InputsCount == 2 ) && ( neuron[1] != 0 ) )
-					{
-						double k = - neuron[0] / neuron[1];
-						double b = - neuron.Threshold / neuron[1];
+        //            // show classifier in the case of 2 dimensional data
+        //            if ( ( neuron.InputsCount == 2 ) && ( neuron[1] != 0 ) )
+        //            {
+        //                double k = - neuron[0] / neuron[1];
+        //                double b = - neuron.Threshold / neuron[1];
 
-						double[,] classifier = new double[2, 2] {
-							{ chart.RangeX.Min, chart.RangeX.Min * k + b },
-							{ chart.RangeX.Max, chart.RangeX.Max * k + b }
-																};
-						// update chart
-						chart.UpdateDataSeries( "classifier", classifier );
-					}
+        //                double[,] classifier = new double[2, 2] {
+        //                    { chart.RangeX.Min, chart.RangeX.Min * k + b },
+        //                    { chart.RangeX.Max, chart.RangeX.Max * k + b }
+        //                                                        };
+        //                // update chart
+        //                chart.UpdateDataSeries( "classifier", classifier );
+        //            }
 
-					// stop if no error
-					if ( error == 0 )
-						break;
+        //            // stop if no error
+        //            if ( error == 0 )
+        //                break;
 
-					iteration++;
-				}
+        //            iteration++;
+        //        }
 
-				// show perceptron's weights
-				weightsList.Items.Clear( );
-				for ( int i = 0; i < variables; i++ )
-				{
-					weightsList.Items.Add( string.Format( "Weight {0}", i + 1  ) );
-					weightsList.Items[i].SubItems.Add( neuron[i].ToString( "F6" ) );
-				}
-				weightsList.Items.Add( "Threshold" );
-				weightsList.Items[variables].SubItems.Add( neuron.Threshold.ToString( "F6" ) );
+        //        // show perceptron's weights
+        //        weightsList.Items.Clear( );
+        //        for ( int i = 0; i < variables; i++ )
+        //        {
+        //            weightsList.Items.Add( string.Format( "Weight {0}", i + 1  ) );
+        //            weightsList.Items[i].SubItems.Add( neuron[i].ToString( "F6" ) );
+        //        }
+        //        weightsList.Items.Add( "Threshold" );
+        //        weightsList.Items[variables].SubItems.Add( neuron.Threshold.ToString( "F6" ) );
 
-				// show error's dynamics
-				double[,] errors = new double[errorsList.Count, 2];
+        //        // show error's dynamics
+        //        double[,] errors = new double[errorsList.Count, 2];
 
-				for ( int i = 0, n = errorsList.Count; i < n; i++ )
-				{
-					errors[i, 0] = i;
-					errors[i, 1] = (double) errorsList[i];
-				}
+        //        for ( int i = 0, n = errorsList.Count; i < n; i++ )
+        //        {
+        //            errors[i, 0] = i;
+        //            errors[i, 1] = (double) errorsList[i];
+        //        }
 
-				errorChart.RangeX = new DoubleRange( 0, errorsList.Count - 1 );
-				errorChart.RangeY = new DoubleRange( 0, samples );
-				errorChart.UpdateDataSeries( "error", errors );
-			}
-			catch ( IOException )
-			{
-				MessageBox.Show( "Failed writing file", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error );
-			}
-			finally
-			{
-				// close files
-				if ( errorsFile != null )
-					errorsFile.Close( );
-				if ( weightsFile != null )
-					weightsFile.Close( );
-			}
+        //        errorChart.RangeX = new DoubleRange( 0, errorsList.Count - 1 );
+        //        errorChart.RangeY = new DoubleRange( 0, samples );
+        //        errorChart.UpdateDataSeries( "error", errors );
+        //    }
+        //    catch ( IOException )
+        //    {
+        //        MessageBox.Show( "Failed writing file", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error );
+        //    }
+        //    finally
+        //    {
+        //        // close files
+        //        if ( errorsFile != null )
+        //            errorsFile.Close( );
+        //        if ( weightsFile != null )
+        //            weightsFile.Close( );
+        //    }
 
-			// enable settings controls
-			EnableControls( true );
-		}
+        //    // enable settings controls
+        //    EnableControls( true );
+        //}
 	}
 }
