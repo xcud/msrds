@@ -95,6 +95,8 @@
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="KLayer.cs" />
+    <Compile Include="KNetwork.cs" />
     <Compile Include="KNeural.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
