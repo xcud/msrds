@@ -419,7 +419,7 @@ namespace SOMOrganizing
 				int cy = rand.Next( height );
 
 				// generate group
-				for ( int j = 0 ; ( i < pointsCount ) && ( j < 10 ); )
+				for ( int j = 0 ; ( i < pointsCount ) && ( j < 2 ); )
 				{
 					int x = cx + rand.Next( diameter ) - groupRadius;
 					int y = cy + rand.Next( diameter ) - groupRadius;
