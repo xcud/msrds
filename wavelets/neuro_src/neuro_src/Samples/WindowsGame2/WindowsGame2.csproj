@@ -99,6 +99,7 @@
     <Compile Include="Combat\CombatantPlayer.cs" />
     <Compile Include="Combat\CombatEndingState.cs" />
     <Compile Include="Combat\CombatEngine.cs" />
+    <Compile Include="InputRecoder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />
