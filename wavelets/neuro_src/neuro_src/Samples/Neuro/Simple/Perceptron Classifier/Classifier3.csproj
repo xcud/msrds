@@ -95,10 +95,12 @@
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DoubleRange.cs" />
     <Compile Include="KLayer.cs" />
     <Compile Include="KLearning.cs" />
     <Compile Include="KNetwork.cs" />
     <Compile Include="KNeural.cs" />
+    <Compile Include="KNeuron.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
