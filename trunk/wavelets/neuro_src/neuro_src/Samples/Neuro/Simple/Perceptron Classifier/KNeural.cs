@@ -7,15 +7,74 @@ using System.IO;
 namespace Classifier
 {
 
+
+    
+
     public class KData
     {
         public List<String> _InputList = new List<string>();
         public string _Output;
     }
 
+
+
     public class KNeural
     {
+        enum ACTION
+        {
+            ATTACK,
+            STAND,
+            NEAR,
+            FAR,
+            DODGE,
+        }
 
+        const int row = 4;
+        const int col = 11;
+
+        public KLearnData[] GetLearnData()
+        {
+
+            double[,] dumyData = new double[row,col]
+
+
+        //                       DISTANCE,EA_ATTACK,EA_STAND,EA_NEAR,EA_DODGE,MA_DODGE,MA_ATTACK,MA_STAND,MA_NEAR,MA_FAR ,    OUTPUT
+                             {      {0,       1   ,   0    ,    0    ,   0   ,   1    ,   0   ,    0  ,  0    ,  0    ,(double) ACTION.DODGE },
+                                    {0.1,     0   ,   1    ,    0    ,   0   ,   0    ,   1   ,    0  ,  0    ,  0    ,(double) ACTION.ATTACK },
+                                    {0.2,     0   ,   1    ,    0    ,   0   ,   0    ,   1   ,    0  ,  0    ,  0    ,(double) ACTION.ATTACK },
+                                    {0.4,     0   ,   1    ,    0    ,   0   ,   0    ,   0   ,    0  ,  1    ,  0    ,(double) ACTION.ATTACK },
+                              };
+
+
+            KLearnData[] data = new KLearnData[4];
+
+            for (int j = 0; j < row; j++)
+            {
+                int size = col - 1;
+                data[j]._Input = new double[size];
+
+                for (int i = 0; i < col; i++)
+                {
+
+                    if (i == col - 1)
+                    {
+                        int na = (int) dumyData[j, i];
+                        data[j]._Symbol = enum. (ACTION)na;
+                    }
+                    else
+                    {
+                        data[j]._Input[i] = dumyData[j, i];
+                    }
+                    
+                    
+                }
+
+
+            }
+
+            return data;      
+
+        }
 
         public void LoadData()
         {
