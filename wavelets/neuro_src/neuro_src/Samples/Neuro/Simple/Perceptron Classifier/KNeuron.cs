@@ -49,5 +49,17 @@ namespace Classifier
 
             _Symbols[symbol]++;
         }
+
+        internal double Compute(double[] input)
+        {
+            output = 0.0;
+
+            // compute distance between inputs and weights
+            for (int i = 0; i < inputsCount; i++)
+            {
+                output += Math.Abs(weights[i] - input[i]);
+            }
+            return output;
+        }
     }
 }
