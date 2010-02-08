@@ -4,16 +4,26 @@ using System.Text;
 
 namespace Classifier
 {
+    
+
+
 
     public class KLearnData
     {
         public double[] _Input;
         public string _Symbol;
-             
+
+
+
+
+
+
     }
 
     public class KLearning
     {
+
+
 
 
 
