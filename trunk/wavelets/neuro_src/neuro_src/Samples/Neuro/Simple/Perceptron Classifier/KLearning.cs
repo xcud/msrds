@@ -42,13 +42,13 @@ namespace Classifier
         private double _SquaredRadius2 = 2 * 7 * 7;
 
          //learning rate
-        private double _LearningRate = 0.1;
+        public double _LearningRate = 0.1;
 
         
         
 
 
-        double Run(KLearnData sample)
+        public double Run(KLearnData sample)
         {
 
             double error = 0.0;
@@ -111,7 +111,6 @@ namespace Classifier
             return 0;
 
         }
-
 
 
         public double RunEpoch(KLearnData[] input)

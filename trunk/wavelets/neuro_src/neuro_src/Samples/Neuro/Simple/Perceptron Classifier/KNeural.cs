@@ -46,10 +46,11 @@ namespace Classifier
                               };
 
 
-            KLearnData[] data = new KLearnData[4];
+            KLearnData[] data = new KLearnData[row];
 
             for (int j = 0; j < row; j++)
             {
+                data[j] = new KLearnData();
                 int size = col - 1;
                 data[j]._Input = new double[size];
 
