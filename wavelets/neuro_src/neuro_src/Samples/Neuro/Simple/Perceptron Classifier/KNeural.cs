@@ -32,7 +32,7 @@ namespace Classifier
         const int row = 4;
         const int col = 11;
 
-        public KLearnData[] GetLearnData()
+        static public KLearnData[] GetLearnData()
         {
 
             double[,] dumyData = new double[row,col]
@@ -59,7 +59,7 @@ namespace Classifier
                     if (i == col - 1)
                     {
                         int na = (int) dumyData[j, i];
-                        data[j]._Symbol = enum. (ACTION)na;
+                        data[j]._Symbol = ((ACTION)na).ToString();
                     }
                     else
                     {

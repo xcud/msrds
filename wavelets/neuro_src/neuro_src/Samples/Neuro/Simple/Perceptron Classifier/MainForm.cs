@@ -553,132 +553,51 @@ namespace Classifier
         // Worker thread
         void SearchSolution()
         {
-            // prepare learning data
-            double[][] input = new double[samples][];
-            double[][] output = new double[samples][];
+            
+            KLearnData[] data = KNeural.GetLearnData();
 
-            for (int i = 0; i < samples; i++)
-            {
-                input[i] = new double[variables];
-                output[i] = new double[1];
 
-                // copy input
-                for (int j = 0; j < variables; j++)
-                    input[i][j] = data[i, j];
-                // copy output
-                output[i][0] = classes[i];
-            }
+            KLearning techar = new KLearning(data[0]._Input.Length, 100, 100);
 
-            // create perceptron
-            ActivationNetwork network = new ActivationNetwork(new ThresholdFunction(), variables, 1);
-            ActivationNeuron neuron = network[0][0];
-            // create teacher
-            PerceptronLearning teacher = new PerceptronLearning(network);
-            // set learning rate
-            teacher.LearningRate = learningRate;
+
+            // input
+            double[] input = new double[3];
+
+            double fixedLearningRate = learningRate / 10;
+            double driftingLearningRate = fixedLearningRate * 9;
 
             // iterations
-            int iteration = 1;
+            int i = 0;
 
-            // statistic files
-            StreamWriter errorsFile = null;
-            StreamWriter weightsFile = null;
-
-            try
+            // loop
+            while (!needToStop)
             {
-                // check if we need to save statistics to files
-                if (saveStatisticsToFiles)
+                trainer.LearningRate = driftingLearningRate * (iterations - i) / iterations + fixedLearningRate;
+                trainer.LearningRadius = (double)radius * (iterations - i) / iterations;
+
+                input[0] = rand.Next(256);
+                input[1] = rand.Next(256);
+                input[2] = rand.Next(256);
+
+                trainer.Run(input);
+
+                // update map once per 50 iterations
+                if ((i % 10) == 9)
                 {
-                    // open files
-                    errorsFile = File.CreateText("errors.csv");
-                    weightsFile = File.CreateText("weights.csv");
+                    UpdateMap();
                 }
 
-                // erros list
-                ArrayList errorsList = new ArrayList();
+                // increase current iteration
+                i++;
 
-                // loop
-                while (!needToStop)
-                {
-                    // save current weights
-                    if (weightsFile != null)
-                    {
-                        for (int i = 0; i < variables; i++)
-                        {
-                            weightsFile.Write(neuron[i] + ";");
-                        }
-                        weightsFile.WriteLine(neuron.Threshold);
-                    }
+                // set current iteration's info
+                currentIterationBox.Text = i.ToString();
 
-                    // run epoch of learning procedure
-                    double error = teacher.RunEpoch(input, output);
-                    errorsList.Add(error);
-
-                    // show current iteration
-                    iterationsBox.Text = iteration.ToString();
-
-                    // save current error
-                    if (errorsFile != null)
-                    {
-                        errorsFile.WriteLine(error);
-                    }
-
-                    // show classifier in the case of 2 dimensional data
-                    if ((neuron.InputsCount == 2) && (neuron[1] != 0))
-                    {
-                        double k = -neuron[0] / neuron[1];
-                        double b = -neuron.Threshold / neuron[1];
-
-                        double[,] classifier = new double[2, 2] {
-                            { chart.RangeX.Min, chart.RangeX.Min * k + b },
-                            { chart.RangeX.Max, chart.RangeX.Max * k + b }
-                                                                };
-                        // update chart
-                        chart.UpdateDataSeries("classifier", classifier);
-                    }
-
-                    // stop if no error
-                    if (error == 0)
-                        break;
-
-                    iteration++;
-                }
-
-                // show perceptron's weights
-                weightsList.Items.Clear();
-                for (int i = 0; i < variables; i++)
-                {
-                    weightsList.Items.Add(string.Format("Weight {0}", i + 1));
-                    weightsList.Items[i].SubItems.Add(neuron[i].ToString("F6"));
-                }
-                weightsList.Items.Add("Threshold");
-                weightsList.Items[variables].SubItems.Add(neuron.Threshold.ToString("F6"));
-
-                // show error's dynamics
-                double[,] errors = new double[errorsList.Count, 2];
-
-                for (int i = 0, n = errorsList.Count; i < n; i++)
-                {
-                    errors[i, 0] = i;
-                    errors[i, 1] = (double)errorsList[i];
-                }
-
-                errorChart.RangeX = new DoubleRange(0, errorsList.Count - 1);
-                errorChart.RangeY = new DoubleRange(0, samples);
-                errorChart.UpdateDataSeries("error", errors);
+                // stop ?
+                if (i >= iterations)
+                    break;
             }
-            catch (IOException)
-            {
-                MessageBox.Show("Failed writing file", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            finally
-            {
-                // close files
-                if (errorsFile != null)
-                    errorsFile.Close();
-                if (weightsFile != null)
-                    weightsFile.Close();
-            }
+
 
             // enable settings controls
             EnableControls(true);
