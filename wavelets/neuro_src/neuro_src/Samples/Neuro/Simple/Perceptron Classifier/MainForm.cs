@@ -19,6 +19,8 @@ using AForge.Neuro;
 using AForge.Neuro.Learning;
 using AForge.Controls;
 
+using gameAI.NerualNetwork;
+
 namespace Classifier
 {
 	/// <summary>
@@ -67,6 +69,8 @@ namespace Classifier
 
 		private Thread	workerThread = null;
         private Button button1;
+        private ListBox listBox1;
+        private Button button2;
 		private bool	needToStop = false;
 
 		// Constructor
@@ -133,6 +137,8 @@ namespace Classifier
             this.startButton = new System.Windows.Forms.Button();
             this.learningRateBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.listBox1 = new System.Windows.Forms.ListBox();
+            this.button2 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -339,10 +345,30 @@ namespace Classifier
             this.label1.TabIndex = 0;
             this.label1.Text = "Learning rate:";
             // 
+            // listBox1
+            // 
+            this.listBox1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.listBox1.FormattingEnabled = true;
+            this.listBox1.Location = new System.Drawing.Point(0, 499);
+            this.listBox1.Name = "listBox1";
+            this.listBox1.Size = new System.Drawing.Size(663, 173);
+            this.listBox1.TabIndex = 2;
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(0, 453);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(95, 30);
+            this.button2.TabIndex = 12;
+            this.button2.Text = "Test";
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-            this.ClientSize = new System.Drawing.Size(459, 440);
+            this.ClientSize = new System.Drawing.Size(663, 672);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.listBox1);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -562,6 +588,9 @@ namespace Classifier
 			workerThread = null;
 		}
 
+        KLearning _trainer;
+
+
         // Worker thread
         void SearchSolution()
         {
@@ -569,7 +598,7 @@ namespace Classifier
             KLearnData[] data = KNeural.GetLearnData();
 
 
-            KLearning trainer = new KLearning(data[0]._Input.Length, 100, 100);
+            _trainer = new KLearning(data[0]._Input.Length, 100, 100);
 
 
             // input
@@ -589,15 +618,15 @@ namespace Classifier
             //while (!needToStop)
             foreach(KLearnData d in data)
             {
-                trainer._LearningRate = driftingLearningRate * (iterations - i) / iterations + fixedLearningRate;
-                trainer._LearningRadius = (double)radius * (iterations - i) / iterations;
+                _trainer._LearningRate = driftingLearningRate * (iterations - i) / iterations + fixedLearningRate;
+                _trainer._LearningRadius = (double)radius * (iterations - i) / iterations;
 
                 input[0] = rand.Next(256);
                 input[1] = rand.Next(256);
                 input[2] = rand.Next(256);
 
                 //trainer.RunEpoch(
-                trainer.Run(d);
+                _trainer.Run(d);
 
                 // update map once per 50 iterations
                 //if ((i % 10) == 9)
@@ -618,7 +647,7 @@ namespace Classifier
 
 
             // enable settings controls
-            EnableControls(true);
+            //EnableControls(true);
         }
         
         int iterations = 5000;
@@ -630,6 +659,20 @@ namespace Classifier
         {
             
 
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            KLearnData[] data = KNeural.GetLearnData();
+
+            foreach(var d in data)
+            {
+                string symbol = _trainer.Estimate(d._Input);
+                listBox1.Items.Add(symbol);
+            }
+
+            
+            
         }
 	}
 }

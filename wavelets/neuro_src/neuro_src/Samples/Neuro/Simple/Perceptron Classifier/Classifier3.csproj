@@ -114,12 +114,6 @@
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DoubleRange.cs" />
-    <Compile Include="KLayer.cs" />
-    <Compile Include="KLearning.cs" />
-    <Compile Include="KNetwork.cs" />
-    <Compile Include="KNeural.cs" />
-    <Compile Include="KNeuron.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -135,6 +129,10 @@
     <ProjectReference Include="..\..\..\..\Sources\Core\Core.csproj">
       <Project>{BFAF50DC-4942-46B8-8615-2A0B4CF08AD2}</Project>
       <Name>Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Sources\gameAI\gameAI.csproj">
+      <Project>{675304FF-6DBE-4155-835A-C927047F3ABD}</Project>
+      <Name>gameAI</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\Sources\Neuro\Neuro.csproj">
       <Project>{53B51230-2CD7-435B-8677-A3E24D134CD8}</Project>

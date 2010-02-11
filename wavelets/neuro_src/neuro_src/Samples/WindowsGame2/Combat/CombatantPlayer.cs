@@ -278,6 +278,98 @@ namespace RolePlaying
         }
 
 
+        Vector2 _OldPos = new Vector2(-1,-1);
+
+        CombatantEx _TargetObject = null;
+
+        Vector2 _OldTargetDist = new Vector2(-1,-1);
+
+
+        Character.CharacterState _OldState;
+
+        public override void OnChangeState(Character.CharacterState State)
+        {
+
+            
+
+            if (_OldTargetDist.X == -1)
+            {
+                _OldTargetDist = _TargetObject.Position - Position;
+
+                _OldState = State;
+
+                return;
+            }
+
+
+
+
+
+            switch (State)
+            {
+                case RolePlayingGameData.Character.CharacterState.Idle:
+
+                    if (_OldState == RolePlayingGameData.Character.CharacterState.Idle)
+                        return;
+
+                    UpdateAIState(WindowsGame2.AI.ACTION.STAND);
+                    
+                    break;
+
+                case RolePlayingGameData.Character.CharacterState.Walking:
+
+
+
+
+                    Vector2 dist = _TargetObject.Position - Position;
+
+                    dist -= _OldTargetDist;
+
+
+                    if (dist.Length() < -10)
+                    {//°¡±î¿öÁü
+
+                        UpdateAIState(WindowsGame2.AI.ACTION.NEAR);
+
+                    }
+                    else if (10 < dist.Length())
+                    {//  ¸ØÃã
+                        return;
+                    }
+                    else
+                    {//  
+                        UpdateAIState(WindowsGame2.AI.ACTION.FAR);
+                    }
+
+                    _OldTargetDist = _TargetObject.Position - Position;
+
+
+                    break;
+
+                default:
+
+                    if (_OldState == State)
+                        return;
+
+
+                    UpdateAIState()
+
+                    break;
+
+            }
+            _OldState == State
+        }
+
+        public void UpdateAIState(WindowsGame2.AI.ACTION state)
+        {
+
+        }
+
+        //public  void OnChangeState(WindowsGame2.AI.ACTION state)
+        //{
+            
+        //}
+
         #endregion
     }
 }
