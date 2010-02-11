@@ -21,6 +21,11 @@ namespace RolePlaying
         static public List<CombatantEx> _CombatantList = new List<CombatantEx>();
 
 
+        public virtual void OnChangeState(Character.CharacterState State)
+        {
+
+        }
+
         float _AniTime = 0;
         protected int _LastDir = 0;
         /// <summary>
@@ -35,7 +40,13 @@ namespace RolePlaying
                 //{
                 //    return;
                 //}
+
+
+
                 Character.State = value;
+
+
+                OnChangeState(value);
 
                 _AniTime = 0;
 
