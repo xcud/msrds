@@ -15,6 +15,7 @@ using RolePlayingGameData;
 
 
 using Microsoft.Xna.Framework.Input;
+using WindowsGame2.AI;
 
 namespace RolePlaying
 {
@@ -280,17 +281,20 @@ namespace RolePlaying
 
         Vector2 _OldPos = new Vector2(-1,-1);
 
-        CombatantEx _TargetObject = null;
+        
 
         Vector2 _OldTargetDist = new Vector2(-1,-1);
 
 
         Character.CharacterState _OldState;
 
+        MyLearning _Learning = new MyLearning();
         public override void OnChangeState(Character.CharacterState State)
         {
 
-            
+
+            if (_TargetObject == null)
+                return;
 
             if (_OldTargetDist.X == -1)
             {
@@ -301,10 +305,6 @@ namespace RolePlaying
                 return;
             }
 
-
-
-
-
             switch (State)
             {
                 case RolePlayingGameData.Character.CharacterState.Idle:
@@ -312,7 +312,7 @@ namespace RolePlaying
                     if (_OldState == RolePlayingGameData.Character.CharacterState.Idle)
                         return;
 
-                    UpdateAIState(WindowsGame2.AI.ACTION.STAND);
+                    UpdateAIState(WindowsGame2.AI.OUTPUT.STAND);
                     
                     break;
 
@@ -323,46 +323,72 @@ namespace RolePlaying
 
                     Vector2 dist = _TargetObject.Position - Position;
 
-                    dist -= _OldTargetDist;
+                    //dist -= _OldTargetDist;
 
+                    float fDist = dist.Length() - _OldTargetDist.Length();
 
-                    if (dist.Length() < -10)
+                    if (fDist < -10)
                     {//°¡±î¿öÁü
 
-                        UpdateAIState(WindowsGame2.AI.ACTION.NEAR);
+                        UpdateAIState(WindowsGame2.AI.OUTPUT.NEAR);
 
                     }
-                    else if (10 < dist.Length())
+                    else if (10 < fDist)
                     {//  ¸ØÃã
-                        return;
+                        UpdateAIState(WindowsGame2.AI.OUTPUT.FAR);
+                        
                     }
                     else
                     {//  
-                        UpdateAIState(WindowsGame2.AI.ACTION.FAR);
+                        return;
                     }
 
                     _OldTargetDist = _TargetObject.Position - Position;
 
 
                     break;
-
-                default:
-
+                
+                case RolePlayingGameData.Character.CharacterState.Attack:
                     if (_OldState == State)
                         return;
 
+                    UpdateAIState(OUTPUT.ATTACK);
 
-                    UpdateAIState()
+
+                    break;
+                case RolePlayingGameData.Character.CharacterState.Dodging:
+                    if (_OldState == State)
+                        return;
+
+                    UpdateAIState(OUTPUT.DODGE);
+                    break;
+                    
+
+                default:
+
+
+
+                    //UpdateAIState()
 
                     break;
 
             }
-            _OldState == State
+            _OldState = State;
         }
 
-        public void UpdateAIState(WindowsGame2.AI.ACTION state)
+        // DISTANCE,ES_ATTACK,MS_STAND,MS_NEAR,MS_FAR,OUTPUT , ES_STAND,ES_NEAR,ES_FAR,MS_ATTACK,
+
+
+
+        public void UpdateAIState(WindowsGame2.AI.OUTPUT state)
         {
 
+            WindowsGame2.AI.InputData input = GetInputData();
+
+            _LastAction = state;
+            //float 
+
+            _Learning.AddData(input, state);
         }
 
         //public  void OnChangeState(WindowsGame2.AI.ACTION state)

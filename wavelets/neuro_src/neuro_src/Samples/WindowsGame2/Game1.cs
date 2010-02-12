@@ -26,6 +26,7 @@ namespace WindowsGame2
 
         RolePlayingGameData.Player _Player = new RolePlayingGameData.Player();
         RolePlaying.CombatantPlayer _CPlayer;
+        
 
         //List<RolePlaying.CombatantPlayer> _PlayerList = new List<RolePlaying.CombatantPlayer>();
 
@@ -67,6 +68,7 @@ namespace WindowsGame2
             _CPlayer = new RolePlaying.CombatantPlayer(_Player);
 
 
+
             _CPlayer.Position = new Vector2(100, 100);
 
             RolePlaying.CombatantEx._CombatantList.Add(_CPlayer);
@@ -78,9 +80,15 @@ namespace WindowsGame2
 
             _Mob.Position = new Vector2(100,100);
 
+            _CPlayer._TargetObject = _Mob;
+            _Mob._TargetObject = _CPlayer;
+
             RolePlaying.CombatantEx._CombatantList.Add(_Mob);
 
             
+
+
+
             // TODO: use this.Content to load your game content here
         }
 

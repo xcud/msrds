@@ -7,6 +7,9 @@ using RolePlayingGameData;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework;
 
+
+using WindowsGame2.AI;
+
 namespace RolePlaying
 {
 
@@ -16,6 +19,26 @@ namespace RolePlaying
 
     public abstract  class CombatantEx : Combatant
     {
+
+        public CombatantEx _TargetObject = null;
+
+
+
+        public WindowsGame2.AI.InputData GetInputData()
+        {
+
+
+            float dist = (Position - _TargetObject.Position).Length();
+            WindowsGame2.AI.InputData input = new WindowsGame2.AI.InputData();
+
+            input[INPUT.DISTANCE] = dist / 1000;
+
+            input[(int)INPUT.MS_STAND + (int)LastAction()] = 1;
+
+            input[(int)INPUT.ES_STAND + (int)_TargetObject.LastAction()] = 1;
+
+            return input;
+        }
 
 
         static public List<CombatantEx> _CombatantList = new List<CombatantEx>();
@@ -93,6 +116,13 @@ namespace RolePlaying
         }
 
 
+        protected OUTPUT _LastAction = OUTPUT.STAND;
+
+        public OUTPUT LastAction()
+        {
+            return _LastAction;
+        }
+
 
 
         public override void Update(GameTime gameTime)
@@ -103,6 +133,9 @@ namespace RolePlaying
             {
                 _AniTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
+
+
+
 
             switch (State)
             {
@@ -143,6 +176,10 @@ namespace RolePlaying
 
 
             }
+
+
+
+
 
         }
     }

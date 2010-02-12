@@ -86,10 +86,19 @@ namespace gameAI.NerualNetwork
             Compute(p);
             int winner = GetWinner();
 
-            foreach (var s in _Layers[0]._Neurons[winner]._Symbols.Keys)
-                return s;
+            string strSymobl = null;
+            uint max = 0;
+            foreach (var s in _Layers[0]._Neurons[winner]._Symbols)
+            {
+                if (max < s.Value)
+                {
+                    max = s.Value;
+                    strSymobl = s.Key;
+                }
+            }
+                
 
-            return null;
+            return strSymobl;
         }
     }
 }

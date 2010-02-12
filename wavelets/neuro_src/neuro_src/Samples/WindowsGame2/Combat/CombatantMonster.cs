@@ -15,6 +15,7 @@ using RolePlayingGameData;
 
 
 using Microsoft.Xna.Framework.Input;
+using WindowsGame2.AI;
 
 namespace RolePlaying
 {
@@ -189,9 +190,58 @@ namespace RolePlaying
         #region Updating
 
 
+        OUTPUT _LastAIState = OUTPUT.STAND;
+        OUTPUT _CurAIState = OUTPUT.STAND;
+
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
 
 
 
+
+            if (CombatSprite.GetcurrentAnimation() != null && CombatSprite.GetcurrentAnimation().IsLoop == false)
+            {
+                if (CombatSprite.IsPlaybackComplete == false)
+                    return;
+
+                State = RolePlayingGameData.Character.CharacterState.Idle;
+            }
+
+
+            switch (State)
+            {
+                case RolePlayingGameData.Character.CharacterState.Walking:
+                case RolePlayingGameData.Character.CharacterState.Idle:
+
+
+                    WindowsGame2.AI.InputData input = GetInputData();
+
+                    _CurAIState = MyLearning.I.GetNextAction(input);
+
+                    break;
+                
+
+            }
+
+
+            switch (_CurAIState)
+            {
+                case OUTPUT.STAND:
+                    State = RolePlayingGameData.Character.CharacterState.Idle;
+
+                    break;
+                case OUTPUT.ATTACK:
+                    State = RolePlayingGameData.Character.CharacterState.Attack;
+                    break;
+                case OUTPUT.FAR:
+                    break;
+            }
+
+
+            
+
+        }
 
 
         #endregion
