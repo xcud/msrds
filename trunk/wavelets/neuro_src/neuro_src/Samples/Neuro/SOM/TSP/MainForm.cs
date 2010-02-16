@@ -1,7 +1,7 @@
 // AForge Framework
 // Traveling Salesman Problem using Elastic Net
 //
-// Copyright © Andrew Kirillov, 2006
+// Copyright ?Andrew Kirillov, 2006
 // andrew.kirillov@gmail.com
 //
 
@@ -522,7 +522,7 @@ namespace TSP
 				i++;
 
 				// set current iteration's info
-				currentIterationBox.Text = i.ToString( );
+				//currentIterationBox.Text = i.ToString( );
 
 				// stop ?
 				if ( i >= iterations )
@@ -530,7 +530,7 @@ namespace TSP
 			}
 
 			// enable settings controls
-			EnableControls( true );
+			//EnableControls( true );
 		}
 	}
 }

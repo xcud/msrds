@@ -22,22 +22,35 @@ namespace RolePlaying
 
         public CombatantEx _TargetObject = null;
 
-
+        WindowsGame2.AI.InputData _Input = new InputData();
 
         public WindowsGame2.AI.InputData GetInputData()
         {
 
 
             float dist = (Position - _TargetObject.Position).Length();
-            WindowsGame2.AI.InputData input = new WindowsGame2.AI.InputData();
+            //WindowsGame2.AI.InputData input = new WindowsGame2.AI.InputData();
 
-            input[INPUT.DISTANCE] = dist / 1000;
+            _Input[INPUT.DISTANCE] = dist / 1000;
 
-            input[(int)INPUT.MS_STAND + (int)LastAction()] = 1;
+            int segment = (int)INPUT.MS_STAND2 - (int)INPUT.MS_STAND;
 
-            input[(int)INPUT.ES_STAND + (int)_TargetObject.LastAction()] = 1;
+            for (int i = (int)INPUT.MS_DODGE3;  (int)INPUT.MS_STAND2 <= i; i--)
+            {
+                _Input[i] = _Input[i - segment];
+            }
 
-            return input;
+
+            for (int i = (int)INPUT.MS_STAND;i <  (int)INPUT.MS_DODGE ; i++)
+            {
+                _Input[i] = 0;
+            }
+
+            _Input[(int)INPUT.MS_STAND + (int)LastAction()] = 1;
+
+            _Input[(int)INPUT.ES_STAND + (int)_TargetObject.LastAction()] = 1;
+
+            return _Input;
         }
 
 
