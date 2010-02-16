@@ -95,7 +95,6 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="AI\MyLearning.cs" />
-    <Compile Include="CombatantPlayer.cs" />
     <Compile Include="Combat\Actions\CombatAction.cs" />
     <Compile Include="Combat\Actions\DefendCombatAction.cs" />
     <Compile Include="Combat\Actions\ItemCombatAction.cs" />

@@ -65,6 +65,20 @@ namespace WindowsGame2.AI
         MS_FAR,
         MS_ATTACK,
         MS_DODGE,
+
+        MS_STAND2,
+        MS_NEAR2,
+        MS_FAR2,
+        MS_ATTACK2,
+        MS_DODGE2,
+
+        MS_STAND3,
+        MS_NEAR3,
+        MS_FAR3,
+        MS_ATTACK3,
+        MS_DODGE3,
+
+
         MAX
     }
 
@@ -106,14 +120,42 @@ namespace WindowsGame2.AI
         {
             StringBuilder s = new StringBuilder();
             s.Append("[");
+
+            int c = 0;
             foreach (var item in input._Input)
             {
-                s.Append(item.ToString());
+                
+                switch ((INPUT)c)
+                {
+                    case INPUT.ES_STAND:
+                    case INPUT.MS_STAND:
+                    case INPUT.MS_STAND2:
+                    case INPUT.MS_STAND3:
+                        s.Append("[");
+                        s.Append(item.ToString());
+                        break;
+                    case INPUT.ES_DODGE:
+                    case INPUT.MS_DODGE:
+                    case INPUT.MS_DODGE2:
+                    case INPUT.MS_DODGE3:
+                        s.Append(item.ToString());
+                        s.Append("]");
+
+                        break;
+                    default:
+                        s.Append(item.ToString());
+                        break;
+
+                }
+                c++;
+                
             }
 
             s.Append("] [");
 
             s.Append(output.ToString());
+            
+            
 
             s.Append("]");
 
