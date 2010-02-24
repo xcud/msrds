@@ -1,0 +1,192 @@
+
+           
+           
+     O     
+     O     
+    OOO    
+    OOO    
+    OOO    
+   OOOOO   
+   OOOOO   
+           
+            -> 0°
+
+           
+           
+        O  
+       O   
+     OOO   
+    OOO    
+   OOO     
+ OOOOO     
+OOOOO      
+           
+            -> 45°
+
+           
+           
+           
+  OO       
+  OOOOO    
+  OOOOOOO  
+  OOOOO    
+  OO       
+           
+           
+            -> 90°
+
+           
+           
+OOOOO      
+ OOOOO     
+   OOO     
+    OOO    
+     OOO   
+       O   
+        O  
+           
+            -> 135°
+
+           
+           
+   OOOOO   
+   OOOOO   
+    OOO    
+    OOO    
+    OOO    
+     O     
+     O     
+           
+            -> 180°
+
+           
+           
+      OOOOO
+     OOOOO 
+     OOO   
+    OOO    
+   OOO     
+   O       
+  O        
+           
+            -> 225°
+
+           
+           
+           
+       OO  
+    OOOOO  
+  OOOOOOO  
+    OOOOO  
+       OO  
+           
+           
+            -> 270°
+
+           
+           
+  O        
+   O       
+   OOO     
+    OOO    
+     OOO   
+     OOOOO 
+      OOOOO
+           
+            -> 315°
+
+           
+           
+     O     
+     O     
+     O     
+    OOO    
+    OOO    
+    OOO    
+   OOOOO   
+           
+            -> 0°
+
+           
+           
+     O     
+     O     
+    O O    
+    O O    
+    O O    
+   O   O   
+   O   O   
+           
+            -> 0°
+
+           
+           
+           
+     O     
+    OOO    
+    OOO    
+    OOO    
+   OOOOO   
+           
+           
+            -> 0°
+
+           
+           
+           
+           
+     O     
+     O     
+     O     
+    OOO    
+           
+           
+            -> 20°
+
+           
+  O        
+     O     
+     O     
+    OOO    
+    OO     
+    OOO   O
+    OOOO   
+   OOOOO   
+           
+       O    -> 0°
+
+           
+           
+     O     
+     O     
+    OOO    
+    OOO    
+    OOO    
+   OOOOO   
+   OOOOO   
+           
+            -> 0°
+
+           
+           
+       O   
+      O    
+    OOO    
+    OOO    
+   OOO     
+  OOOOO    
+ OOOOO     
+           
+            -> 23°
+
+           
+           
+        O  
+       O   
+     OOO   
+    OOO    
+   OOO     
+ OOOOO     
+OOOOO      
+           
+            -> 45°

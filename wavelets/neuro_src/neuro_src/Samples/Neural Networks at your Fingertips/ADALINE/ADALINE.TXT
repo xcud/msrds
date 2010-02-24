@@ -1,0 +1,80 @@
+
+ OOO 
+O   O
+O   O
+O   O
+O   O
+O   O
+ OOO  -> 0
+
+  O  
+ OO  
+O O  
+  O  
+  O  
+  O  
+  O   -> 1
+
+ OOO 
+O   O
+    O
+   O 
+  O  
+ O   
+OOOOO -> 2
+
+ OOO 
+O   O
+    O
+ OOO 
+    O
+O   O
+ OOO  -> 3
+
+   O 
+  OO 
+ O O 
+O  O 
+OOOOO
+   O 
+   O  -> 4
+
+OOOOO
+O    
+O    
+OOOO 
+    O
+O   O
+ OOO  -> 5
+
+ OOO 
+O   O
+O    
+OOOO 
+O   O
+O   O
+ OOO  -> 6
+
+OOOOO
+    O
+    O
+   O 
+  O  
+ O   
+O     -> 7
+
+ OOO 
+O   O
+O   O
+ OOO 
+O   O
+O   O
+ OOO  -> 8
+
+ OOO 
+O   O
+O   O
+ OOOO
+    O
+O   O
+ OOO  -> 9
