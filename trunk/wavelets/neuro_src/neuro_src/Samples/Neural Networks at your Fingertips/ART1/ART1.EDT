@@ -1,0 +1,30 @@
+   O  -> Class 0
+  O O -> Class 1
+    O -> Class 1
+  O O -> Class 2
+    O -> Class 1
+  O O -> Class 2
+    O -> Class 1
+ OO O -> Class 3
+ OO   -> Class 3
+ OO O -> Class 4
+ OO   -> Class 3
+OOO   -> Class 5
+OO    -> Class 5
+O     -> Class 5
+OO    -> Class 6
+OOO   -> Class 7
+OOOO  -> Class 8
+OOOOO -> Class 9
+O     -> Class 5
+ O    -> Class 3
+  O   -> Class 2
+   O  -> Class 0
+    O -> Class 1
+  O O -> Class 4
+ OO O -> Class 9
+ OO   -> Class 7
+OOO   -> Class 8
+OO    -> Class 6
+OOOO  -> new Input and all Classes exhausted
+OOOOO -> new Input and all Classes exhausted

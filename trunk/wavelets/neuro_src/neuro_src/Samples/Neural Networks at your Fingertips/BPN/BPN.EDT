@@ -1,0 +1,61 @@
+NMSE is 0.879 on Training Set and 0.834 on Test Set - saving Weights ...
+NMSE is 0.818 on Training Set and 0.783 on Test Set - saving Weights ...
+NMSE is 0.749 on Training Set and 0.693 on Test Set - saving Weights ...
+NMSE is 0.691 on Training Set and 0.614 on Test Set - saving Weights ...
+NMSE is 0.622 on Training Set and 0.555 on Test Set - saving Weights ...
+NMSE is 0.569 on Training Set and 0.491 on Test Set - saving Weights ...
+NMSE is 0.533 on Training Set and 0.467 on Test Set - saving Weights ...
+NMSE is 0.490 on Training Set and 0.416 on Test Set - saving Weights ...
+NMSE is 0.470 on Training Set and 0.401 on Test Set - saving Weights ...
+NMSE is 0.441 on Training Set and 0.361 on Test Set - saving Weights ...
+.
+.
+.
+NMSE is 0.142 on Training Set and 0.143 on Test Set
+NMSE is 0.142 on Training Set and 0.146 on Test Set
+NMSE is 0.141 on Training Set and 0.143 on Test Set
+NMSE is 0.146 on Training Set and 0.141 on Test Set
+NMSE is 0.144 on Training Set and 0.141 on Test Set
+NMSE is 0.140 on Training Set and 0.142 on Test Set
+NMSE is 0.144 on Training Set and 0.148 on Test Set
+NMSE is 0.140 on Training Set and 0.139 on Test Set - saving Weights ...
+NMSE is 0.140 on Training Set and 0.140 on Test Set
+NMSE is 0.141 on Training Set and 0.138 on Test Set - saving Weights ...
+.
+.
+.
+NMSE is 0.104 on Training Set and 0.154 on Test Set
+NMSE is 0.102 on Training Set and 0.160 on Test Set
+NMSE is 0.102 on Training Set and 0.160 on Test Set
+NMSE is 0.100 on Training Set and 0.157 on Test Set
+NMSE is 0.105 on Training Set and 0.153 on Test Set
+NMSE is 0.100 on Training Set and 0.155 on Test Set
+NMSE is 0.101 on Training Set and 0.154 on Test Set
+NMSE is 0.100 on Training Set and 0.158 on Test Set
+NMSE is 0.107 on Training Set and 0.170 on Test Set - stopping Training
+                                                      and restoring Weights ...
+NMSE is 0.141 on Training Set and 0.138 on Test Set
+
+
+Year    Sunspots    Open-Loop Prediction    Closed-Loop Prediction
+
+1960       0.572                   0.532                     0.532
+1961       0.327                   0.334                     0.301
+1962       0.258                   0.158                     0.146
+1963       0.217                   0.156                     0.098
+1964       0.143                   0.236                     0.149
+1965       0.164                   0.230                     0.273
+1966       0.298                   0.263                     0.405
+1967       0.495                   0.454                     0.552
+1968       0.545                   0.615                     0.627
+1969       0.544                   0.550                     0.589
+1970       0.540                   0.474                     0.464
+1971       0.380                   0.455                     0.305
+1972       0.390                   0.270                     0.191
+1973       0.260                   0.275                     0.139
+1974       0.245                   0.211                     0.158
+1975       0.165                   0.181                     0.170
+1976       0.153                   0.128                     0.175
+1977       0.215                   0.151                     0.193
+1978       0.489                   0.316                     0.274
+1979       0.754                   0.622                     0.373
