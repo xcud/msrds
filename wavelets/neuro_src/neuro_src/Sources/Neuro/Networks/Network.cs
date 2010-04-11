@@ -1,8 +1,10 @@
 // AForge Neural Net Library
 //
-// Copyright © Andrew Kirillov, 2005-2006
+// Copyright ?Andrew Kirillov, 2005-2006
 // andrew.kirillov@gmail.com
 //
+using System.Diagnostics;
+using System.Text;
 
 namespace AForge.Neuro
 {
@@ -136,5 +138,22 @@ namespace AForge.Neuro
 				layer.Randomize();
 			}
 		}
+
+
+        public override string ToString()
+        {
+            int count = 0;
+            StringBuilder sb= new StringBuilder();             
+            foreach (Layer layer in layers)
+            {
+                string str = string.Format("layer[{0}] ,{1}", count,layer.ToString());
+                sb.AppendLine(str);
+                count++;
+                //Debug.WriteLine("layer[{0}]", count);
+                //layer.ToString();
+            }
+
+            return sb.ToString();
+        }
 	}
 }
