@@ -1,9 +1,9 @@
 // AForge Neural Net Library
 //
-// Copyright © Andrew Kirillov, 2005-2006
+// Copyright ?Andrew Kirillov, 2005-2006
 // andrew.kirillov@gmail.com
 //
-
+using System.Text;
 namespace AForge.Neuro
 {
 	using System;
@@ -163,5 +163,20 @@ namespace AForge.Neuro
 		/// The output value is also stored in <see cref="Output"/> property.</remarks>
 		/// 
 		public abstract double Compute( double[] input );
+
+
+        public override string ToString()
+        {
+            int count = 0;
+            StringBuilder sb = new StringBuilder();
+            foreach (double w in weights)
+            {
+                string str = string.Format("weights[{0}] = {1},", count, w);
+                sb.Append(str);
+                count++;
+            }
+
+            return sb.ToString();
+        }
 	}
 }
