@@ -26,12 +26,15 @@ namespace ZGControlTest
 		public Form2()
 		{
 			InitializeComponent();
+            numericUpDown1.DecimalPlaces = 1;
+            numericUpDown1.Increment = 0.1m;
 		}
 
 		private void Form1_Load( object sender, EventArgs e )
 		{
 			// Get a reference to the GraphPane instance in the ZedGraphControl
 			GraphPane myPane = zg1.GraphPane;
+            
 
 			// Set the titles and axis labels
 			myPane.Title.Text = "Demonstration of Dual Y Graph";
@@ -41,27 +44,65 @@ namespace ZGControlTest
 
 			// Make up some data points based on the Sine function
 			PointPairList list = new PointPairList();
-			PointPairList list2 = new PointPairList();
-			for ( double i = -2; i < 2; i+=0.1 )
+			PointPairList list1 = new PointPairList();
+            PointPairList list2 = new PointPairList();
+            PointPairList list3 = new PointPairList();
+
+			for ( double i = -36; i < 36; i+=1 )
 			{
-				double x = (double)i * 5.0;
-				//double y = Math.Sin( (double)i * Math.PI / 15.0 ) * 16.0;
+				double x = (double)i *10;
+				
+                double y = Math.Sin( (double)i * Math.PI / 15.0 ) * 16.0;
                
-                double y = ((2 / (1 + Math.Exp(  x))) - 1);
-				double y2 = y * 13.5;
+                //double y = ((2 / (1 + Math.Exp(  x))) - 1);
+
+
+                double y1 = ((2 / (1 + Math.Exp(y * (double)numericUpDown1.Value))) - 1);
+                double y2 = ((2 / (1 + Math.Exp(y * (double)numericUpDown2.Value))) - 1);
+
+
 				list.Add( x, y );
-				list2.Add( x, y2 );
+				list1.Add( x, y1 );
+                list2.Add(x, y2);
+
+                list3.Add(x, y1 + y2);
 			}
+            myPane.ClearCurve();
 
 			// Generate a red curve with diamond symbols, and "Alpha" in the legend
-			LineItem myCurve = myPane.AddCurve( "Alpha",
-				list, Color.Red, SymbolType.Diamond );
+			LineItem myCurve = myPane.AddCurve( "sample", list, Color.Black, SymbolType.Diamond );
 			// Fill the symbols with white
 			myCurve.Symbol.Fill = new Fill( Color.White );
 
-			// Generate a blue curve with circle symbols, and "Beta" in the legend
-			myCurve = myPane.AddCurve( "Beta",
-				list2, Color.Blue, SymbolType.Circle );
+
+            if (checkBox1.Checked == true)
+            {
+                // Generate a blue curve with circle symbols, and "Beta" in the legend
+                myCurve = myPane.AddCurve("Red", list1, Color.Red, SymbolType.Circle);
+
+
+                // Fill the symbols with white
+                myCurve.Symbol.Fill = new Fill(Color.White);
+                // Associate this curve with the Y2 axis
+                myCurve.IsY2Axis = true;
+            }
+
+            if (checkBox2.Checked == true)
+            {
+
+                myCurve = myPane.AddCurve("Green", list2, Color.Green, SymbolType.Circle);
+
+
+                // Fill the symbols with white
+                myCurve.Symbol.Fill = new Fill(Color.White);
+                // Associate this curve with the Y2 axis
+                myCurve.IsY2Axis = true;
+
+            }
+
+
+            myCurve = myPane.AddCurve("Blue", list3, Color.Blue, SymbolType.Circle);
+
 			// Fill the symbols with white
 			myCurve.Symbol.Fill = new Fill( Color.White );
 			// Associate this curve with the Y2 axis
@@ -81,8 +122,8 @@ namespace ZGControlTest
 			// Align the Y axis labels so they are flush to the axis
 			myPane.YAxis.Scale.Align = AlignP.Inside;
 			// Manually set the axis range
-			myPane.YAxis.Scale.Min = -30;
-			myPane.YAxis.Scale.Max = 30;
+			//myPane.YAxis.Scale.Min = -30;
+			//myPane.YAxis.Scale.Max = 30;
 
 			// Enable the Y2 axis display
 			myPane.Y2Axis.IsVisible = true;
@@ -100,12 +141,14 @@ namespace ZGControlTest
 			// Fill the axis background with a gradient
 			myPane.Chart.Fill = new Fill( Color.White, Color.LightGray, 45.0f );
 
-			// Add a text box with instructions
-			TextObj text = new TextObj(
-				"Zoom: left mouse & drag\nPan: middle mouse & drag\nContext Menu: right mouse",
-				0.05f, 0.95f, CoordType.ChartFraction, AlignH.Left, AlignV.Bottom );
-			text.FontSpec.StringAlignment = StringAlignment.Near;
-			myPane.GraphObjList.Add( text );
+            //// Add a text box with instructions
+            //TextObj text = new TextObj(
+            //    "Zoom: left mouse & drag\nPan: middle mouse & drag\nContext Menu: right mouse",
+            //    0.05f, 0.95f, CoordType.ChartFraction, AlignH.Left, AlignV.Bottom );
+            //text.FontSpec.StringAlignment = StringAlignment.Near;
+
+            //myPane.GraphObjList.Clear();
+            //myPane.GraphObjList.Add( text );
 
 			// Enable scrollbars if needed
 			zg1.IsShowHScrollBar = true;
@@ -148,7 +191,7 @@ namespace ZGControlTest
 		{
 			zg1.Location = new Point( 10, 10 );
 			// Leave a small margin around the outside of the control
-			zg1.Size = new Size( this.ClientRectangle.Width - 20,
+			zg1.Size = new Size( this.ClientRectangle.Width - 100,
 					this.ClientRectangle.Height - 20 );
 		}
 
@@ -203,6 +246,22 @@ namespace ZGControlTest
 		{
 			// Here we get notification everytime the user zooms
 		}
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Form1_Load(null, null);
+        }
+
+        private void numericUpDown2_ValueChanged(object sender, EventArgs e)
+        {
+            Form1_Load(null, null);
+            //numericUpDown1.Value
+        }
+
+        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+        {
+            Form1_Load(null, null);
+        }
 
 
 	}
