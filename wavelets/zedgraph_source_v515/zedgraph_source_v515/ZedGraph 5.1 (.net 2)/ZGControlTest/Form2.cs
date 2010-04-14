@@ -57,15 +57,19 @@ namespace ZGControlTest
                 //double y = ((2 / (1 + Math.Exp(  x))) - 1);
 
 
-                double y1 = ((2 / (1 + Math.Exp(y * (double)numericUpDown1.Value))) - 1);
-                double y2 = ((2 / (1 + Math.Exp(y * (double)numericUpDown2.Value))) - 1);
+                double y1 = ((2 / (1 + Math.Exp(y * (double)numericUpDown1.Value + (double)numericUpDown3.Value))) - 1);
+                double y2 = ((2 / (1 + Math.Exp(y * (double)numericUpDown2.Value + (double)numericUpDown4.Value))) - 1);
 
 
 				list.Add( x, y );
 				list1.Add( x, y1 );
                 list2.Add(x, y2);
+                double y3 = y1 * (double)numericUpDown5.Value + y2 * (double)numericUpDown6.Value;
+                y3 += (double)numericUpDown7.Value;
 
-                list3.Add(x, y1 + y2);
+                y3 = ((2 / (1 + Math.Exp(y3))) - 1);
+
+                list3.Add(x, y3);
 			}
             myPane.ClearCurve();
 
@@ -259,6 +263,31 @@ namespace ZGControlTest
         }
 
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+        {
+            Form1_Load(null, null);
+        }
+
+        private void numericUpDown3_ValueChanged(object sender, EventArgs e)
+        {
+            Form1_Load(null, null);
+        }
+
+        private void numericUpDown4_ValueChanged(object sender, EventArgs e)
+        {
+            Form1_Load(null, null);
+        }
+
+        private void numericUpDown5_ValueChanged(object sender, EventArgs e)
+        {
+            Form1_Load(null, null);
+        }
+
+        private void numericUpDown7_ValueChanged(object sender, EventArgs e)
+        {
+            Form1_Load(null, null);
+        }
+
+        private void numericUpDown6_ValueChanged(object sender, EventArgs e)
         {
             Form1_Load(null, null);
         }
