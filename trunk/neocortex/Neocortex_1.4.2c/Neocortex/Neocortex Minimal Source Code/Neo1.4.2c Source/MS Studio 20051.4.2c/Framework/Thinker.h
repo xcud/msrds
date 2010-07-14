@@ -23,7 +23,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class ImageSourceController;
 class FileSourceController;
-#include <QFileDialog>
+#include <QtGui/QFileDialog.h>
 #include "NeoParameters.h"
 #include "../Precompile/ui_Neo.h"
 #include "../Framework/GuiUtils.h"

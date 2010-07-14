@@ -18,9 +18,9 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-#include <QDir>
-#include <QFileDialog>
-#include <QInputDialog>
+#include <Qt/QDir.h>
+#include <Qt/QFileDialog.h>
+#include <Qt/QInputDialog.h>
 #include "../Framework/NeoParameters.h"
 #include "../Precompile/ui_Neo.h"
 #include "../Framework/GuiUtils.h"

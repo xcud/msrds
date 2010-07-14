@@ -24,7 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "../Framework/GuiUtils.h"
 // All of these MPF files are needed. Need to check and reduce dependencies -> an interface
 #include "../MPF/Sequence.h"
-#include <QMap>
+#include <Qt/QMap.h>
 #include "../MPF/SparseArray.h"
 #include "../MPF/SubRegion.h"
 #include "../MPF/Source.h"
@@ -32,8 +32,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "../MPF/Sense.h"
 #include "../MPF/Hippo.h"
 // End MPF 'interface'
-#include <QPixmap>
-#include <QMessageBox>
+#include <Qt/QPixmap.h>
+#include <QtGui/QMessageBox.h>
 #include "ISaccade.h"
 #include "SaccadeImpl.h"
 #include "SourceController.h"

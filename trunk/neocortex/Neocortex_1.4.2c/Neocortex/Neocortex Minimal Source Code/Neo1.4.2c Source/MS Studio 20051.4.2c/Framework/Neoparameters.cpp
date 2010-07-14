@@ -20,12 +20,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #include "NeoParameters.h"
 #include "../Precompile/ui_Parameters.h"
-#include <QSpinBox>
-#include <QDoubleSpinBox>
-#include <QLabel>
-#include <QString>
-#include <QMessageBox>
-#include <QWidget>
+#include <QtGui/QSpinBox.h>
+#include <QtGui/QDoubleSpinBox>
+#include <QtGui/QLabel>
+#include <Qt/QString.h>
+#include <QtGui/QMessageBox>
+#include <QtGui/QWidget>
 #define NO_OVERLAP
 
 NeoParameters::NeoParameters()

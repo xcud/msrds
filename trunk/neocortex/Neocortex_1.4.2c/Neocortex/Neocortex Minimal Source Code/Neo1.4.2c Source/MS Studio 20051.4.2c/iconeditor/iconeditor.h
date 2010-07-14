@@ -4,7 +4,7 @@ C++ GUI Programming with Qt 4 by
 Jasmin Blanchette and Mark Summerfield, ISBN 0-13-187249-4.
 
 iconeditor
-Copyright © 2004 Trolltech® AS. All Rights Reserved.
+Copyright ?2004 Trolltech?AS. All Rights Reserved.
 Modified by David Green (QT based GUI, event-model data sources, User interface enhancements)
 
 This program is free software; you can redistribute it and/or
@@ -25,9 +25,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #ifndef ICONEDITOR_H
 #define ICONEDITOR_H
 
-#include <QColor>
-#include <QImage>
-#include <QWidget>
+#include <Qt/QColor.h>
+#include <Qt/QImage.h>
+#include <Qt/QWidget.h>
 
 class IconEditor : public QWidget
 {

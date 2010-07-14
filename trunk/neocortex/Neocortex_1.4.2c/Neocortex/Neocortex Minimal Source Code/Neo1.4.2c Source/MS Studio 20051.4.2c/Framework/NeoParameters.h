@@ -23,11 +23,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #include <vector>
 #include <cmath>
-#include <QMessageBox>
+#include <QtGui/QMessageBox>
 //#include <QCloseEvent>
 #include "../Precompile/ui_Parameters.h"
 
-class NeoParameters : public QObject
+class NeoParameters : public QObject , Ui::Parameters
 {
 
    Q_OBJECT

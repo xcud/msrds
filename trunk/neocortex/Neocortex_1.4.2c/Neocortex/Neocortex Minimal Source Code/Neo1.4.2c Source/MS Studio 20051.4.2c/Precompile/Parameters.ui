@@ -1,10 +1,11 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>Parameters</class>
- <widget class="QDialog" name="Parameters" >
-  <property name="windowModality" >
+ <widget class="QDialog" name="Parameters">
+  <property name="windowModality">
    <enum>Qt::ApplicationModal</enum>
   </property>
-  <property name="geometry" >
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -12,20 +13,20 @@
     <height>541</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Neocortex Parameters</string>
   </property>
-  <property name="toolTip" >
+  <property name="toolTip">
    <string/>
   </property>
-  <property name="statusTip" >
+  <property name="statusTip">
    <string/>
   </property>
-  <property name="whatsThis" >
+  <property name="whatsThis">
    <string>Side Compression spinners will adjust themselves to values that give integral region sides.</string>
   </property>
-  <widget class="QLabel" name="label_2" >
-   <property name="geometry" >
+  <widget class="QLabel" name="label_2">
+   <property name="geometry">
     <rect>
      <x>10</x>
      <y>31</y>
@@ -33,18 +34,18 @@
      <height>16</height>
     </rect>
    </property>
-   <property name="font" >
+   <property name="font">
     <font>
      <weight>50</weight>
      <bold>false</bold>
     </font>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Number of Regions</string>
    </property>
   </widget>
-  <widget class="QSpinBox" name="RegionCount" >
-   <property name="geometry" >
+  <widget class="QSpinBox" name="RegionCount">
+   <property name="geometry">
     <rect>
      <x>122</x>
      <y>33</y>
@@ -52,18 +53,18 @@
      <height>22</height>
     </rect>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string/>
    </property>
-   <property name="minimum" >
+   <property name="minimum">
     <number>2</number>
    </property>
-   <property name="maximum" >
+   <property name="maximum">
     <number>4</number>
    </property>
   </widget>
-  <widget class="QLabel" name="label_3" >
-   <property name="geometry" >
+  <widget class="QLabel" name="label_3">
+   <property name="geometry">
     <rect>
      <x>11</x>
      <y>84</y>
@@ -71,12 +72,12 @@
      <height>20</height>
     </rect>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Side compression</string>
    </property>
   </widget>
-  <widget class="QLabel" name="ForgetThresholdLegend" >
-   <property name="geometry" >
+  <widget class="QLabel" name="ForgetThresholdLegend">
+   <property name="geometry">
     <rect>
      <x>11</x>
      <y>237</y>
@@ -84,15 +85,15 @@
      <height>30</height>
     </rect>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Delete memories below threshold</string>
    </property>
-   <property name="wordWrap" >
+   <property name="wordWrap">
     <bool>true</bool>
    </property>
   </widget>
-  <widget class="QLabel" name="label_4" >
-   <property name="geometry" >
+  <widget class="QLabel" name="label_4">
+   <property name="geometry">
     <rect>
      <x>122</x>
      <y>63</y>
@@ -100,12 +101,12 @@
      <height>16</height>
     </rect>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Eye-0               0-1                 1-2                  2- 3           3 - Hippo</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_5" >
-   <property name="geometry" >
+  <widget class="QLabel" name="label_5">
+   <property name="geometry">
     <rect>
      <x>12</x>
      <y>61</y>
@@ -113,12 +114,12 @@
      <height>20</height>
     </rect>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Child-Parent</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="OK" >
-   <property name="geometry" >
+  <widget class="QPushButton" name="OK">
+   <property name="geometry">
     <rect>
      <x>350</x>
      <y>510</y>
@@ -126,12 +127,12 @@
      <height>25</height>
     </rect>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>OK</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_6" >
-   <property name="geometry" >
+  <widget class="QLabel" name="label_6">
+   <property name="geometry">
     <rect>
      <x>11</x>
      <y>136</y>
@@ -139,12 +140,12 @@
      <height>16</height>
     </rect>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Region</string>
    </property>
   </widget>
-  <widget class="QLabel" name="Side_0" >
-   <property name="geometry" >
+  <widget class="QLabel" name="Side_0">
+   <property name="geometry">
     <rect>
      <x>80</x>
      <y>155</y>
@@ -152,12 +153,12 @@
      <height>16</height>
     </rect>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>0</string>
    </property>
   </widget>
-  <widget class="QLabel" name="LabSide_0" >
-   <property name="geometry" >
+  <widget class="QLabel" name="LabSide_0">
+   <property name="geometry">
     <rect>
      <x>80</x>
      <y>136</y>
@@ -165,12 +166,12 @@
      <height>16</height>
     </rect>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>0</string>
    </property>
   </widget>
-  <widget class="QLabel" name="LabSide_2" >
-   <property name="geometry" >
+  <widget class="QLabel" name="LabSide_2">
+   <property name="geometry">
     <rect>
      <x>218</x>
      <y>136</y>
@@ -178,12 +179,12 @@
      <height>16</height>
     </rect>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>2</string>
    </property>
   </widget>
-  <widget class="QLabel" name="LabSide_1" >
-   <property name="geometry" >
+  <widget class="QLabel" name="LabSide_1">
+   <property name="geometry">
     <rect>
      <x>148</x>
      <y>136</y>
@@ -191,12 +192,12 @@
      <height>16</height>
     </rect>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>1</string>
    </property>
   </widget>
-  <widget class="QLabel" name="LabSide_3" >
-   <property name="geometry" >
+  <widget class="QLabel" name="LabSide_3">
+   <property name="geometry">
     <rect>
      <x>288</x>
      <y>136</y>
@@ -204,12 +205,12 @@
      <height>16</height>
     </rect>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>3</string>
    </property>
   </widget>
-  <widget class="QLabel" name="Side_1" >
-   <property name="geometry" >
+  <widget class="QLabel" name="Side_1">
+   <property name="geometry">
     <rect>
      <x>148</x>
      <y>156</y>
@@ -217,12 +218,12 @@
      <height>16</height>
     </rect>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>0</string>
    </property>
   </widget>
-  <widget class="QLabel" name="Side_2" >
-   <property name="geometry" >
+  <widget class="QLabel" name="Side_2">
+   <property name="geometry">
     <rect>
      <x>218</x>
      <y>156</y>
@@ -230,12 +231,12 @@
      <height>16</height>
     </rect>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>0</string>
    </property>
   </widget>
-  <widget class="QLabel" name="Side_3" >
-   <property name="geometry" >
+  <widget class="QLabel" name="Side_3">
+   <property name="geometry">
     <rect>
      <x>288</x>
      <y>156</y>
@@ -243,12 +244,12 @@
      <height>16</height>
     </rect>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>0</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_7" >
-   <property name="geometry" >
+  <widget class="QLabel" name="label_7">
+   <property name="geometry">
     <rect>
      <x>12</x>
      <y>155</y>
@@ -256,12 +257,12 @@
      <height>16</height>
     </rect>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Side</string>
    </property>
   </widget>
-  <widget class="QDoubleSpinBox" name="ForgetThreshold_0" >
-   <property name="geometry" >
+  <widget class="QDoubleSpinBox" name="ForgetThreshold_0">
+   <property name="geometry">
     <rect>
      <x>121</x>
      <y>243</y>
@@ -269,12 +270,12 @@
      <height>20</height>
     </rect>
    </property>
-   <property name="singleStep" >
+   <property name="singleStep">
     <double>0.100000000000000</double>
    </property>
   </widget>
-  <widget class="QDoubleSpinBox" name="ForgetThreshold_1" >
-   <property name="geometry" >
+  <widget class="QDoubleSpinBox" name="ForgetThreshold_1">
+   <property name="geometry">
     <rect>
      <x>191</x>
      <y>243</y>
@@ -282,12 +283,12 @@
      <height>20</height>
     </rect>
    </property>
-   <property name="singleStep" >
+   <property name="singleStep">
     <double>0.100000000000000</double>
    </property>
   </widget>
-  <widget class="QDoubleSpinBox" name="ForgetThreshold_2" >
-   <property name="geometry" >
+  <widget class="QDoubleSpinBox" name="ForgetThreshold_2">
+   <property name="geometry">
     <rect>
      <x>261</x>
      <y>243</y>
@@ -295,12 +296,12 @@
      <height>20</height>
     </rect>
    </property>
-   <property name="singleStep" >
+   <property name="singleStep">
     <double>0.100000000000000</double>
    </property>
   </widget>
-  <widget class="QDoubleSpinBox" name="ForgetThreshold_3" >
-   <property name="geometry" >
+  <widget class="QDoubleSpinBox" name="ForgetThreshold_3">
+   <property name="geometry">
     <rect>
      <x>331</x>
      <y>243</y>
@@ -308,12 +309,12 @@
      <height>20</height>
     </rect>
    </property>
-   <property name="singleStep" >
+   <property name="singleStep">
     <double>1.000000000000000</double>
    </property>
   </widget>
-  <widget class="QSpinBox" name="SideCompression_0" >
-   <property name="geometry" >
+  <widget class="QSpinBox" name="SideCompression_0">
+   <property name="geometry">
     <rect>
      <x>121</x>
      <y>86</y>
@@ -321,15 +322,15 @@
      <height>20</height>
     </rect>
    </property>
-   <property name="minimum" >
+   <property name="minimum">
     <number>1</number>
    </property>
-   <property name="maximum" >
+   <property name="maximum">
     <number>99</number>
    </property>
   </widget>
-  <widget class="QSpinBox" name="SideCompression_1" >
-   <property name="geometry" >
+  <widget class="QSpinBox" name="SideCompression_1">
+   <property name="geometry">
     <rect>
      <x>191</x>
      <y>85</y>
@@ -337,12 +338,12 @@
      <height>20</height>
     </rect>
    </property>
-   <property name="minimum" >
+   <property name="minimum">
     <number>1</number>
    </property>
   </widget>
-  <widget class="QSpinBox" name="SideCompression_2" >
-   <property name="geometry" >
+  <widget class="QSpinBox" name="SideCompression_2">
+   <property name="geometry">
     <rect>
      <x>261</x>
      <y>84</y>
@@ -350,12 +351,12 @@
      <height>20</height>
     </rect>
    </property>
-   <property name="minimum" >
+   <property name="minimum">
     <number>1</number>
    </property>
   </widget>
-  <widget class="QSpinBox" name="SideCompression_3" >
-   <property name="geometry" >
+  <widget class="QSpinBox" name="SideCompression_3">
+   <property name="geometry">
     <rect>
      <x>330</x>
      <y>85</y>
@@ -363,12 +364,12 @@
      <height>20</height>
     </rect>
    </property>
-   <property name="minimum" >
+   <property name="minimum">
     <number>1</number>
    </property>
   </widget>
-  <widget class="QLabel" name="SideCompression_Hippo" >
-   <property name="geometry" >
+  <widget class="QLabel" name="SideCompression_Hippo">
+   <property name="geometry">
     <rect>
      <x>396</x>
      <y>86</y>
@@ -376,12 +377,12 @@
      <height>16</height>
     </rect>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>1</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_10" >
-   <property name="geometry" >
+  <widget class="QLabel" name="label_10">
+   <property name="geometry">
     <rect>
      <x>312</x>
      <y>136</y>
@@ -389,12 +390,12 @@
      <height>16</height>
     </rect>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Hippocampus</string>
    </property>
   </widget>
-  <widget class="QLabel" name="Side_4" >
-   <property name="geometry" >
+  <widget class="QLabel" name="Side_4">
+   <property name="geometry">
     <rect>
      <x>349</x>
      <y>156</y>
@@ -402,12 +403,12 @@
      <height>16</height>
     </rect>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>1</string>
    </property>
   </widget>
-  <widget class="QCheckBox" name="DeletionByPercentage" >
-   <property name="geometry" >
+  <widget class="QCheckBox" name="DeletionByPercentage">
+   <property name="geometry">
     <rect>
      <x>10</x>
      <y>214</y>
@@ -415,12 +416,12 @@
      <height>19</height>
     </rect>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Deletion method (toggle between threshold and percentage method)</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label" >
-   <property name="geometry" >
+  <widget class="QLabel" name="label">
+   <property name="geometry">
     <rect>
      <x>11</x>
      <y>190</y>
@@ -428,18 +429,18 @@
      <height>16</height>
     </rect>
    </property>
-   <property name="font" >
+   <property name="font">
     <font>
      <weight>75</weight>
      <bold>true</bold>
     </font>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Memory Deletion Method</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_9" >
-   <property name="geometry" >
+  <widget class="QLabel" name="label_9">
+   <property name="geometry">
     <rect>
      <x>11</x>
      <y>354</y>
@@ -447,21 +448,21 @@
      <height>29</height>
     </rect>
    </property>
-   <property name="font" >
+   <property name="font">
     <font>
      <weight>50</weight>
      <bold>false</bold>
     </font>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Constrain No of Memories to:</string>
    </property>
-   <property name="wordWrap" >
+   <property name="wordWrap">
     <bool>true</bool>
    </property>
   </widget>
-  <widget class="QSpinBox" name="MaxMemory_0" >
-   <property name="geometry" >
+  <widget class="QSpinBox" name="MaxMemory_0">
+   <property name="geometry">
     <rect>
      <x>121</x>
      <y>358</y>
@@ -469,18 +470,18 @@
      <height>18</height>
     </rect>
    </property>
-   <property name="maximum" >
+   <property name="maximum">
     <number>30000</number>
    </property>
-   <property name="singleStep" >
+   <property name="singleStep">
     <number>1000</number>
    </property>
-   <property name="value" >
+   <property name="value">
     <number>30000</number>
    </property>
   </widget>
-  <widget class="QSpinBox" name="MaxMemory_1" >
-   <property name="geometry" >
+  <widget class="QSpinBox" name="MaxMemory_1">
+   <property name="geometry">
     <rect>
      <x>191</x>
      <y>358</y>
@@ -488,18 +489,18 @@
      <height>18</height>
     </rect>
    </property>
-   <property name="maximum" >
+   <property name="maximum">
     <number>30000</number>
    </property>
-   <property name="singleStep" >
+   <property name="singleStep">
     <number>1000</number>
    </property>
-   <property name="value" >
+   <property name="value">
     <number>30000</number>
    </property>
   </widget>
-  <widget class="QSpinBox" name="MaxMemory_2" >
-   <property name="geometry" >
+  <widget class="QSpinBox" name="MaxMemory_2">
+   <property name="geometry">
     <rect>
      <x>261</x>
      <y>358</y>
@@ -507,18 +508,18 @@
      <height>18</height>
     </rect>
    </property>
-   <property name="maximum" >
+   <property name="maximum">
     <number>30000</number>
    </property>
-   <property name="singleStep" >
+   <property name="singleStep">
     <number>1000</number>
    </property>
-   <property name="value" >
+   <property name="value">
     <number>30000</number>
    </property>
   </widget>
-  <widget class="QSpinBox" name="MaxMemory_3" >
-   <property name="geometry" >
+  <widget class="QSpinBox" name="MaxMemory_3">
+   <property name="geometry">
     <rect>
      <x>331</x>
      <y>358</y>
@@ -526,18 +527,18 @@
      <height>18</height>
     </rect>
    </property>
-   <property name="maximum" >
+   <property name="maximum">
     <number>30000</number>
    </property>
-   <property name="singleStep" >
+   <property name="singleStep">
     <number>1000</number>
    </property>
-   <property name="value" >
+   <property name="value">
     <number>30000</number>
    </property>
   </widget>
-  <widget class="QCheckBox" name="DoNotForget" >
-   <property name="geometry" >
+  <widget class="QCheckBox" name="DoNotForget">
+   <property name="geometry">
     <rect>
      <x>11</x>
      <y>300</y>
@@ -545,12 +546,12 @@
      <height>17</height>
     </rect>
    </property>
-   <property name="text" >
+   <property name="text">
     <string/>
    </property>
   </widget>
-  <widget class="QLabel" name="label_12" >
-   <property name="geometry" >
+  <widget class="QLabel" name="label_12">
+   <property name="geometry">
     <rect>
      <x>40</x>
      <y>299</y>
@@ -558,15 +559,15 @@
      <height>30</height>
     </rect>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>If this is checked, the memory will be constrained to the values set on the spinners below.</string>
    </property>
-   <property name="wordWrap" >
+   <property name="wordWrap">
     <bool>true</bool>
    </property>
   </widget>
-  <widget class="QLabel" name="label_13" >
-   <property name="geometry" >
+  <widget class="QLabel" name="label_13">
+   <property name="geometry">
     <rect>
      <x>11</x>
      <y>280</y>
@@ -574,18 +575,18 @@
      <height>21</height>
     </rect>
    </property>
-   <property name="font" >
+   <property name="font">
     <font>
      <weight>75</weight>
      <bold>true</bold>
     </font>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Constraining Memory</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="Revert" >
-   <property name="geometry" >
+  <widget class="QPushButton" name="Revert">
+   <property name="geometry">
     <rect>
      <x>268</x>
      <y>510</y>
@@ -593,12 +594,12 @@
      <height>25</height>
     </rect>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Revert</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="SecondPassSaccadesLimit" >
-   <property name="geometry" >
+  <widget class="QLineEdit" name="SecondPassSaccadesLimit">
+   <property name="geometry">
     <rect>
      <x>340</x>
      <y>480</y>
@@ -606,18 +607,18 @@
      <height>20</height>
     </rect>
    </property>
-   <property name="inputMask" >
+   <property name="inputMask">
     <string>0000; </string>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>0000</string>
    </property>
-   <property name="cursorPosition" >
+   <property name="cursorPosition">
     <number>4</number>
    </property>
   </widget>
-  <widget class="QLineEdit" name="FirstPassSaccadesLimit" >
-   <property name="geometry" >
+  <widget class="QLineEdit" name="FirstPassSaccadesLimit">
+   <property name="geometry">
     <rect>
      <x>140</x>
      <y>480</y>
@@ -625,18 +626,18 @@
      <height>20</height>
     </rect>
    </property>
-   <property name="inputMask" >
+   <property name="inputMask">
     <string>0000; </string>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>0000</string>
    </property>
-   <property name="cursorPosition" >
+   <property name="cursorPosition">
     <number>4</number>
    </property>
   </widget>
-  <widget class="QLabel" name="label_14" >
-   <property name="geometry" >
+  <widget class="QLabel" name="label_14">
+   <property name="geometry">
     <rect>
      <x>10</x>
      <y>457</y>
@@ -644,18 +645,18 @@
      <height>14</height>
     </rect>
    </property>
-   <property name="font" >
+   <property name="font">
     <font>
      <weight>75</weight>
      <bold>true</bold>
     </font>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Training Saccades</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_15" >
-   <property name="geometry" >
+  <widget class="QLabel" name="label_15">
+   <property name="geometry">
     <rect>
      <x>10</x>
      <y>480</y>
@@ -663,12 +664,12 @@
      <height>14</height>
     </rect>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>First pass saccades Limit</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_16" >
-   <property name="geometry" >
+  <widget class="QLabel" name="label_16">
+   <property name="geometry">
     <rect>
      <x>200</x>
      <y>480</y>
@@ -676,12 +677,12 @@
      <height>14</height>
     </rect>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Second pass saccades limit</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_18" >
-   <property name="geometry" >
+  <widget class="QLabel" name="label_18">
+   <property name="geometry">
     <rect>
      <x>11</x>
      <y>119</y>
@@ -689,12 +690,12 @@
      <height>16</height>
     </rect>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Result of Region side calculations</string>
    </property>
   </widget>
-  <widget class="QLabel" name="LabMaxMemory_0" >
-   <property name="geometry" >
+  <widget class="QLabel" name="LabMaxMemory_0">
+   <property name="geometry">
     <rect>
      <x>140</x>
      <y>336</y>
@@ -702,12 +703,12 @@
      <height>16</height>
     </rect>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>0</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_19" >
-   <property name="geometry" >
+  <widget class="QLabel" name="label_19">
+   <property name="geometry">
     <rect>
      <x>55</x>
      <y>336</y>
@@ -715,12 +716,12 @@
      <height>16</height>
     </rect>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Region</string>
    </property>
   </widget>
-  <widget class="QLabel" name="LabMaxMemory_1" >
-   <property name="geometry" >
+  <widget class="QLabel" name="LabMaxMemory_1">
+   <property name="geometry">
     <rect>
      <x>210</x>
      <y>336</y>
@@ -728,12 +729,12 @@
      <height>16</height>
     </rect>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>1</string>
    </property>
   </widget>
-  <widget class="QLabel" name="LabMaxMemory_2" >
-   <property name="geometry" >
+  <widget class="QLabel" name="LabMaxMemory_2">
+   <property name="geometry">
     <rect>
      <x>280</x>
      <y>336</y>
@@ -741,12 +742,12 @@
      <height>16</height>
     </rect>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>2</string>
    </property>
   </widget>
-  <widget class="QLabel" name="LabMaxMemory_3" >
-   <property name="geometry" >
+  <widget class="QLabel" name="LabMaxMemory_3">
+   <property name="geometry">
     <rect>
      <x>350</x>
      <y>336</y>
@@ -754,12 +755,12 @@
      <height>16</height>
     </rect>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>3</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_20" >
-   <property name="geometry" >
+  <widget class="QLabel" name="label_20">
+   <property name="geometry">
     <rect>
      <x>10</x>
      <y>417</y>
@@ -767,12 +768,12 @@
      <height>16</height>
     </rect>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Low Usage Threshold</string>
    </property>
   </widget>
-  <widget class="QSpinBox" name="LowUsageThreshold_0" >
-   <property name="geometry" >
+  <widget class="QSpinBox" name="LowUsageThreshold_0">
+   <property name="geometry">
     <rect>
      <x>120</x>
      <y>417</y>
@@ -780,15 +781,15 @@
      <height>22</height>
     </rect>
    </property>
-   <property name="maximum" >
+   <property name="maximum">
     <number>99</number>
    </property>
-   <property name="value" >
+   <property name="value">
     <number>2</number>
    </property>
   </widget>
-  <widget class="QSpinBox" name="LowUsageThreshold_1" >
-   <property name="geometry" >
+  <widget class="QSpinBox" name="LowUsageThreshold_1">
+   <property name="geometry">
     <rect>
      <x>190</x>
      <y>418</y>
@@ -796,15 +797,15 @@
      <height>21</height>
     </rect>
    </property>
-   <property name="maximum" >
+   <property name="maximum">
     <number>99</number>
    </property>
-   <property name="value" >
+   <property name="value">
     <number>2</number>
    </property>
   </widget>
-  <widget class="QSpinBox" name="LowUsageThreshold_2" >
-   <property name="geometry" >
+  <widget class="QSpinBox" name="LowUsageThreshold_2">
+   <property name="geometry">
     <rect>
      <x>260</x>
      <y>417</y>
@@ -812,15 +813,15 @@
      <height>22</height>
     </rect>
    </property>
-   <property name="maximum" >
+   <property name="maximum">
     <number>99</number>
    </property>
-   <property name="value" >
+   <property name="value">
     <number>2</number>
    </property>
   </widget>
-  <widget class="QSpinBox" name="LowUsageThreshold_3" >
-   <property name="geometry" >
+  <widget class="QSpinBox" name="LowUsageThreshold_3">
+   <property name="geometry">
     <rect>
      <x>330</x>
      <y>417</y>
@@ -828,15 +829,15 @@
      <height>22</height>
     </rect>
    </property>
-   <property name="maximum" >
+   <property name="maximum">
     <number>99</number>
    </property>
-   <property name="value" >
+   <property name="value">
     <number>2</number>
    </property>
   </widget>
-  <widget class="QLabel" name="label_21" >
-   <property name="geometry" >
+  <widget class="QLabel" name="label_21">
+   <property name="geometry">
     <rect>
      <x>10</x>
      <y>396</y>
@@ -844,12 +845,12 @@
      <height>16</height>
     </rect>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>The threshold at which a memory can be discarded is set on these spinners:</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_22" >
-   <property name="geometry" >
+  <widget class="QLabel" name="label_22">
+   <property name="geometry">
     <rect>
      <x>4</x>
      <y>12</y>
@@ -857,18 +858,18 @@
      <height>16</height>
     </rect>
    </property>
-   <property name="font" >
+   <property name="font">
     <font>
      <weight>75</weight>
      <bold>true</bold>
     </font>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Setting the Number of Regions</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_8" >
-   <property name="geometry" >
+  <widget class="QLabel" name="label_8">
+   <property name="geometry">
     <rect>
      <x>160</x>
      <y>190</y>
@@ -876,45 +877,45 @@
      <height>16</height>
     </rect>
    </property>
-   <property name="font" >
+   <property name="font">
     <font>
      <weight>75</weight>
      <bold>true</bold>
     </font>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>After each region's forward pass, a selection of low-usage pattern memories is 
 deleted. Memories can be selected for deletion either by means of a threshold 
 value or by means of a percentage of the memories. Threshold is a fraction of 
 the average size of all memories.</string>
    </property>
-   <property name="frameShape" >
+   <property name="frameShape">
     <enum>QFrame::Box</enum>
    </property>
-   <property name="frameShadow" >
+   <property name="frameShadow">
     <enum>QFrame::Plain</enum>
    </property>
-   <property name="lineWidth" >
+   <property name="lineWidth">
     <number>1</number>
    </property>
-   <property name="midLineWidth" >
+   <property name="midLineWidth">
     <number>1</number>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>?</string>
    </property>
-   <property name="textFormat" >
+   <property name="textFormat">
     <enum>Qt::PlainText</enum>
    </property>
-   <property name="scaledContents" >
+   <property name="scaledContents">
     <bool>false</bool>
    </property>
-   <property name="alignment" >
+   <property name="alignment">
     <set>Qt::AlignCenter</set>
    </property>
   </widget>
-  <widget class="QLabel" name="label_23" >
-   <property name="geometry" >
+  <widget class="QLabel" name="label_23">
+   <property name="geometry">
     <rect>
      <x>180</x>
      <y>12</y>
@@ -922,43 +923,43 @@ the average size of all memories.</string>
      <height>16</height>
     </rect>
    </property>
-   <property name="font" >
+   <property name="font">
     <font>
      <weight>75</weight>
      <bold>true</bold>
     </font>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>You can set the side compression for each Region's child-parent relation.  
 The dialog constrains the values such that each side measurement is an integer.</string>
    </property>
-   <property name="frameShape" >
+   <property name="frameShape">
     <enum>QFrame::Box</enum>
    </property>
-   <property name="frameShadow" >
+   <property name="frameShadow">
     <enum>QFrame::Plain</enum>
    </property>
-   <property name="lineWidth" >
+   <property name="lineWidth">
     <number>1</number>
    </property>
-   <property name="midLineWidth" >
+   <property name="midLineWidth">
     <number>1</number>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>?</string>
    </property>
-   <property name="textFormat" >
+   <property name="textFormat">
     <enum>Qt::PlainText</enum>
    </property>
-   <property name="scaledContents" >
+   <property name="scaledContents">
     <bool>false</bool>
    </property>
-   <property name="alignment" >
+   <property name="alignment">
     <set>Qt::AlignCenter</set>
    </property>
   </widget>
-  <widget class="QLabel" name="label_24" >
-   <property name="geometry" >
+  <widget class="QLabel" name="label_24">
+   <property name="geometry">
     <rect>
      <x>139</x>
      <y>282</y>
@@ -966,45 +967,45 @@ The dialog constrains the values such that each side measurement is an integer.<
      <height>16</height>
     </rect>
    </property>
-   <property name="font" >
+   <property name="font">
     <font>
      <weight>75</weight>
      <bold>true</bold>
     </font>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>Instead of forgetting memories after training a Region we reduce the memory 
 that is available in the first place. During learning, after a Region's memory 
 becomes full, we just discard the least useful (e.g. the oldest and least 
 populous) memories and replace them with the new ones.</string>
    </property>
-   <property name="frameShape" >
+   <property name="frameShape">
     <enum>QFrame::Box</enum>
    </property>
-   <property name="frameShadow" >
+   <property name="frameShadow">
     <enum>QFrame::Plain</enum>
    </property>
-   <property name="lineWidth" >
+   <property name="lineWidth">
     <number>1</number>
    </property>
-   <property name="midLineWidth" >
+   <property name="midLineWidth">
     <number>1</number>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>?</string>
    </property>
-   <property name="textFormat" >
+   <property name="textFormat">
     <enum>Qt::PlainText</enum>
    </property>
-   <property name="scaledContents" >
+   <property name="scaledContents">
     <bool>false</bool>
    </property>
-   <property name="alignment" >
+   <property name="alignment">
     <set>Qt::AlignCenter</set>
    </property>
   </widget>
-  <widget class="QLabel" name="label_25" >
-   <property name="geometry" >
+  <widget class="QLabel" name="label_25">
+   <property name="geometry">
     <rect>
      <x>119</x>
      <y>456</y>
@@ -1012,40 +1013,40 @@ populous) memories and replace them with the new ones.</string>
      <height>16</height>
     </rect>
    </property>
-   <property name="font" >
+   <property name="font">
     <font>
      <weight>75</weight>
      <bold>true</bold>
     </font>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>During training. the first pass for each Region learns the input patterns for that 
-Region and assigns a name to each.  &#xd;&#xd;
+Region and assigns a name to each.  
 In the second pass pass each child Region learns the conditional probability of 
 each of its patterns given each parent pattern that occured for the same object.</string>
    </property>
-   <property name="frameShape" >
+   <property name="frameShape">
     <enum>QFrame::Box</enum>
    </property>
-   <property name="frameShadow" >
+   <property name="frameShadow">
     <enum>QFrame::Plain</enum>
    </property>
-   <property name="lineWidth" >
+   <property name="lineWidth">
     <number>1</number>
    </property>
-   <property name="midLineWidth" >
+   <property name="midLineWidth">
     <number>1</number>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>?</string>
    </property>
-   <property name="textFormat" >
+   <property name="textFormat">
     <enum>Qt::PlainText</enum>
    </property>
-   <property name="scaledContents" >
+   <property name="scaledContents">
     <bool>false</bool>
    </property>
-   <property name="alignment" >
+   <property name="alignment">
     <set>Qt::AlignCenter</set>
    </property>
   </widget>

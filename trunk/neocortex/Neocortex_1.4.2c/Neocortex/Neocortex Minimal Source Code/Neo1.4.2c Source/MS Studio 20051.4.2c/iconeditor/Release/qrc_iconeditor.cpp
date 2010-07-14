@@ -1,8 +1,8 @@
 /****************************************************************************
 ** Resource object code
 **
-** Created: Sun 14. Dec 16:57:49 2008
-**      by: The Resource Compiler for Qt version 4.4.3
+** Created: Wed Jul 14 18:01:45 2010
+**      by: The Resource Compiler for Qt version 4.6.3
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -10,7 +10,7 @@
 #include <QtCore/qglobal.h>
 
 static const unsigned char qt_resource_data[] = {
-  // E:/SourceStatic/Neo/MS Studio 20051.4.2c/iconeditor/images/mouse.png
+  // D:/ccr/msrds/neocortex/Neocortex_1.4.2c/Neocortex/Neocortex Minimal Source Code/Neo1.4.2c Source/MS Studio 20051.4.2c/iconeditor/images/mouse.png
   0x0,0x0,0x4,0xb,
   0x89,
   0x50,0x4e,0x47,0xd,0xa,0x1a,0xa,0x0,0x0,0x0,0xd,0x49,0x48,0x44,0x52,0x0,
@@ -107,10 +107,10 @@ static const unsigned char qt_resource_struct[] = {
 
 QT_BEGIN_NAMESPACE
 
-extern bool qRegisterResourceData
+extern Q_CORE_EXPORT bool qRegisterResourceData
     (int, const unsigned char *, const unsigned char *, const unsigned char *);
 
-extern bool qUnregisterResourceData
+extern Q_CORE_EXPORT bool qUnregisterResourceData
     (int, const unsigned char *, const unsigned char *, const unsigned char *);
 
 QT_END_NAMESPACE
