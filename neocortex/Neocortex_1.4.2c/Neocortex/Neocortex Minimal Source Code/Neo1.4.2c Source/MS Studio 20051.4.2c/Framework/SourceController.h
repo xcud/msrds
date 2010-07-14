@@ -21,8 +21,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #ifndef IMAGECONTROLLER_H
 #define IMAGECONTROLLER_H
 
-#include <QDir>
-#include <QFileDialog>
+#include <Qt/QDir.h>
+#include <Qt/QFileDialog.h>
 #include "NeoParameters.h"
 #include "../Precompile/ui_Neo.h"
 #include "../Framework/GuiUtils.h"

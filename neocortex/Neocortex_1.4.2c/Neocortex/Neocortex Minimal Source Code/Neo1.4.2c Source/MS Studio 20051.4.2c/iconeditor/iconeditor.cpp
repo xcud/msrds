@@ -4,7 +4,7 @@ C++ GUI Programming with Qt 4 by
 Jasmin Blanchette and Mark Summerfield, ISBN 0-13-187249-4.
 
 iconeditor
-Copyright © 2004 Trolltech® AS. All Rights Reserved.
+Copyright ?2004 Trolltech?AS. All Rights Reserved.
 
 Neocortex - Memory-Prediction Framework
 Copyright (C) 2007 Saulius J. Garalevicius
@@ -26,10 +26,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
 
-#include <QtGui>
-#include <QMatrix>
-#include <QTransform>
-#include <QRect>
+//#include <QtGui>
+#include <Qt/QPainter.h>
+#include <Qt/qevent.h>
+#include <Qt/QMatrix.h>
+#include <Qt/QTransform.h>
+#include <Qt/QRect.h>
 #include "../CImg-1.2.5/CImg.h"
 
 #include "../iconeditor/iconeditor.h"

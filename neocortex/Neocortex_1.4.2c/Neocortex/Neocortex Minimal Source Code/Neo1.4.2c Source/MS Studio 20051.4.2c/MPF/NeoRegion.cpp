@@ -29,7 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "../Precompile/ui_Neo.h"
 #include "../Framework/GuiUtils.h"
 #include "Sequence.h"
-#include <QMap>
+#include <Qt/QMap.h>
 #include "SparseArray.h"
 #include "SubRegion.h"
 #include "Source.h"

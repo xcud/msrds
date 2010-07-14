@@ -26,7 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 //#include "../Precompile/ui_Parameters.h"
 #include "../Framework/NeoParameters.h"
 
-#include <QSettings>
+#include <Qt/QSettings.h>
 
 class GuiUtils;
 class Thinker;

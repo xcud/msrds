@@ -1,7 +1,21 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Neo", "Neo.vcxproj", "{FA810ED4-D31F-4EF1-9C37-EEA60190E125}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Framework", "..\Framework\Framework.vcxproj", "{946327A5-7368-4B5F-96FE-A3DF733EE15A}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Neo", "Neo.vcxproj", "{4C95313B-0DAD-42AB-ABC6-EB90DED56658}"
+	ProjectSection(ProjectDependencies) = postProject
+		{946327A5-7368-4B5F-96FE-A3DF733EE15A} = {946327A5-7368-4B5F-96FE-A3DF733EE15A}
+		{D41D8CD9-8F00-3204-A980-0998ECF8427E} = {D41D8CD9-8F00-3204-A980-0998ECF8427E}
+		{F54BFFDE-F398-4BAC-A793-4EC4D056FA63} = {F54BFFDE-F398-4BAC-A793-4EC4D056FA63}
+		{B31AEFE6-C4C6-4565-9484-83CD64019182} = {B31AEFE6-C4C6-4565-9484-83CD64019182}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MPF", "..\MPF\MPF.vcxproj", "{D41D8CD9-8F00-3204-A980-0998ECF8427E}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Precompile", "..\Precompile\Precompile.vcxproj", "{F54BFFDE-F398-4BAC-A793-4EC4D056FA63}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "iconeditor", "..\iconeditor\iconeditor.vcxproj", "{B31AEFE6-C4C6-4565-9484-83CD64019182}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -9,10 +23,26 @@ Global
 		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{FA810ED4-D31F-4EF1-9C37-EEA60190E125}.Debug|Win32.ActiveCfg = Debug|Win32
-		{FA810ED4-D31F-4EF1-9C37-EEA60190E125}.Debug|Win32.Build.0 = Debug|Win32
-		{FA810ED4-D31F-4EF1-9C37-EEA60190E125}.Release|Win32.ActiveCfg = Release|Win32
-		{FA810ED4-D31F-4EF1-9C37-EEA60190E125}.Release|Win32.Build.0 = Release|Win32
+		{946327A5-7368-4B5F-96FE-A3DF733EE15A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{946327A5-7368-4B5F-96FE-A3DF733EE15A}.Debug|Win32.Build.0 = Debug|Win32
+		{946327A5-7368-4B5F-96FE-A3DF733EE15A}.Release|Win32.ActiveCfg = Release|Win32
+		{946327A5-7368-4B5F-96FE-A3DF733EE15A}.Release|Win32.Build.0 = Release|Win32
+		{4C95313B-0DAD-42AB-ABC6-EB90DED56658}.Debug|Win32.ActiveCfg = Debug|Win32
+		{4C95313B-0DAD-42AB-ABC6-EB90DED56658}.Debug|Win32.Build.0 = Debug|Win32
+		{4C95313B-0DAD-42AB-ABC6-EB90DED56658}.Release|Win32.ActiveCfg = Release|Win32
+		{4C95313B-0DAD-42AB-ABC6-EB90DED56658}.Release|Win32.Build.0 = Release|Win32
+		{D41D8CD9-8F00-3204-A980-0998ECF8427E}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D41D8CD9-8F00-3204-A980-0998ECF8427E}.Debug|Win32.Build.0 = Debug|Win32
+		{D41D8CD9-8F00-3204-A980-0998ECF8427E}.Release|Win32.ActiveCfg = Release|Win32
+		{D41D8CD9-8F00-3204-A980-0998ECF8427E}.Release|Win32.Build.0 = Release|Win32
+		{F54BFFDE-F398-4BAC-A793-4EC4D056FA63}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F54BFFDE-F398-4BAC-A793-4EC4D056FA63}.Debug|Win32.Build.0 = Debug|Win32
+		{F54BFFDE-F398-4BAC-A793-4EC4D056FA63}.Release|Win32.ActiveCfg = Release|Win32
+		{F54BFFDE-F398-4BAC-A793-4EC4D056FA63}.Release|Win32.Build.0 = Release|Win32
+		{B31AEFE6-C4C6-4565-9484-83CD64019182}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B31AEFE6-C4C6-4565-9484-83CD64019182}.Debug|Win32.Build.0 = Debug|Win32
+		{B31AEFE6-C4C6-4565-9484-83CD64019182}.Release|Win32.ActiveCfg = Release|Win32
+		{B31AEFE6-C4C6-4565-9484-83CD64019182}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

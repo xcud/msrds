@@ -21,7 +21,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #define ISACCADE
 
 #include <vector>
-#include <QtGui>
+#include <Qt/QObject.h>
 typedef std::vector< std::vector<unsigned> > BmpArray;
 
 class ISaccade : public QObject

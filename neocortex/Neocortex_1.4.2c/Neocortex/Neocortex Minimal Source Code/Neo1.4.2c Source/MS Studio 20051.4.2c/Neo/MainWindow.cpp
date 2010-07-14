@@ -17,14 +17,16 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
-#include <QApplication>
+
+
+#include <QtGui/QApplication>
 #include "../Framework/NeoParameters.h"
 #include "../Precompile/ui_About.h"
 #include "../Precompile/ui_Neo.h"
 #include "../Framework/NeoParameters.h"
 #include "../Framework/GuiUtils.h"
-#include <QFileDialog>
-#include <QMessageBox>
+#include <QtGui/QFileDialog>
+#include <QtGui/QMessageBox>
 #include "../Framework/Thinker.h"
 #include <sstream>
 

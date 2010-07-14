@@ -20,17 +20,17 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #include <string>
 #include <vector>
-#include <QPixmap>
-#include <QDir>
-#include <QRect>
-#include <QSize>
-#include <QImage>
+#include <Qt/QPixmap.h>
+#include <Qt/QDir.h>
+#include <Qt/QRect.h>
+#include <Qt/QSize.h>
+#include <Qt/QImage.h>
 //#include "../iconeditor/iconeditor.h"
 #include "../Precompile/ui_Neo.h"
 #ifdef _WINDOWS
 #include <exception>
 #endif
-#include <QInputDialog>
+#include <Qt/QInputDialog.h>
 
 #include "GuiUtils.h"
 
