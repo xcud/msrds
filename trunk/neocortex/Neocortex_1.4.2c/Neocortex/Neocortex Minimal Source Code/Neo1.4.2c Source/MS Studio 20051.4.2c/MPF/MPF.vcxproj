@@ -24,6 +24,7 @@
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v90</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -115,6 +116,12 @@
     <ClInclude Include="Source.h" />
     <ClInclude Include="SparseArray.h" />
     <ClInclude Include="SubRegion.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Precompile\Precompile.vcxproj">
+      <Project>{f54bffde-f398-4bac-a793-4ec4d056fa63}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
