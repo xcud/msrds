@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'Parameters.ui'
 **
-** Created: Wed Jul 14 18:01:14 2010
+** Created: Thu Jul 29 20:25:22 2010
 **      by: Qt User Interface Compiler version 4.6.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
