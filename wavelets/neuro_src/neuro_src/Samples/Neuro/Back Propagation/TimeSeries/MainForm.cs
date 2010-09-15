@@ -123,8 +123,8 @@ namespace TimeSeries
 		{
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.dataList = new System.Windows.Forms.ListView();
-            this.yColumnHeader = new System.Windows.Forms.ColumnHeader();
-            this.estimatedYColumnHeader = new System.Windows.Forms.ColumnHeader();
+            this.yColumnHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.estimatedYColumnHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.loadDataButton = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.chart = new AForge.Controls.Chart();
@@ -165,9 +165,9 @@ namespace TimeSeries
             // 
             this.groupBox1.Controls.Add(this.dataList);
             this.groupBox1.Controls.Add(this.loadDataButton);
-            this.groupBox1.Location = new System.Drawing.Point(12, 11);
+            this.groupBox1.Location = new System.Drawing.Point(10, 10);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(216, 409);
+            this.groupBox1.Size = new System.Drawing.Size(180, 380);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Data";
@@ -179,9 +179,9 @@ namespace TimeSeries
             this.estimatedYColumnHeader});
             this.dataList.FullRowSelect = true;
             this.dataList.GridLines = true;
-            this.dataList.Location = new System.Drawing.Point(12, 22);
+            this.dataList.Location = new System.Drawing.Point(10, 20);
             this.dataList.Name = "dataList";
-            this.dataList.Size = new System.Drawing.Size(192, 339);
+            this.dataList.Size = new System.Drawing.Size(160, 315);
             this.dataList.TabIndex = 3;
             this.dataList.UseCompatibleStateImageBehavior = false;
             this.dataList.View = System.Windows.Forms.View.Details;
@@ -198,9 +198,9 @@ namespace TimeSeries
             // 
             // loadDataButton
             // 
-            this.loadDataButton.Location = new System.Drawing.Point(12, 372);
+            this.loadDataButton.Location = new System.Drawing.Point(10, 345);
             this.loadDataButton.Name = "loadDataButton";
-            this.loadDataButton.Size = new System.Drawing.Size(90, 24);
+            this.loadDataButton.Size = new System.Drawing.Size(75, 23);
             this.loadDataButton.TabIndex = 2;
             this.loadDataButton.Text = "&Load";
             this.loadDataButton.Click += new System.EventHandler(this.loadDataButton_Click);
@@ -208,18 +208,18 @@ namespace TimeSeries
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.chart);
-            this.groupBox2.Location = new System.Drawing.Point(240, 11);
+            this.groupBox2.Location = new System.Drawing.Point(200, 10);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(360, 409);
+            this.groupBox2.Size = new System.Drawing.Size(300, 380);
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Function";
             // 
             // chart
             // 
-            this.chart.Location = new System.Drawing.Point(12, 22);
+            this.chart.Location = new System.Drawing.Point(10, 20);
             this.chart.Name = "chart";
-            this.chart.Size = new System.Drawing.Size(336, 376);
+            this.chart.Size = new System.Drawing.Size(280, 350);
             this.chart.TabIndex = 0;
             // 
             // openFileDialog
@@ -244,136 +244,136 @@ namespace TimeSeries
             this.groupBox3.Controls.Add(this.label10);
             this.groupBox3.Controls.Add(this.label9);
             this.groupBox3.Controls.Add(this.label5);
-            this.groupBox3.Location = new System.Drawing.Point(612, 11);
+            this.groupBox3.Location = new System.Drawing.Point(510, 10);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(234, 221);
+            this.groupBox3.Size = new System.Drawing.Size(195, 205);
             this.groupBox3.TabIndex = 3;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Settings";
             // 
             // momentumBox
             // 
-            this.momentumBox.Location = new System.Drawing.Point(150, 48);
+            this.momentumBox.Location = new System.Drawing.Point(125, 45);
             this.momentumBox.Name = "momentumBox";
-            this.momentumBox.Size = new System.Drawing.Size(72, 21);
+            this.momentumBox.Size = new System.Drawing.Size(60, 20);
             this.momentumBox.TabIndex = 9;
             // 
             // label6
             // 
-            this.label6.Location = new System.Drawing.Point(12, 51);
+            this.label6.Location = new System.Drawing.Point(10, 47);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(98, 18);
+            this.label6.Size = new System.Drawing.Size(82, 17);
             this.label6.TabIndex = 8;
             this.label6.Text = "Momentum:";
             // 
             // alphaBox
             // 
-            this.alphaBox.Location = new System.Drawing.Point(150, 75);
+            this.alphaBox.Location = new System.Drawing.Point(125, 70);
             this.alphaBox.Name = "alphaBox";
-            this.alphaBox.Size = new System.Drawing.Size(72, 21);
+            this.alphaBox.Size = new System.Drawing.Size(60, 20);
             this.alphaBox.TabIndex = 11;
             // 
             // label2
             // 
-            this.label2.Location = new System.Drawing.Point(12, 78);
+            this.label2.Location = new System.Drawing.Point(10, 72);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(144, 16);
+            this.label2.Size = new System.Drawing.Size(120, 15);
             this.label2.TabIndex = 10;
             this.label2.Text = "Sigmoid\'s alpha value:";
             // 
             // learningRateBox
             // 
-            this.learningRateBox.Location = new System.Drawing.Point(150, 22);
+            this.learningRateBox.Location = new System.Drawing.Point(125, 20);
             this.learningRateBox.Name = "learningRateBox";
-            this.learningRateBox.Size = new System.Drawing.Size(72, 21);
+            this.learningRateBox.Size = new System.Drawing.Size(60, 20);
             this.learningRateBox.TabIndex = 7;
             // 
             // label1
             // 
-            this.label1.Location = new System.Drawing.Point(12, 24);
+            this.label1.Location = new System.Drawing.Point(10, 22);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(94, 15);
+            this.label1.Size = new System.Drawing.Size(78, 14);
             this.label1.TabIndex = 6;
             this.label1.Text = "Learning rate:";
             // 
             // label8
             // 
             this.label8.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.label8.Location = new System.Drawing.Point(12, 169);
+            this.label8.Location = new System.Drawing.Point(10, 157);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(210, 2);
+            this.label8.Size = new System.Drawing.Size(175, 2);
             this.label8.TabIndex = 22;
             // 
             // iterationsBox
             // 
-            this.iterationsBox.Location = new System.Drawing.Point(150, 178);
+            this.iterationsBox.Location = new System.Drawing.Point(125, 165);
             this.iterationsBox.Name = "iterationsBox";
-            this.iterationsBox.Size = new System.Drawing.Size(72, 21);
+            this.iterationsBox.Size = new System.Drawing.Size(60, 20);
             this.iterationsBox.TabIndex = 24;
             // 
             // predictionSizeBox
             // 
-            this.predictionSizeBox.Location = new System.Drawing.Point(150, 140);
+            this.predictionSizeBox.Location = new System.Drawing.Point(125, 130);
             this.predictionSizeBox.Name = "predictionSizeBox";
-            this.predictionSizeBox.Size = new System.Drawing.Size(72, 21);
+            this.predictionSizeBox.Size = new System.Drawing.Size(60, 20);
             this.predictionSizeBox.TabIndex = 21;
             this.predictionSizeBox.TextChanged += new System.EventHandler(this.predictionSizeBox_TextChanged);
             // 
             // label7
             // 
-            this.label7.Location = new System.Drawing.Point(12, 142);
+            this.label7.Location = new System.Drawing.Point(10, 132);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(108, 17);
+            this.label7.Size = new System.Drawing.Size(90, 16);
             this.label7.TabIndex = 20;
             this.label7.Text = "Prediction size:";
             // 
             // windowSizeBox
             // 
-            this.windowSizeBox.Location = new System.Drawing.Point(150, 113);
+            this.windowSizeBox.Location = new System.Drawing.Point(125, 105);
             this.windowSizeBox.Name = "windowSizeBox";
-            this.windowSizeBox.Size = new System.Drawing.Size(72, 21);
+            this.windowSizeBox.Size = new System.Drawing.Size(60, 20);
             this.windowSizeBox.TabIndex = 19;
             this.windowSizeBox.TextChanged += new System.EventHandler(this.windowSizeBox_TextChanged);
             // 
             // label3
             // 
-            this.label3.Location = new System.Drawing.Point(12, 115);
+            this.label3.Location = new System.Drawing.Point(10, 107);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(96, 17);
+            this.label3.Size = new System.Drawing.Size(80, 16);
             this.label3.TabIndex = 18;
             this.label3.Text = "Window size:";
             // 
             // label10
             // 
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(151, 199);
+            this.label10.Location = new System.Drawing.Point(126, 185);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(70, 15);
+            this.label10.Size = new System.Drawing.Size(58, 14);
             this.label10.TabIndex = 25;
             this.label10.Text = "( 0 - inifinity )";
             // 
             // label9
             // 
-            this.label9.Location = new System.Drawing.Point(12, 180);
+            this.label9.Location = new System.Drawing.Point(10, 167);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(84, 17);
+            this.label9.Size = new System.Drawing.Size(70, 16);
             this.label9.TabIndex = 23;
             this.label9.Text = "Iterations:";
             // 
             // label5
             // 
             this.label5.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.label5.Location = new System.Drawing.Point(12, 104);
+            this.label5.Location = new System.Drawing.Point(10, 97);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(210, 3);
+            this.label5.Size = new System.Drawing.Size(175, 2);
             this.label5.TabIndex = 17;
             // 
             // stopButton
             // 
             this.stopButton.Enabled = false;
-            this.stopButton.Location = new System.Drawing.Point(756, 388);
+            this.stopButton.Location = new System.Drawing.Point(630, 360);
             this.stopButton.Name = "stopButton";
-            this.stopButton.Size = new System.Drawing.Size(90, 24);
+            this.stopButton.Size = new System.Drawing.Size(75, 23);
             this.stopButton.TabIndex = 6;
             this.stopButton.Text = "S&top";
             this.stopButton.Click += new System.EventHandler(this.stopButton_Click);
@@ -381,9 +381,9 @@ namespace TimeSeries
             // startButton
             // 
             this.startButton.Enabled = false;
-            this.startButton.Location = new System.Drawing.Point(648, 388);
+            this.startButton.Location = new System.Drawing.Point(540, 360);
             this.startButton.Name = "startButton";
-            this.startButton.Size = new System.Drawing.Size(90, 24);
+            this.startButton.Size = new System.Drawing.Size(75, 23);
             this.startButton.TabIndex = 5;
             this.startButton.Text = "&Start";
             this.startButton.Click += new System.EventHandler(this.startButton_Click);
@@ -396,58 +396,58 @@ namespace TimeSeries
             this.groupBox4.Controls.Add(this.label12);
             this.groupBox4.Controls.Add(this.currentIterationBox);
             this.groupBox4.Controls.Add(this.label11);
-            this.groupBox4.Location = new System.Drawing.Point(612, 242);
+            this.groupBox4.Location = new System.Drawing.Point(510, 225);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(234, 108);
+            this.groupBox4.Size = new System.Drawing.Size(195, 100);
             this.groupBox4.TabIndex = 7;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Current iteration:";
             // 
             // currentPredictionErrorBox
             // 
-            this.currentPredictionErrorBox.Location = new System.Drawing.Point(150, 75);
+            this.currentPredictionErrorBox.Location = new System.Drawing.Point(125, 70);
             this.currentPredictionErrorBox.Name = "currentPredictionErrorBox";
             this.currentPredictionErrorBox.ReadOnly = true;
-            this.currentPredictionErrorBox.Size = new System.Drawing.Size(72, 21);
+            this.currentPredictionErrorBox.Size = new System.Drawing.Size(60, 20);
             this.currentPredictionErrorBox.TabIndex = 5;
             // 
             // label13
             // 
-            this.label13.Location = new System.Drawing.Point(12, 78);
+            this.label13.Location = new System.Drawing.Point(10, 72);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(120, 17);
+            this.label13.Size = new System.Drawing.Size(100, 16);
             this.label13.TabIndex = 4;
             this.label13.Text = "Prediction error:";
             // 
             // currentLearningErrorBox
             // 
-            this.currentLearningErrorBox.Location = new System.Drawing.Point(150, 48);
+            this.currentLearningErrorBox.Location = new System.Drawing.Point(125, 45);
             this.currentLearningErrorBox.Name = "currentLearningErrorBox";
             this.currentLearningErrorBox.ReadOnly = true;
-            this.currentLearningErrorBox.Size = new System.Drawing.Size(72, 21);
+            this.currentLearningErrorBox.Size = new System.Drawing.Size(60, 20);
             this.currentLearningErrorBox.TabIndex = 3;
             // 
             // label12
             // 
-            this.label12.Location = new System.Drawing.Point(12, 51);
+            this.label12.Location = new System.Drawing.Point(10, 47);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(96, 17);
+            this.label12.Size = new System.Drawing.Size(80, 16);
             this.label12.TabIndex = 2;
             this.label12.Text = "Learning error:";
             // 
             // currentIterationBox
             // 
-            this.currentIterationBox.Location = new System.Drawing.Point(150, 22);
+            this.currentIterationBox.Location = new System.Drawing.Point(125, 20);
             this.currentIterationBox.Name = "currentIterationBox";
             this.currentIterationBox.ReadOnly = true;
-            this.currentIterationBox.Size = new System.Drawing.Size(72, 21);
+            this.currentIterationBox.Size = new System.Drawing.Size(60, 20);
             this.currentIterationBox.TabIndex = 1;
             // 
             // label11
             // 
-            this.label11.Location = new System.Drawing.Point(12, 24);
+            this.label11.Location = new System.Drawing.Point(10, 22);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(84, 17);
+            this.label11.Size = new System.Drawing.Size(70, 16);
             this.label11.TabIndex = 0;
             this.label11.Text = "Iteration:";
             // 
@@ -455,16 +455,15 @@ namespace TimeSeries
             // 
             this.listBox1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.listBox1.FormattingEnabled = true;
-            this.listBox1.ItemHeight = 12;
-            this.listBox1.Location = new System.Drawing.Point(0, 391);
+            this.listBox1.Location = new System.Drawing.Point(0, 461);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(941, 184);
+            this.listBox1.Size = new System.Drawing.Size(941, 160);
             this.listBox1.TabIndex = 8;
             // 
             // MainForm
             // 
-            this.AutoScaleBaseSize = new System.Drawing.Size(6, 14);
-            this.ClientSize = new System.Drawing.Size(941, 575);
+            this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+            this.ClientSize = new System.Drawing.Size(941, 621);
             this.Controls.Add(this.listBox1);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.stopButton);
@@ -818,7 +817,13 @@ namespace TimeSeries
 					}
 
 					// evalue the function
+                    
 					solution[i, 1] = ( network.Compute( networkInput)[0] + 0.85 ) / factor + yMin;
+                    if (iteration == iterations)
+                    {
+                        string format = string.Format("[{0}][{1}] = [{2}] + [{3}] = {4}", i, networkInput[0], network[0].Output[0], network[0].Output[1], solution[i, 1]);
+                        listBox1.Items.Add(format);
+                    }
 
 					// calculate prediction error
 					if ( i >= n - predictionSize )
