@@ -8,6 +8,8 @@
 using System;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
+
 using System.ComponentModel;
 using System.Windows.Forms;
 using System.Data;
@@ -79,6 +81,7 @@ namespace TimeSeries
 
 		private double[,]	windowDelimiter = new double[2, 2] { { 0, 0 }, { 0, 0 } };
         private ListBox listBox1;
+        private Button button1;
 		private double[,]	predictionDelimiter = new double[2, 2] { { 0, 0 }, { 0, 0 } };
 
 		// Constructor
@@ -123,8 +126,8 @@ namespace TimeSeries
 		{
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.dataList = new System.Windows.Forms.ListView();
-            this.yColumnHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.estimatedYColumnHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.yColumnHeader = new System.Windows.Forms.ColumnHeader();
+            this.estimatedYColumnHeader = new System.Windows.Forms.ColumnHeader();
             this.loadDataButton = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.chart = new AForge.Controls.Chart();
@@ -155,6 +158,7 @@ namespace TimeSeries
             this.currentIterationBox = new System.Windows.Forms.TextBox();
             this.label11 = new System.Windows.Forms.Label();
             this.listBox1 = new System.Windows.Forms.ListBox();
+            this.button1 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -208,9 +212,9 @@ namespace TimeSeries
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.chart);
-            this.groupBox2.Location = new System.Drawing.Point(200, 10);
+            this.groupBox2.Location = new System.Drawing.Point(222, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(300, 380);
+            this.groupBox2.Size = new System.Drawing.Size(846, 380);
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Function";
@@ -219,7 +223,7 @@ namespace TimeSeries
             // 
             this.chart.Location = new System.Drawing.Point(10, 20);
             this.chart.Name = "chart";
-            this.chart.Size = new System.Drawing.Size(280, 350);
+            this.chart.Size = new System.Drawing.Size(830, 350);
             this.chart.TabIndex = 0;
             // 
             // openFileDialog
@@ -244,7 +248,7 @@ namespace TimeSeries
             this.groupBox3.Controls.Add(this.label10);
             this.groupBox3.Controls.Add(this.label9);
             this.groupBox3.Controls.Add(this.label5);
-            this.groupBox3.Location = new System.Drawing.Point(510, 10);
+            this.groupBox3.Location = new System.Drawing.Point(1078, 12);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(195, 205);
             this.groupBox3.TabIndex = 3;
@@ -333,6 +337,7 @@ namespace TimeSeries
             this.windowSizeBox.Name = "windowSizeBox";
             this.windowSizeBox.Size = new System.Drawing.Size(60, 20);
             this.windowSizeBox.TabIndex = 19;
+            this.windowSizeBox.Text = "4";
             this.windowSizeBox.TextChanged += new System.EventHandler(this.windowSizeBox_TextChanged);
             // 
             // label3
@@ -371,7 +376,7 @@ namespace TimeSeries
             // stopButton
             // 
             this.stopButton.Enabled = false;
-            this.stopButton.Location = new System.Drawing.Point(630, 360);
+            this.stopButton.Location = new System.Drawing.Point(1198, 362);
             this.stopButton.Name = "stopButton";
             this.stopButton.Size = new System.Drawing.Size(75, 23);
             this.stopButton.TabIndex = 6;
@@ -381,7 +386,7 @@ namespace TimeSeries
             // startButton
             // 
             this.startButton.Enabled = false;
-            this.startButton.Location = new System.Drawing.Point(540, 360);
+            this.startButton.Location = new System.Drawing.Point(1108, 362);
             this.startButton.Name = "startButton";
             this.startButton.Size = new System.Drawing.Size(75, 23);
             this.startButton.TabIndex = 5;
@@ -396,7 +401,7 @@ namespace TimeSeries
             this.groupBox4.Controls.Add(this.label12);
             this.groupBox4.Controls.Add(this.currentIterationBox);
             this.groupBox4.Controls.Add(this.label11);
-            this.groupBox4.Location = new System.Drawing.Point(510, 225);
+            this.groupBox4.Location = new System.Drawing.Point(1078, 227);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(195, 100);
             this.groupBox4.TabIndex = 7;
@@ -455,15 +460,25 @@ namespace TimeSeries
             // 
             this.listBox1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.listBox1.FormattingEnabled = true;
-            this.listBox1.Location = new System.Drawing.Point(0, 461);
+            this.listBox1.Location = new System.Drawing.Point(0, 443);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(941, 160);
+            this.listBox1.Size = new System.Drawing.Size(1285, 160);
             this.listBox1.TabIndex = 8;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(20, 396);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 4;
+            this.button1.Text = "Load_Text";
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // MainForm
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-            this.ClientSize = new System.Drawing.Size(941, 621);
+            this.ClientSize = new System.Drawing.Size(1285, 603);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.listBox1);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.stopButton);
@@ -516,66 +531,6 @@ namespace TimeSeries
 			windowSizeBox.Text		= windowSize.ToString( );
 			predictionSizeBox.Text	= predictionSize.ToString( );
 			iterationsBox.Text		= iterations.ToString( );
-		}
-
-		// Load data
-		private void loadDataButton_Click(object sender, System.EventArgs e)
-		{
-			// show file selection dialog
-			if ( openFileDialog.ShowDialog( ) == DialogResult.OK )
-			{
-				StreamReader reader = null;
-				// read maximum 50 points
-				double[] tempData = new double[50];
-
-				try
-				{
-					// open selected file
-					reader = File.OpenText( openFileDialog.FileName );
-					string	str = null;
-					int		i = 0;
-
-					// read the data
-					while ( ( i < 50 ) && ( ( str = reader.ReadLine( ) ) != null ) )
-					{
-						// parse the value
-						tempData[i] = double.Parse( str );
-
-						i++;
-					}
-
-					// allocate and set data
-					data = new double[i];
-					dataToShow = new double[i, 2];
-					Array.Copy( tempData, 0, data, 0, i );
-					for ( int j = 0; j < i; j++ )
-					{
-						dataToShow[j, 0] = j;
-						dataToShow[j, 1] = data[j];
-					}
-				}
-				catch (Exception)
-				{
-					MessageBox.Show( "Failed reading the file", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error );
-					return;
-				}
-				finally
-				{
-					// close file
-					if ( reader != null )
-						reader.Close( );
-				}
-
-				// update list and chart
-				UpdateDataListView( );
-				chart.RangeX = new DoubleRange( 0, data.Length - 1 );
-				chart.UpdateDataSeries( "data", dataToShow );
-				chart.UpdateDataSeries( "solution", null );
-				// set delimiters
-				UpdateDelimiters( );
-				// enable "Start" button
-				startButton.Enabled = true;
-			}
 		}
 
 		// Update delimiters on the chart
@@ -750,7 +705,7 @@ namespace TimeSeries
 		void SearchSolution( )
 		{
 
-            windowSize = 1;
+            windowSize = 4;
 			// number of learning samples
 			int samples = data.Length - predictionSize - windowSize;
 			// data transformation factor
@@ -865,5 +820,159 @@ namespace TimeSeries
 			// enable settings controls
 			EnableControls( true );
 		}
+
+        // Load data
+        private void loadDataButton_Click(object sender, System.EventArgs e)
+        {
+            // show file selection dialog
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                StreamReader reader = null;
+                // read maximum 50 points
+                double[] tempData = new double[50];
+
+                try
+                {
+                    // open selected file
+                    reader = File.OpenText(openFileDialog.FileName);
+                    string str = null;
+                    int i = 0;
+
+                    // read the data
+                    while ((i < 50) && ((str = reader.ReadLine()) != null))
+                    {
+                        // parse the value
+                        tempData[i] = double.Parse(str);
+
+                        i++;
+                    }
+
+                    // allocate and set data
+                    data = new double[i];
+                    dataToShow = new double[i, 2];
+                    Array.Copy(tempData, 0, data, 0, i);
+                    for (int j = 0; j < i; j++)
+                    {
+                        dataToShow[j, 0] = j;
+                        dataToShow[j, 1] = data[j];
+                    }
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Failed reading the file", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                finally
+                {
+                    // close file
+                    if (reader != null)
+                        reader.Close();
+                }
+
+                // update list and chart
+                UpdateDataListView();
+                chart.RangeX = new DoubleRange(0, data.Length - 1);
+                chart.UpdateDataSeries("data", dataToShow);
+                chart.UpdateDataSeries("solution", null);
+                // set delimiters
+                UpdateDelimiters();
+                // enable "Start" button
+                startButton.Enabled = true;
+            }
+        }
+
+
+        //List<char> _wordList = new List<char>();
+        Dictionary<char, double> _wordList = new Dictionary<char, double>();
+
+        List<double> _wordSequence = new List<double>();
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                StreamReader reader = null;
+                // read maximum 50 points
+                double[] tempData = new double[50];
+
+                try
+                {
+                    // open selected file
+                    reader = File.OpenText(openFileDialog.FileName);
+                    string str = null;
+                    int i = 0;
+
+                    // read the data
+                    while ((i < 50) && ((str = reader.ReadLine()) != null))
+                    {
+
+                        foreach (var word in str.ToCharArray())
+                        {
+                            
+
+                            if (_wordList.ContainsKey(word) == false)
+                            {
+                                _wordList.Add(word, _wordList.Count + 1);
+                            }
+                            else
+                            {
+
+                            }
+
+                            _wordSequence.Add(_wordList[word]);
+
+                            i++;
+                        }
+
+
+                        
+                    }
+
+
+                    // allocate and set data
+                    data = new double[i];
+                    dataToShow = new double[i, 2];
+
+
+                    //Array.Copy(tempData, 0, data, 0, i);
+
+                    int j = 0;
+                    foreach (var word in _wordSequence)
+                    {
+                        dataToShow[j, 0] = j;
+                        dataToShow[j, 1] = word;
+                        data[j] = word;
+
+
+                        j++;
+
+                        
+                    }
+
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Failed reading the file", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                finally
+                {
+                    // close file
+                    if (reader != null)
+                        reader.Close();
+                }
+
+
+                // update list and chart
+                UpdateDataListView();
+                chart.RangeX = new DoubleRange(0, data.Length - 1);
+                chart.UpdateDataSeries("data", dataToShow);
+                chart.UpdateDataSeries("solution", null);
+                // set delimiters
+                UpdateDelimiters();
+                // enable "Start" button
+                startButton.Enabled = true;
+            }
+        }
 	}
 }
