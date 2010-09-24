@@ -82,6 +82,7 @@ namespace TimeSeries
 		private double[,]	windowDelimiter = new double[2, 2] { { 0, 0 }, { 0, 0 } };
         private ListBox listBox1;
         private Button button1;
+        private TextBox textBox1;
 		private double[,]	predictionDelimiter = new double[2, 2] { { 0, 0 }, { 0, 0 } };
 
 		// Constructor
@@ -97,6 +98,9 @@ namespace TimeSeries
 			chart.AddDataSeries( "solution", Color.Blue, Chart.SeriesType.Line, 1 );
 			chart.AddDataSeries( "window", Color.LightGray, Chart.SeriesType.Line, 1, false );
 			chart.AddDataSeries( "prediction", Color.Gray, Chart.SeriesType.Line, 1, false );
+
+
+            //textBox1.KeyUp +=new KeyEventHandler(textBox1_KeyUp);
 
 			// update controls
 			UpdateSettings( );
@@ -126,8 +130,8 @@ namespace TimeSeries
 		{
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.dataList = new System.Windows.Forms.ListView();
-            this.yColumnHeader = new System.Windows.Forms.ColumnHeader();
-            this.estimatedYColumnHeader = new System.Windows.Forms.ColumnHeader();
+            this.yColumnHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.estimatedYColumnHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.loadDataButton = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.chart = new AForge.Controls.Chart();
@@ -159,6 +163,7 @@ namespace TimeSeries
             this.label11 = new System.Windows.Forms.Label();
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.button1 = new System.Windows.Forms.Button();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -474,10 +479,20 @@ namespace TimeSeries
             this.button1.Text = "Load_Text";
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(241, 401);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(480, 20);
+            this.textBox1.TabIndex = 9;
+            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+            this.textBox1.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBox1_KeyUp);
+            // 
             // MainForm
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.ClientSize = new System.Drawing.Size(1285, 603);
+            this.Controls.Add(this.textBox1);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.listBox1);
             this.Controls.Add(this.groupBox4);
@@ -491,6 +506,7 @@ namespace TimeSeries
             this.Name = "MainForm";
             this.Text = "Time Series Prediction using Multi-Layer Neural Network";
             this.Closing += new System.ComponentModel.CancelEventHandler(this.MainForm_Closing);
+            this.Load += new System.EventHandler(this.MainForm_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
@@ -498,6 +514,7 @@ namespace TimeSeries
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
 		}
 		#endregion
@@ -700,14 +717,20 @@ namespace TimeSeries
 			workerThread.Join( );
 			workerThread = null;
 		}
-
+        ActivationNetwork _network;
 		// Worker thread
 		void SearchSolution( )
 		{
 
-            windowSize = 4;
+            windowSize = _WordToID.Count ;
+
+            //windowSize = 3;
+
+
 			// number of learning samples
 			int samples = data.Length - predictionSize - windowSize;
+            //int samples = 157;
+
 			// data transformation factor
 			double factor = 1.7 / chart.RangeY.Length;
 			double yMin = chart.RangeY.Min;
@@ -730,11 +753,12 @@ namespace TimeSeries
 			}
 
 			// create multi-layer neural network
-			ActivationNetwork	network = new ActivationNetwork(
+			_network = new ActivationNetwork(
 				new BipolarSigmoidFunction( sigmoidAlphaValue ),
-				windowSize, windowSize * 2, 1 );
+                //new ThresholdFunction(),
+                windowSize, windowSize*2, 1);
 			// create teacher
-			BackPropagationLearning teacher = new BackPropagationLearning( network );
+			BackPropagationLearning teacher = new BackPropagationLearning( _network );
 			// set learning rate and momentum
 			teacher.LearningRate	= learningRate;
 			teacher.Momentum		= momentum;
@@ -773,11 +797,11 @@ namespace TimeSeries
 
 					// evalue the function
                     
-					solution[i, 1] = ( network.Compute( networkInput)[0] + 0.85 ) / factor + yMin;
+					solution[i, 1] = ( _network.Compute( networkInput)[0] + 0.85 ) / factor + yMin;
                     if (iteration == iterations)
                     {
-                        string format = string.Format("[{0}][{1}] = [{2}] + [{3}] = {4}", i, networkInput[0], network[0].Output[0], network[0].Output[1], solution[i, 1]);
-                        listBox1.Items.Add(format);
+                        string format = string.Format("[{0}][{1}] = [{2}] + [{3}] = {4}", i, networkInput[0], _network[0].Output[0], _network[0].Output[1], solution[i, 1]);
+                        //listBox1.Items.Add(format);
                     }
 
 					// calculate prediction error
@@ -811,14 +835,14 @@ namespace TimeSeries
 			{
                 lock (this)
                 {
-                    dataList.Items[j].SubItems.Add(solution[k, 1].ToString());
+                    //dataList.Items[j].SubItems.Add(solution[k, 1].ToString());
                 }
 			}
 
-            listBox1.Items.Add(network.ToString());
+            //listBox1.Items.Add(network.ToString());
 
 			// enable settings controls
-			EnableControls( true );
+			//EnableControls( true );
 		}
 
         // Load data
@@ -883,7 +907,8 @@ namespace TimeSeries
 
 
         //List<char> _wordList = new List<char>();
-        Dictionary<char, double> _wordList = new Dictionary<char, double>();
+        Dictionary<char, double> _WordToID = new Dictionary<char, double>();
+        Dictionary<double, char> _IDToWord = new Dictionary<double, char>();
 
         List<double> _wordSequence = new List<double>();
 
@@ -903,23 +928,27 @@ namespace TimeSeries
                     int i = 0;
 
                     // read the data
-                    while ((i < 50) && ((str = reader.ReadLine()) != null))
+                    while ((str = reader.ReadLine()) != null)
                     {
 
                         foreach (var word in str.ToCharArray())
                         {
                             
 
-                            if (_wordList.ContainsKey(word) == false)
+                            if (_WordToID.ContainsKey(word) == false)
                             {
-                                _wordList.Add(word, _wordList.Count + 1);
+                                _IDToWord.Add(_WordToID.Count + 1, word);
+                                _WordToID.Add(word, _WordToID.Count + 1);
+
+                                
+                                listBox1.Items.Add(word);
                             }
                             else
                             {
 
                             }
 
-                            _wordSequence.Add(_wordList[word]);
+                            _wordSequence.Add(_WordToID[word]);
 
                             i++;
                         }
@@ -940,8 +969,8 @@ namespace TimeSeries
                     foreach (var word in _wordSequence)
                     {
                         dataToShow[j, 0] = j;
-                        dataToShow[j, 1] = word;
-                        data[j] = word;
+                        dataToShow[j, 1] = word / _wordSequence.Count;
+                        data[j] = word / _wordSequence.Count;
 
 
                         j++;
@@ -973,6 +1002,91 @@ namespace TimeSeries
                 // enable "Start" button
                 startButton.Enabled = true;
             }
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+
+        List<double>  wordToID(string text)
+        {
+            List<double> sequences = new List<double>();
+            foreach (var word in text.ToCharArray())
+            {
+                if (_WordToID.ContainsKey(word) == true)
+                {
+                    sequences.Add(_WordToID[word]);
+                }
+                else
+                {
+                    sequences.Add(0);
+                }
+
+            }
+
+            return sequences;
+        }
+
+        string IDToWord(double[] ids)
+        {
+            string words = string.Empty;
+            foreach (var output in ids)
+            {
+                double id = Math.Round(output * _wordSequence.Count);
+
+                if (_IDToWord.ContainsKey(id))
+                {
+                    words += _IDToWord[id];
+                }
+                else
+                {
+                    words += "X";
+                }
+                
+            }
+
+            return words;
+            
+        }
+
+
+        private void textBox1_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                if (0 < textBox1.Text.Length)
+                {
+                    var sequences = wordToID(textBox1.Text);
+
+
+                    //double[] networkInput = new double[windowSize];
+
+                    double[] networkInput = new double[sequences.Count];
+
+                    int i = 0;
+                    foreach (var id in sequences)
+                    {
+                        networkInput[i] = id/_wordSequence.Count;
+                        i++;
+                    }
+
+
+                    var ooutput = _network.Compute(networkInput);
+
+                    string strResult = IDToWord(ooutput);
+
+                    listBox1.Items.Insert(0,textBox1.Text + "=>" + strResult);
+                }
+
+                
+            }
+        }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+
         }
 	}
 }
