@@ -1,0 +1,385 @@
+
+---Ex6
+a)TempOrder xy2
+2Blocks-2cells: 
+--- TempOrder xy2 (again for Rafal) (Std-2bl2cell)
+Du erinnerst Dich: t1 =10+10, t2=50+10, SeqLen=100+10,
+ich habe alle laengen jeweils mit einem Faktor (f)=1,2,5,10
+mutiziert=>t1 =10*f+10*f, t2=50*f+10*f, SeqLen=100*f+10*f,
+
+(success after, %solutions):
+f=1:  14530  ,90% 
+f=2:  30220  ,60% 
+f=5:  235120 ,40%
+f=10: 743100 ,10%
+
+SeqLen100:
+NbS: 9 NS: 1/10 MNbEpo: 14530  Var: 18873.8 Std: 137.4 estStdErrMean: 486
+SeqLen200:
+NbS: 5 NS: 8/13 MNbEpo: 30220  Var: 14707.0 Std: 121.3 estStdErrMean: 606
+SeqLen500:
+NbS: 4 NS: 6/10 MNbEpo: 235120  Var: 535445.2 Std: 731.7 estStdErrMean: 4222
+SeqLen1000:
+NbS: 1 NS: 9/10 MNbEpo: 7431.0  Var: 0.0 Std: 0.0 estStdErrMean: 0.0
+
+b)TempOrder xy3
+1CellBlocks: 
+ ()GrowingNet: NoS:9 373/1=373
+
+2Blocks-2cells:
+ StdTopo:			NoS:3  MNbEpo: 2328/7  = 332.57
+ Inited_Hierarchy:		       MNbEpo: 4131/10 = 413.1
+ ()GrowingNet:(always 2 blocks)	       MNbEpo: 3741/10 = 374.1 
+ GrowingNet:			       MNbEpo: 4150/10 = 415
+ Fully-GrowingNet:			MNbEpo: 4350/10 = 435
+ Pos-GrowingNet-Start2Bl:	NoS:2  MNbEpo: 3615/8  = 451.88
+ Pos-GrowingNet-Freeze:(stopped)NoS:2  MNbEpo: 123 once
+ GrowingNet-Freeze:		NoS:5  MNbEpo: 5823/5s = 1164.6
+ GrowingNet-Start2Bl: 		NoS:1  MNbEpo: 4918/9  = 546.44
+ Only_FirstOrderBlocks:		       MNbEpo: 2075/10 = 207.5
+ ()NotSelfRecBlocks-GrowingNet:	       MNbEpo: 5221/10 = 522.1 (8x2Bl,2x3Bl)
+ ()AllTimeTarget-GrowingNet:	       MNbEpo: 2728/10 = 272.8
+ GrowingNet-ConstAlpha(0.5):		NoS:3  MNbEpo: 2883/7 = 411.86
+ GrowingNet-LocalAlpha:			NoS:7  MNbEpo: 3481/3 = 1160.3
+ NewLocalAlphaCode-GrowingNet:		NoS:5  MNbEpo: 3147/4 = 786.75
+ StdTopo-LocalAlpha:(1000)		NoS:4  MNbEpo: 481/6  = 80.167
+ StdTopo-ConstAlpha(0.5):(1000)		NoS:9  MNbEpo: 809    = 809
+ NewLocalAlphaCode-StdTopo:(1000)	NoS:5  MNbEpo: 552/5  = 110.40
+ StdTopo/varificaionRun:(1000)		NoS:4  MNbEpo: 2877/6 = 479.50
+
+4Blocks-2cells:
+ StdTopo:			NoS:3  MNbEpo: 933/7	= 133.29
+ Inited_Hierarchy:		NoS:1  MNbEpo: 1994/9	= 221.56
+ ()GrowingNet:			see 2Blocks
+ Only_FirstOrderBlocks:		       MNbEpo: 2240/10	= 224
+ NotSelfRecBlocks-StdTopo:	NoS:2  MNbEpo: 1355/8   = 169.38
+ ()NotSelfRecBlocks-GrowingNet:	see 2Blocks
+
+
+c)TempOrder xy4
+4Blocks-2cells:
+ StdTopo:			NoS:6  MNbEpo: 3339/4 = 834.75
+ Inited_Hierarchy:		NoS:4  MNbEpo: 3780/6 = 630
+ ()GrowingNet:			NoS:5  MNbEpo: 4499/5 = 899.80
+ GrowingNet:			NoS:7  MNbEpo: 2281/3 = 760.33
+ ()Fully-GrowingNet:		NoS:3  MNbEpo: 7955/7 = 1136.4
+ Only_FirstOrderBlocks:		NoS:2  MNbEpo: 5891/8 = 736.38
+ ()NotSelfRecBlocks-GrowingNet:	NoS:6  MNbEpo: 5978/4 = 1494.5
+ ()AllTimeTarget-GrowingNet:	NoS:2  MNbEpo: 7991/8 = 998.88
+ AllTimeTarget-GrowingNet:	..
+ Only_FirstOrderBlocks-GrowingNet: NoS:1  MNbEpo: 7001/6 = 1166.8
+ Only_FirstOrderBlocks-GrowingNet: NoS:5  MNbEpo: 5118/5 = 1023.6
+
+---Laufband
+2Blocks-8cells
+ StdTopo:		NoS:2  MNbEpo: 2352/8 = 294
+ AllTimeTarget-StdTopo:	       MNbEpo: 520/10 = 52
+ StepPredict-StdTopo:	NoS:1  MNbEpo: 1218/9 = 135.33
+
+---LongVeryNoisyTimesSeries
+ ()GrowingNet:			NoS:1   MNbEpo: 606/9 = 67.333
+ ()Module-AllTimeTarget-GrowingNet:	MNbEpo: 1652/10 = 165.20
+ ()Direct-AllTimeTarget-GrowingNet:	MNbEpo: 1547/10 = 154.70
+
+---Sinus
+ ()GrowingNet:				NoS:4   MNbEpo: 6991/7 = 998.71
+ GrowingNet:		(the same)	NoS:4   MNbEpo: 6991/7 = 998.71
+ StepPredict-GrowingNet:		NoS:1   MNbEpo: 9142/9 = 1015.8
+ (PredGetIn)StepPredict-GrowingNet:	NoS:3   MNbEpo: 8416/7 = 1202.3
+ StepPredict-DirectAllTimeTarget-
+ -GrowingNet:				NoS:4   MNbEpo: 9871/6 = 1645.2
+
+---EmbeddedReberGrammar--StdTopo
+ Checked_Version_A0.5			NS:26   MNbEpo:37
+ Checked_Version_A0.5_PatUpdate		NS:35   MNbEpo:43
+ ---PatUpdate-T500-SeqDW
+ Bl4				NbS:72 NS:28/100 MNbEpo:49.4  Var: 45.1
+ A0.1.EXP				NS:52   MNbEpo:123
+ A0.3.EXP			NbS:58 NS:42/100 MNbEpo:51.9  Var: 36.2
+ A0.5.EXP				NS:46   MNbEpo:47
+ A0.7.EXP			NbS:60 NS:40/100 MNbEpo:35.7  Var: 30.9
+ A1.0.EXP				NS:64   MNbEpo:24
+ A0.1					NS:48   MNbEpo:123
+ A0.5					NS:48   MNbEpo:36
+ A1.0				NbS:31 NS:69/100 MNbEpo:40.5  Var: 38.0
+ ---PatUpdate-TaT500-EXP-PatW
+A0.5-NoGW
+  NbS: 98 NS: 2/100 MNbEpo: 21.5  Var: 406.9 Std: 20.2 estStdErrMean: 2.0
+A0.5
+  NbS: 63 NS: 37/100 MNbEpo: 36.4  Var: 1135.1 Std: 33.7 estStdErrMean: 4.3
+LocalAlpha
+  NbS: 70 NS: 30/100 MNbEpo: 28.3  Var: 1227.3 Std: 35.0 estStdErrMean: 4.2
+LocalAlpha-NoGW
+  LocalAlpha-NoGW/Mue1.0
+  NbS: 21 NS: 79/100 MNbEpo: 27.0  Var: 751.6 Std: 27.4 estStdErrMean: 6.1
+LocalAlpha-NoGW/Mue0.01
+  NbS: 99 NS: 1/100 MNbEpo: 23.6  Var: 621.9 Std: 24.9 estStdErrMean: 2.5
+LocalAlpha-NoGW/Mue0.001
+  NbS: 99 NS: 1/100 MNbEpo: 29.9  Var: 351.0 Std: 18.7 estStdErrMean: 1.9
+LocalAlpha-NoGW/Mue0.1
+  NbS: 97 NS: 3/100 MNbEpo: 23.0  Var: 624.1 Std: 25.0 estStdErrMean: 2.5
+A0.5-4Bl
+  NbS: 95 NS: 5/100 MNbEpo: 24.3  Var: 906.7 Std: 30.1 estStdErrMean: 3.1
+WeightDecay
+WeightDecay/4Bl
+  NbS: 93 NS: 7/100 MNbEpo: 38.3  Var: 1982.6 Std: 44.5 estStdErrMean: 4.6
+WeightDecay/3Bl
+  NbS: 76 NS: 24/100 MNbEpo: 53.0  Var: 2386.6 Std: 48.9 estStdErrMean: 5.6
+
+***ContinuousReberGrammer
+
+
+
+---SpaceToTime
+--10Bit
+-10Bl:
+NbS: 100 NS: 0/100 MNbEpo: 29.0  Var: 5108.4 Std: 71.5 estStdErrMean: 7.2
+-6Bl:
+NbS: 98 NS: 2/100 MNbEpo: 22.6  Var: 929.4 Std: 30.5 estStdErrMean: 3.1
+--8Bit
+-5Bl:
+NbS: 94 NS: 6/100 MNbEpo: 108.7  Var: 15896.1 Std: 126.1 estStdErrMean: 13.1
+-6Bl:
+NbS: 99 NS: 1/100 MNbEpo: 91.3  Var: 4116.9 Std: 64.2 estStdErrMean: 6.5
+-7Bl:
+NbS: 99 NS: 1/100 MNbEpo: 78.4  Var: 1980.8 Std: 44.5 estStdErrMean: 4.5
+-8Bl:
+NbS: 100 NS: 0/100 MNbEpo: 87.1  Var: 5064.1 Std: 71.2 estStdErrMean: 7.2
+8Bl:Decay>
+NbS: 97 NS: 3/100 MNbEpo: 207.2  Var: 21144.3 Std: 145.4 estStdErrMean: 14.8
+++++++++ 
+-LocalAlpha/5Bl
+NbS: 88 NS: 12/100 MNbEpo: 125.6  Var: 15705.2 Std: 125.3 estStdErrMean: 13.4
+-LocalAlpha/6Bl
+NbS: 99 NS: 1/100 MNbEpo: 88.7  Var: 3531.4 Std: 59.4 estStdErrMean: 6.0
+-LocalAlpha/7Bl
+NbS: 100 NS: 0/100 MNbEpo: 89.0  Var: 5269.2 Std: 72.6 estStdErrMean: 7.3
+-LocalAlpha/8Bl
+NbS: 99 NS: 1/100 MNbEpo: 83.5  Var: 9780.4 Std: 98.9 estStdErrMean: 10.0
+
+--SeqTar
+4Bl/A0.5:
+NbS: 53 NS: 47/100 MNbEpo: 235.4  Var: 33450.5 Std: 182.9 estStdErrMean: 25.4
+4Bl/A0.3:
+NbS: 51 NS: 49/100 MNbEpo: 311.5  Var: 49419.2 Std: 222.3 estStdErrMean: 31.4
+---
+5Bl/A0.1
+NbS: 66 NS: 34/100 MNbEpo: 621.1  Var: 40544.4 Std: 201.4 estStdErrMean: 25.0
+5Bl/A0.2
+NbS: 93 NS: 7/100 MNbEpo: 409.5  Var: 35646.6 Std: 188.8 estStdErrMean: 19.7
+5Bl/A0.3
+NbS: 92 NS: 8/100 MNbEpo: 298.0  Var: 25840.1 Std: 160.7 estStdErrMean: 16.9
+5Bl/A0.5:
+NbS: 89 NS: 11/100 MNbEpo: 207.0  Var: 21657.9 Std: 147.2 estStdErrMean: 15.7
+5Bl/A0.7:
+NbS: 90 NS: 10/100 MNbEpo: 189.8  Var: 26527.8 Std: 162.9 estStdErrMean: 17.3
+5Bl/A0.9:
+NbS: 81 NS: 19/100 MNbEpo: 156.8  Var: 24209.3 Std: 155.6 estStdErrMean: 17.4
+5Bl/A1.1:
+NbS: 67 NS: 33/100 MNbEpo: 149.7  Var: 28789.7 Std: 169.7 estStdErrMean: 20.9
+5Bl/A1.3:
+NbS: 59 NS: 41/100 MNbEpo: 137.1  Var: 19031.4 Std: 138.0 estStdErrMean: 18.1
+---
+8Bl/A0.1:
+NbS: 82 NS: 63/145 MNbEpo: 684.3  Var: 28291.6 Std: 168.2 estStdErrMean: 18.7
+8Bl/A0.5:
+NbS: 96 NS: 4/100 MNbEpo: 210.8  Var: 16180.0 Std: 127.2 estStdErrMean: 13.1
+8Bl/A0.9:
+NbS: 95 NS: 5/100 MNbEpo: 174.3  Var: 22567.1 Std: 150.2 estStdErrMean: 15.5
+++++++++++++
+LocalAlpha/4Bl:(A0.5)
+NbS: 64 NS: 36/100 MNbEpo: 276.1  Var: 44902.6 Std: 211.9 estStdErrMean: 26.7
+---
+LocalAlpha/5Bl/A0.1
+NbS: 62 NS: 38/100 MNbEpo: 626.3  Var: 36539.5 Std: 191.2 estStdErrMean: 24.5
+LocalAlpha/5Bl/A0.2
+NbS: 93 NS: 7/100 MNbEpo: 377.6  Var: 24128.1 Std: 155.3 estStdErrMean: 16.2
+LocalAlpha/5Bl/A0.3
+NbS: 93 NS: 7/100 MNbEpo: 279.7  Var: 23188.1 Std: 152.3 estStdErrMean: 15.9
+LocalAlpha/5Bl/A0.5
+NbS: 90 NS: 10/100 MNbEpo: 207.5  Var: 16866.0 Std: 129.9 estStdErrMean: 13.8
+LocalAlpha/5Bl/A0.7
+NbS: 92 NS: 8/100 MNbEpo: 150.8  Var: 18314.0 Std: 135.3 estStdErrMean: 14.2
+LocalAlpha/5Bl/A0.9
+NbS: 81 NS: 19/100 MNbEpo: 192.9  Var: 37356.2 Std: 193.3 estStdErrMean: 21.6
+LocalAlpha/5Bl/A1.1
+NbS: 80 NS: 20/100 MNbEpo: 160.3  Var: 23114.5 Std: 152.0 estStdErrMean: 17.1
+LocalAlpha/5Bl/A1.3
+NbS: 58 NS: 42/100 MNbEpo: 116.2  Var: 11024.6 Std: 105.0 estStdErrMean: 13.9
+---
+LocalAlpha/8Bl/A0.1:
+NbS: 65 NS: 35/100 MNbEpo: 613.5  Var: 33021.3 Std: 181.7 estStdErrMean: 22.7
+LocalAlpha/8Bl/A0.5:
+NbS: 97 NS: 3/100 MNbEpo: 180.0  Var: 14501.8 Std: 120.4 estStdErrMean: 12.3
+	LocalAlpha/8Bl/MUE0.1>(A0.5)
+NbS: 94 NS: 6/100 MNbEpo: 215.7  Var: 17226.8 Std: 131.3 estStdErrMean: 13.6
+	LocalAlpha/8Bl/MUE0.001(A0.5)
+NbS: 96 NS: 4/100 MNbEpo: 201.0  Var: 17392.3 Std: 131.9 estStdErrMean: 13.5
+LocalAlpha/8Bl/A0.9:
+NbS: 88 NS: 12/100 MNbEpo: 164.3  Var: 26736.3 Std: 163.5 estStdErrMean: 17.5
+
+---Noise
+A0.5-8Bl:
+NbS: 100 NS: 0/100 MNbEpo: 64.5  Var: 1011.7 Std: 31.8 estStdErrMean: 3.2
+
+-------1999------------
+
+----TempXOR: (with out shortcuts)
+/TempXOR/2In2D/Fg
+NbS: 100 NS: 0/100 MNbEpo: 3.7  Var: 0.5 Std: 0.7 estStdErrMean: 0.1
+/TempXOR/2In2D/Std
+NbS: 100 NS: 0/100 MNbEpo: 3.1  Var: 0.1 Std: 0.4 estStdErrMean: 0.0
+/TempXOR/2In3D/Fg
+NbS: 99 NS: 1/100 MNbEpo: 10.2  Var: 38.2 Std: 6.2 estStdErrMean: 0.6
+/TempXOR/2In3D/Std
+NbS: 100 NS: 0/100 MNbEpo: 8.9  Var: 8.4 Std: 2.9 estStdErrMean: 0.3
+/TempXOR/2In4D/Std
+NbS: 7 NS: 93/100 MNbEpo: 134.7  Var: 5856.5 Std: 76.5 estStdErrMean: 31.2
+/TempXOR/3In2D/Fg
+NbS: 100 NS: 0/100 MNbEpo: 7.5  Var: 6.8 Std: 2.6 estStdErrMean: 0.3
+/TempXOR/3In2D/Std
+NbS: 100 NS: 0/100 MNbEpo: 6.6  Var: 4.7 Std: 2.2 estStdErrMean: 0.2
+/TempXOR/4In2D/Fg
+NbS: 100 NS: 0/100 MNbEpo: 6.9  Var: 2.3 Std: 1.5 estStdErrMean: 0.2
+/TempXOR/4In2D/Std
+NbS: 100 NS: 0/100 MNbEpo: 6.6  Var: 1.6 Std: 1.3 estStdErrMean: 0.1
+/TempXOR/5In2D/Fg
+NbS: 100 NS: 0/100 MNbEpo: 25.2  Var: 104.9 Std: 10.2 estStdErrMean: 1.0
+/TempXOR/5In2D/Std
+NbS: 100 NS: 0/100 MNbEpo: 25.3  Var: 72.2 Std: 8.5 estStdErrMean: 0.9
+/TempXOR/6In2D/Fg
+NbS: 100 NS: 0/100 MNbEpo: 64.0  Var: 48.2 Std: 6.9 estStdErrMean: 0.7
+/TempXOR/5In2D/Std 
+NbS: 100 NS: 0/100 MNbEpo: 25.3  Var: 72.2 Std: 8.5 estStdErrMean: 0.9
+
+
+--- TempXOR without out shortcuts (2B2C)
+
+/TempXOR/2In2D/Std
+NbS: 100 NS: 0/100 MNbEpo: 16.6  Var: 97.9 Std: 9.9 estStdErrMean: 1.0
+/TempXOR/2In2D/Fg
+NbS: 100 NS: 0/100 MNbEpo: 16.7  Var: 90.7 Std: 9.5 estStdErrMean: 1.0
+/TempXOR/3In2D/Std
+NbS: 100 NS: 0/100 MNbEpo: 57.8  Var: 495.6 Std: 22.3 estStdErrMean: 2.2
+TempXOR/3In2D/Fg
+NbS: 100 NS: 0/100 MNbEpo: 63.2  Var: 463.6 Std: 21.5 estStdErrMean: 2.2
+/TempXOR/4In2D/Std
+NbS: 0 NS: 100/100 MNbEpo: 0.0  Var: 0.0 Std: 0.0 estStdErrMean: 0.0
+/TempXOR/4In2D/Fg
+NbS: 0 NS: 100/100 MNbEpo: 0.0  Var: 0.0 Std: 0.0 estStdErrMean: 0.0
+/TempXOR/5In2D/Std
+NbS: 0 NS: 100/100 MNbEpo: 0.0  Var: 0.0 Std: 0.0 estStdErrMean: 0.0
+/TempXOR/5In2D/Fg
+NbS: 0 NS: 100/100 MNbEpo: 0.0  Var: 0.0 Std: 0.0 estStdErrMean: 0.0
+-----
+/TempXOR/2In3D/Std
+NbS: 39 NS: 61/100 MNbEpo: 84.9  Var: 3034.3 Std: 55.1 estStdErrMean: 8.9
+/TempXOR/2In3D/Fg
+NbS: 46 NS: 30/76 MNbEpo: 73.8  Var: 2678.9 Std: 51.8 estStdErrMean: 7.7
+/TempXOR/2In4D/Std
+NbS: 0 NS: 100/100 MNbEpo: 0.0  Var: 0.0 Std: 0.0 estStdErrMean: 0.0
+/TempXOR/4In2D/Fg
+NbS: 0 NS: 100/100 MNbEpo: 0.0  Var: 0.0 Std: 0.0 estStdErrMean: 0.0
+
+---TempXOR with TagetDelay
+/Std/1TargetDelay
+NbS: 10 NS: 0/10 MNbEpo: 7.3  Var: 2.6 Std: 1.6 estStdErrMean: 0.5
+/Fg/TargetDelay1
+NbS: 10 NS: 0/10 MNbEpo: 6.2  Var: 2.8 Std: 1.7 estStdErrMean: 0.6
+/Fg/TargetDelay10
+NbS: 10 NS: 0/10 MNbEpo: 20.9  Var: 1141.7 Std: 33.8 estStdErrMean: 11.3
+/Std/TargetDelay100
+NbS: 8 NS: 2/10 MNbEpo: 94.9  Var: 7340.1 Std: 85.7 estStdErrMean: 32.4
+/Fg/TargetDelay100
+NbS: 0 NS: 10/10 MNbEpo: 0.0  Var: 0.0 Std: 0.0 estStdErrMean: 0.0
+/Fg/TargetDelay500
+NbS: 0 NS: 10/10 MNbEpo: 0.0  Var: 0.0 Std: 0.0 estStdErrMean: 0.0
+
+---TempXOR with TagetDelay, end symbol, output gate bias.
+/Std/TargetDelay1
+NbS: 10 NS: 0/10 MNbEpo: 21.8  Var: 62.8 Std: 7.9 estStdErrMean: 2.6
+/Fg/TargetDelay1
+NbS: 10 NS: 0/10 MNbEpo: 24.8  Var: 31.4 Std: 5.6 estStdErrMean: 1.9
+/Fg/RaRe1
+NbS: 10 NS: 0/10 MNbEpo: 18.4.1  Var: 681.7 Std: 26.1 estStdErrMean: 0.8.7
+/Std/TargetDelay10
+NbS: 8 NS: 2/10 MNbEpo: 16.2  Var: 20.4 Std: 4.5 estStdErrMean: 1.7
+/Fg/TargetDelay10
+NbS: 10 NS: 0/10 MNbEpo: 39.5  Var: 107.8 Std: 10.4 estStdErrMean: 3.5
+/Fg/RaRe10
+NbS: 10 NS: 0/10 MNbEpo: 128.2  Var: 660.2 Std: 25.7 estStdErrMean: 8.6
+/Std/TargetDelay50
+NbS: 10 NS: 0/10 MNbEpo: 15.5  Var: 56.6 Std: 7.5 estStdErrMean: 2.5
+/Fg/TargetDelay50
+NbS: 0 NS: 10/10 MNbEpo: 0.0  Var: 0.0 Std: 0.0 estStdErrMean: 0.0
+/Fg/RaRe50
+NbS: 10 NS: 0/10 MNbEpo: 34.8.0  Var: 17891.2 Std: 133.8 estStdErrMean: 4.4.6
+/Fg/AdjustedBias50
+NbS: 10 NS: 0/10 MNbEpo: 44.5.6  Var: 23095.8 Std: 152.0 estStdErrMean: 5.0.7
+/Std/TargetDelay100
+NbS: 10 NS: 0/10 MNbEpo: 62.7  Var: 3184.2 Std: 56.4 estStdErrMean: 18.8
+/Fg/RaRe100
+NbS: 10 NS: 0/10 MNbEpo: 207.9 Var: 912642.9 Std: 955.3 estStdErrMean: 31.8
+Fg/AdjustedBias100
+NbS: 10 NS: 0/10 MNbEpo: 29.4.9  Var: 15709.3 Std: 125.3 estStdErrMean: 4.1.8
+/Std/TargetDelay200
+NbS: 7 NS: 3/10 MNbEpo: 113.0  Var: 2961??.9 Std: 54.4 estStdErrMean: 22.2
+/Std_NewPar200
+NbS: 10 NS: 0/10 MNbEpo: 129.0.5  Var: 278420.6 Std: 527.7 estStdErrMean: 17.5.9
+/Std/200CenteredIn (and new par)
+NbS: 10 NS: 0/10 MNbEpo: 83.8.8  Var: 421010.4 Std: 648.9 estStdErrMean: 21.6.3
+
+
+/Fg/RaRe200
+
+Fg/AdjustedBias200
+NbS: 9 NS: 1/10 MNbEpo: 791.4  Var: 265393.1 Std: 515.2 estStdErrMean: 182.1
+/Std/TargetDelay500
+NbS: 2 NS: 8/10 MNbEpo: 227.0  Var: 32041.0 Std: 179.0 estStdErrMean: 179.0
+
+/Std/TargetDelay1000
+NbS: 4 NS: 6/10 MNbEpo: 566.4  Var: 7151168.2 Std: 267.2 estStdErrMean: 154.4/
+/Std/TargetDelay1500
+
+
+---------------------- other tests
+Std/TargetDelay100-BrokenPoly
+NbS: 7 NS: 3/10 MNbEpo: 28.1  Var: 39191.6 Std: 198.0 estStdErrMean: 8.1
+/Fg/TargetDelay50/HighBias>
+NbS: 10 NS: 0/10 MNbEpo: 36.2  Var: 226.4 Std: 15.0 estStdErrMean: 5.0
+/Fg/TargetDelay100 HighBias>
+NbS: 10 NS: 0/10 MNbEpo: 131.6  Var: 8531.4 Std: 92.4 estStdErrMean: 30.8
+
+
+-----Adding for Rafal (trainEpo=100seq)
+T50/
+NbS: 10 NS: 0/10 MNbEpo: 1268.7  Var: 114880.6 Std: 338.9 estStdErrMean: 113.0
+T100OldPar/
+NbS: 10 NS: 0/10 MNbEpo: 245.4  Var: 8655.0 Std: 93.0 estStdErrMean: 31.0
+T100/
+NbS: 10 NS: 0/10 MNbEpo: 1724.4  Var: 288451.6 Std: 537.1 estStdErrMean: 179.0
+T200/
+NbS: 10 NS: 0/10 MNbEpo: 1784.4  Var: 307125.6 Std: 554.2 estStdErrMean: 184.7
+T500/
+NbS: 10 NS: 0/10 MNbEpo: 2531.6  Var: 2369676.6 Std: 1539.4 estStdErrMean: 513.1
+T1000/
+NbS: 10 NS: 0/10 MNbEpo: 5314.0  Var: 21441936.0 Std: 4630.5 estStdErrMean: 1543.5
+T1500/
+NbS: 6 NS: 4/10 MNbEpo: 5261.0  Var: 798796.7 Std: 893.8 estStdErrMean: 399.7
+T2000/
+NbS: 6 NS: 4/10 MNbEpo: 10070.0  Var: 16931756.3 Std: 4114.8 estStdErrMean: 1840.2
+T2500/
+NbS: 3 NS: 3/6 MNbEpo: 15096.3  Var: 64038322.9 Std: 8002.4 estStdErrMean: 5658.5
+T		perf. sol.	succ. after
+50		100%		126870
+100		100%		172440
+200		100%		178440
+500		100%		253160
+1000		100%		531400
+1500		60%		526100
+2000		60%		1007000
+2500		30%		1509630
+5000		0%
+
+ 
+ 

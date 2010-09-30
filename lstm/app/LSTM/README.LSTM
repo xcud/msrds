@@ -1,0 +1,51 @@
+
+This is an intro to the LSTM (Long Short Term Memory) simulator.
+Version: 30 June 1999, last update: 2005-05-15
+
+The code is a "quick-and-dirty" version of LSTM with forget gates
+and peephole connections. The algorithm is documented in my
+publications (they are on-line at www.felixgers.de).
+The executable is called LSTM, it is for linux ELF. 
+The source is written in C++.
+
+LSTM reads the LSTM.par file and writes a cerr.log to indicate
+errors in the setup (also during runtime).
+The parameters in LSTM.par should be quite clear, 
+the ones that are not, are probably not used within the current setup.
+Look into the code for documentation.
+
+Pattern (data) files names are defined in LSTM.par.
+In a pattern file sequences are separated by "\n\n", pattern by "\n".
+and in+out values by "\t" or " ". The number of values in a pattern 
+(in a line) must be constant for the whole file.
+One line in the data contains input and output.
+
+Set the parameter SetStepTarget in the LSTM.par file to 1
+to specify that there is only one target for a each sequence 
+after the last pattern (all other targets are ignored).
+
+
+
+But an arbitrary target value for every output must always be specified.
+It is also possible to generate the pattern on-line with the 
+PatternGenerator class (see the code in ../base/PatternManager.cpp .
+
+The files E_Reber.Train.500.dat and E_Reber.Test.500.dat
+contain 500 independent samples form the embedded Reber grammar task.
+The result log-files for three learning trials are included.
+
+The network learns until the training set is fully learned
+then one test is performed. 
+The output are log files (Error.log.NbTrial,etc) with the number of
+misclassified sequences per epoch. The final weight matrices are stored
+in the w.end files (names with trial-nb.. and nb. of train epoches).
+Growing nets print out a Grow.log .
+
+Many options are implemented as preprocessor conditional commands.
+They can be modified in the files LSTM.h and NeuralNetBase.h .
+The most relevant one is USE_FORGET_GATES to switch on forget gates.
+
+Have fun.
+
+Felix Gers
+
