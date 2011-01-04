@@ -1,0 +1,256 @@
+
+ The program needs 3 files:
+ lstmtrain.txt  
+ lstmtest.txt
+ lstmpars.txt
+
+ The first file contains the training set,
+ the second the test set und the third
+ the parameters for the programm.
+
+ Assume n input components and m output components.
+ The training and test files consist of real
+ values as follows:
+ inputcomp-1 inputcomp-2 ... inputcomp-n target-1 target-2 ... target-m
+ inputcomp-1 inputcomp-2 ... inputcomp-n target-1 target-2 ... target-m
+ inputcomp-1 inputcomp-2 ... inputcomp-n target-1 target-2 ... target-m
+ inputcomp-1 inputcomp-2 ... inputcomp-n target-1 target-2 ... target-m
+ inputcomp-1 inputcomp-2 ... inputcomp-n target-1 target-2 ... target-m
+ inputcomp-1 inputcomp-2 ... inputcomp-n target-1 target-2 ... target-m
+ .
+ .
+ .
+
+ 
+
+ If a target component exceeds 10.0 then there is no target 
+ for this sequence element.
+
+ An input sequence ends with a data vector with first
+ input component exceeding 10.0.
+
+ The training/test set ends with a data vector with first
+ input component exceeding 10.0 (the last 2 data vectors in
+ the file contain first input components greater than 10.0).
+
+ AN EXAMPLE:
+with 2 sequences and target only at sequence end
+>>>>
+-1.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+1.00 0.00
+20.00 20.00
+1.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+0.00 20.00
+1.00 1.00
+20.00 20.00
+20.00 20.00
+>>>>
+
+
+ The programm output is written into files "out[a,b,...].txt" and
+ the weight matrix is written into files "wei[a,b,...].par".
+
+ The output files list epoch number, number of sequences seen so far by
+ the net, average MSE on the previous epoch and number of
+ incorrectly classified sequences from the previous epoch.
+
+
+
+
+
+ The parameter file:
+
+number inputs: "int"                           // number of input units //
+number outputs: "int"                          // number of output units = targets //
+output layer biased: 1/0                       // 1 --> biased 0 --> not biased //
+number hidden units: "int"                     // number of conventional hidden units //
+hidden layer biased: 1/0                       // 1 --> biased 0 --> not biased //
+number memory cell blocks: "int"               // number of memory cell blocks //
+###here definitions for each block###          // begin listing for block parameters //
+**block number: 1**                            // begin block number 1 //
+block size: "int"    			       // block size of block 1 //
+initial input gate bias: "real"		       // initial bias for the input gate of block 1 //
+initial output gate bias: "real"	       // initial bias for the output gate of block 1 //
+**block number: 2**			       // begin block number 2 //
+block size: "int"			       // block size of block 2 //
+initial input gate bias: "real"		       // initial bias for the input gate of block 2 //
+initial output gate bias: "real"	       // initial bias for the output gate of block 2 //
+**block number: 3**			       // begin block number 3 //
+.
+.
+.
+###end definitions for each block###
+learning rate: "real"			       // learning rate > 0 //
+max. error for correct sequence: "real"        // value > 0 which gives the maximal absolute error //
+					       // of the output units during processing a sequence, //
+					       // when processed correctly //
+half interval length for intialization: "real" // setting this value to a means that //
+					       // the interval for weight initialization is [-a,a] //
+performing test after ? epochs: "int"          // test on the test set after ? epochs //
+performing test after fewer than ? wrong classifications for training set: "int"   
+					       // perform an additional test on the test set if //
+					       // the training set has fewer than ? wrong //
+					       // classifictions during the previous epoch //
+write weight after ? epochs: "int"             // write the weight matrix every ? epochs //
+max. number of trials: "int"		       // number of trials to be conducted //
+stop learning once MSE per epoch <: "real"     // stop learning once MSE of training set is below ? //
+stop learning once wrong classifications per epoch <: "int"  
+					       // stop learning once the number of wrong //
+   					       // classifications for the training set is below ? //
+epochs to be learned after stop learning is set: "int" 
+					       // gives the number of epoch to be learned after //
+					       // stop learning is set //
+initialization of random generator: "int"      // an integer seed for random generator //
+reset the net after each sequence?: 1/0        // 1 --> reset net after each sequence //
+weight update after sequence or epoch?: 1/0    // 1 --> weight update after each sequence //
+max. number of epochs: "int"		       // stop learning if max. number of epochs is reached //
+size of training set: "int"		       // size of training set //
+size of test set: "int"			       // size of test set //
+
+
+ AN EXAMPLE:
+>>>>>
+number inputs: 1
+number outputs: 1
+output layer biased: 1
+number hidden units: 0
+hidden layer biased: 1
+number memory cell blocks: 2
+###here definitions for each block###
+**block number: 1**
+block size: 2
+initial input gate bias: -1.0
+initial output gate bias: 0.0
+**block number: 2**
+block size: 2
+initial input gate bias: -2.0
+initial output gate bias: 0
+###end definitions for each block###
+learning rate: 0.1
+max. error for correct sequence: 0.2
+half interval length for intialization: 0.1
+performing test after ? epochs: 100
+performing test after fewer than ? wrong classifications on training set: 3
+write weight after ? epochs: 200
+max. number of trials: 10
+stop learning once MSE per epoch <: 0.001
+stop learning once wrong classifications per epoch <: 1
+epochs to be learned after stop learning is set: 10
+initialization of random generator: 123
+reset the net after each sequence?: 1
+weight update after sequence or epoch?: 1
+max. number of epochs: 1000000
+size of training set: 100
+size of test set: 100
+>>>>>
+
+
+
+
