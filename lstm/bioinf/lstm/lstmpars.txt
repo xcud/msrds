@@ -18,9 +18,9 @@ learning rate: 0.1
 max. error for correct sequence: 0.2
 half interval length for intialization: 0.1
 performing test after ? epochs: 100
-performing test after fewer than ? wrong classifications on training set: 3
+performing test after fewer than ? wrong classifications on training set: 1
 write weight after ? epochs: 200
-max. number of trials: 10
+max. number of trials: 1
 stop learning once MSE per epoch <: 0.001
 stop learning once wrong classifications per epoch <: 1
 epochs to be learned after stop learning is set: 10
@@ -28,8 +28,8 @@ initialization of random generator: 123
 reset the net after each sequence?: 1
 weight update after sequence or epoch?: 1
 max. number of epochs: 1000000
-size of training set: 100
-size of test set: 100
+size of training set: 4
+size of test set: 4
 
 
 

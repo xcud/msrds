@@ -72,11 +72,11 @@ char LSTM::Run()
 
   // Trial loop.
   for( Tri=0; Tri < NbTrials; Tri++ ) 
-    { 
-      InitOrDeleteNet(true); // Also re-read complete par file.
+  { 
+    InitOrDeleteNet(true); // Also re-read complete par file.
 
       // Epo loop.
-      do 
+    do 
 	{ 
 	  Epo++;
 	  // Skip rest of trial if matherr (nan) occured.
@@ -96,12 +96,12 @@ char LSTM::Run()
 #else
       // This Seq will be overwritten, we init the Nb variables here.
       if(Generate_Pat && (Generate_Pat_Each_Epoch>0))
-	{
-	  if((unsigned int)(Epo % Generate_Pat_Each_Epoch) == 0)
-	    {
-	      GeneratePattern(TrainData, Pat_FuncName);
-	    }
-	}
+      {
+		  if((unsigned int)(Epo % Generate_Pat_Each_Epoch) == 0)
+		  {
+			  GeneratePattern(TrainData, Pat_FuncName);
+		  }
+	  }
 
       if( MixTrainSeqs ) { MixTrainSequences(); }
 #endif
@@ -109,26 +109,27 @@ char LSTM::Run()
 
       //Clamping duration for iterated prediction.
       if((unsigned int)( Epo % AverageTrainBuf) == 0) 
-	{
-	  if(MeanPatCorrectTrain)	
-	    MeanPatCorrectTrain/=MeanPatCorrectTrainCount;
-	  else MeanPatCorrectTrain=0;
-	  DebugFile<<Epo<<" "
+	  {
+		if(MeanPatCorrectTrain)	
+			MeanPatCorrectTrain/=MeanPatCorrectTrainCount;
+		else MeanPatCorrectTrain=0;
+			DebugFile<<Epo<<" "
 		   <<MinPatCorrectTrain<<" "
 		   <<MeanPatCorrectTrain<<" "
 		   <<MaxPatCorrectTrain<<" "
 		   <<endl; //ddd
-	  MaxPatCorrectTrain=0; MinPatCorrectTrain=DBL_MAX; 
-	  MeanPatCorrectTrain=0; MeanPatCorrectTrainCount=0; 
+
+		MaxPatCorrectTrain=0; MinPatCorrectTrain=DBL_MAX; 
+		MeanPatCorrectTrain=0; MeanPatCorrectTrainCount=0; 
 	}
 
       //
-      ClassesWrong=0; MSEEpo=0; PatCorrect=0; PatCount=0;
-      SeqOnline=0; SeqOnlinePatCount=0; AlphaDecayInSeq=1;
+    ClassesWrong=0; MSEEpo=0; PatCorrect=0; PatCount=0;
+    SeqOnline=0; SeqOnlinePatCount=0; AlphaDecayInSeq=1;
       // Seq loop.
-      for(Seq=0;Seq<TrainData.NbSeq;FreezeSeqLoop ? Seq=0 : Seq++) {
-	MSESeq=0; PatWrong=0; ClampOut=false; Clamping=false; 
-	ClampPatStart=0; ClampPatStop=0;
+    for(Seq=0;Seq<TrainData.NbSeq;FreezeSeqLoop ? Seq=0 : Seq++) {
+		MSESeq=0; PatWrong=0; ClampOut=false; Clamping=false; 
+		ClampPatStart=0; ClampPatStop=0;
 
 	// Reset the network.
 #ifndef DO_ONLINE_PAT_PRODUCTION
@@ -162,10 +163,10 @@ char LSTM::Run()
 	//DisplayNet(TrainData); DisplayWeights(); KeyCheck();
 	//AlphaPredict = Alpha / TrainData.NbPat[Seq]; // AlphaPredict
 	if(RandomPrediction) 
-	  {
+	{
 	    RandomPredictionStart=
 	      (unsigned int)fmod((double)lrand48(),RandomPrediction);
-	  }
+	}
 	
 	// Pattern loop.
 	for( Pat = RandomPredictionStart; 
