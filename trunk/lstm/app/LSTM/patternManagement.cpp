@@ -208,48 +208,53 @@ char TPatternManager::LoadPattern(struct TPatData &apsPatData,
 	  return 0;
  	} else if(apsPatData.NbVal ==0) break; // useless ws before eof
       // Skip invisible white space.
-      for(pF>>c;c == ' ' || c == '\t' || c == '\n' 
-	    || pF.eof();pF>>c) {
-	if(c=='\t' || c==' ') continue; // seperate values
-	if(c=='\n' || pF.eof()) // end of a pattern
-	  // 2x'\n' or eof : new sequence
-	  if(apsPatData.NbVal == 0) {
-#ifdef DEBUG
-	    cerr<<"NbSeq: "<<apsPatData.NbSeq<<"\t";
-	    if(apsPatData.NbPat)
-	      cerr<<"NbPat: " 
-		  <<apsPatData.NbPat[apsPatData.NbSeq]<<"\t";
-	    cerr<<"NbValTemp: "<<NbValTemp<<"\n";
-#endif
-	    apsPatData.NbSeq++;
-	    break; // ignore further white space after sequence end
-	  } else { // first '\n'
-	    if(apsPatData.NbPat) { // exists only in the second scan
-	      // Count the number of sequencec first
-	      apsPatData.NbPat[apsPatData.NbSeq]++;
-	      // check for constant pattern length
-	      if((NbValTemp) && 
-		  (NbValTemp != apsPatData.NbVal)) {
-		cerr<<"Error in "<<acPatFilename
-			   <<" pattern length not constant.\n";
-		//delete pF; 
-		return 1;
-	      }
-	    }
-	    NbValTemp = apsPatData.NbVal; apsPatData.NbVal = 0;
-	  }
+    for(pF>>c;c == ' ' || c == '\t' || c == '\n' || pF.eof();pF>>c) 
+	{
+		if(c=='\t' || c==' ') continue; // seperate values
+
+		if(c=='\n' || pF.eof()) // end of a pattern
+		{
+		  if(apsPatData.NbVal == 0)
+		  {// 2x'\n' or eof : new sequence
+	#ifdef DEBUG
+			cerr<<"NbSeq: "<<apsPatData.NbSeq<<"\t";
+			if(apsPatData.NbPat)
+			  cerr<<"NbPat: " 
+			  <<apsPatData.NbPat[apsPatData.NbSeq]<<"\t";
+			cerr<<"NbValTemp: "<<NbValTemp<<"\n";
+	#endif
+			apsPatData.NbSeq++;
+			break; // ignore further white space after sequence end
+		  }  else { // first '\n'
+			if(apsPatData.NbPat) { // exists only in the second scan
+			  // Count the number of sequencec first
+			  apsPatData.NbPat[apsPatData.NbSeq]++;
+			  // check for constant pattern length
+			  if((NbValTemp) &&  (NbValTemp != apsPatData.NbVal)) {
+					cerr<<"Error in "<<acPatFilename
+				   <<" pattern length not constant.\n";
+			//delete pF; 
+			return 1;
+			  }
+			}
+			NbValTemp = apsPatData.NbVal; 
+			apsPatData.NbVal = 0;
+		  }
+		}
       }
       // the next char belongs to the next float 
       // (or was useless white space)
       pF.putback(c);
     }
-    if(apsPatData.NbPat) cScanned = true;
+    if(apsPatData.NbPat) 
+		cScanned = true;
     else {
       // new NbPat to store the number of pattern in each sequnce.
       // Deleted in the destuctor.
       apsPatData.NbPat = new unsigned int[apsPatData.NbSeq];
       for(unsigned int seq=0;seq<apsPatData.NbSeq;seq++)
-	apsPatData.NbPat[seq] = 0;
+			apsPatData.NbPat[seq] = 0;
+
       apsPatData.NbSeq = 0;
       apsPatData.NbVal = 0;
       pF.clear(); // unset eof
