@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lstm", "lstm\lstm.vcxproj", "{D1C1334A-BFCE-43D9-8119-25A97F53DB11}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "rtrl", "rtrl\rtrl.vcxproj", "{019C5A2E-4D1F-4A6D-9DF7-A2AB9BEFFA7C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -13,6 +15,10 @@ Global
 		{D1C1334A-BFCE-43D9-8119-25A97F53DB11}.Debug|Win32.Build.0 = Debug|Win32
 		{D1C1334A-BFCE-43D9-8119-25A97F53DB11}.Release|Win32.ActiveCfg = Release|Win32
 		{D1C1334A-BFCE-43D9-8119-25A97F53DB11}.Release|Win32.Build.0 = Release|Win32
+		{019C5A2E-4D1F-4A6D-9DF7-A2AB9BEFFA7C}.Debug|Win32.ActiveCfg = Debug|Win32
+		{019C5A2E-4D1F-4A6D-9DF7-A2AB9BEFFA7C}.Debug|Win32.Build.0 = Debug|Win32
+		{019C5A2E-4D1F-4A6D-9DF7-A2AB9BEFFA7C}.Release|Win32.ActiveCfg = Release|Win32
+		{019C5A2E-4D1F-4A6D-9DF7-A2AB9BEFFA7C}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
