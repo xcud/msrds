@@ -435,70 +435,71 @@ void set_input()
 
 void execute_act()
 {
-  /* setting the net input */
-  set_input();
-  /* next element in the sequence */
-  element++;
-  /* sequence end */
-  if (element>length[example])
-    {
-      /* first element in a sequence */
-      element=0;
-      /* counting the number of sequences in a epoch */
-      example++;
-      /* counting the number of sequences the net has seen */
-      numb_seq++;
-      /* resetting the error for the current sequence */
-      seq_cor=1;
-      /* resetting the error per sequence */
-      seq_err=0;
-      /* reset after each sequence? */
-      if (sequ_reset==1)
-	reset_net();
-      /* weight update after each sequence? */
-      if (w_up==1)
-	weight_up=1;
-      /* end of an epoch ? */
-      if (example>training_size-1)
+	/* setting the net input */
+	set_input();
+	/* next element in the sequence */
+	element++;
+	/* sequence end */
+	if (element>length[example])
 	{
-	  /* MSE and misclassifications output for training set */
-	  output_epoch();
-	  /* when to stop learning */
-	  if (stop_learn==0)
-	    {
-	      if ((epoch_err<stop_mse)||(class_err<stop_class))
+		/* first element in a sequence */
+		element=0;
+		/* counting the number of sequences in a epoch */
+		example++;
+		/* counting the number of sequences the net has seen */
+		numb_seq++;
+		/* resetting the error for the current sequence */
+		seq_cor=1;
+		/* resetting the error per sequence */
+		seq_err=0;
+		/* reset after each sequence? */
+		if (sequ_reset==1)
+			reset_net();
+		/* weight update after each sequence? */
+		if (w_up==1)
+			weight_up=1;
+		/* end of an epoch ? */
+		if (example>training_size-1)
 		{
-		  stop_learn=1;
-		  maxepoch=epoch+ext_epochs;
-		}
-	    }
-	  /* weight update after each epoch? */
-	  if (w_up!=1)
-	    weight_up=1;
-	  /* performing a test on a test  set? */
-	  if ((epoch%test_aus==0)||(class_err<min_fehl))
-	    {
-	      reset_net();
-	      test();
-	      reset_net();
-	      seq_cor=1;
-	      seq_err=0;
-	    }
-	  /* first sequence in the training set */
-	  example=0;
-	  /* counting the epochs */
-	  epoch++;
-	  /* resetting the error per epoch */
-	  epoch_err=0;
-	  /* resetting the misclassifications per epoch */
-	  class_err=0;
-	  /* Write weight matrix */
-	  if (epoch%w_out==0)
-	    weight_out();
+			/* MSE and misclassifications output for training set */
+			output_epoch();
+			/* when to stop learning */
+			if (stop_learn==0)
+			{
+				if ((epoch_err<stop_mse)||(class_err<stop_class))
+				{
+					stop_learn=1;
+					maxepoch=epoch+ext_epochs;
+				}
+			}
+			/* weight update after each epoch? */
+			if (w_up!=1)
+				weight_up=1;
 
+			/* performing a test on a test  set? */
+			if ((epoch%test_aus==0)||(class_err<min_fehl))
+			{
+				reset_net();
+				test();
+				reset_net();
+				seq_cor=1;
+				seq_err=0;
+			}
+		/* first sequence in the training set */
+			example=0;
+			/* counting the epochs */
+			epoch++;
+			/* resetting the error per epoch */
+			epoch_err=0;
+			/* resetting the misclassifications per epoch */
+			class_err=0;
+			/* Write weight matrix */
+			if (epoch%w_out==0)
+				weight_out();
+
+		}
+		set_input();
 	}
-      set_input();
-    }
 }
 
 void initia()
@@ -967,7 +968,7 @@ void main()
 
 			/* stop if maxepoch reached */
 			if (epoch>maxepoch)
-			learn=0;
+				learn=0;
 
 		}
 
