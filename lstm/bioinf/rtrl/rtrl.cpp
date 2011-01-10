@@ -1,20 +1,22 @@
-// lstm.cpp : Defines the entry point for the console application.
+// rtrl.cpp : Defines the entry point for the console application.
 //
 
 #include "stdafx.h"
+
+
 
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-#define max_blocks 10
-#define max_size 10
-#define max_units 80
-#define max_inputs 10
-#define max_outputs 10
-#define max_sequence_length 500
-#define max_training_size 300
-#define max_test_size 300
+
+
+#define max_units 15
+#define max_inputs 5
+#define max_outputs 3
+#define max_sequence_length 100
+#define max_training_size 200
+#define max_test_size 200
 
 FILE *fp1,*fp2;
 char *outfile,*weightfile;
@@ -27,12 +29,6 @@ int
   hid_mod, 
   /*number input and hidden units */
   hi_in_mod,
-  /*number input and hidden units and gates and memory cells */
-  cell_mod,
-  /* number of memory cell blocks */
-  num_blocks,
-  /* Size of the memory cell blocks */
-  block_size[max_blocks],
   /* number of all units */
   ges_mod,
   /* current sequence of the training set */
@@ -56,11 +52,8 @@ int
   test_size,
   /* max. number of epochs before learning stop*/
   maxepoch,
-  maxepoch_init,
-  /* bias1==1 --> hidden units, with gates, and cells biased */
+  /* bias1==1 --> units biased ? */
   bias1,
-  /* bias2==1 --> output units biased */
-  bias2,
   /* is target provided for the current input */
   targ,
   /* element in a sequence of the test set */
@@ -100,29 +93,14 @@ double
   W_mod[max_units][max_units],
   /* contribution to update of weight matrix */
   DW[max_units][max_units],
-  /* input gates */
-  Y_in[max_blocks],
-  /* output gates */
-  Y_out[max_blocks],
   /* new activation for all units */
   Yk_mod_new[max_units],
   /* old activation for all units */
   Yk_mod_old[max_units],
-  /* function g for each cell */
-  G[max_blocks][max_size],
-  /* function h for each cell */
-  H[max_blocks][max_size],
-  /* internal state for each cell */
-  S[max_blocks][max_size],
-  /* output for each cell */
-  Yc[max_blocks][max_size],
-  /* derivative with respect to weights to input gate for each cell */
-  SI[max_blocks][max_size][max_units],
-  /* derivative with respect to weights to cell input for each cell */
-  SC[max_blocks][max_size][max_units],
-  /* initial input and output gate bias for each block */
-  bias_inp[max_blocks],
-  bias_out[max_blocks],
+  /* dyk / dwij derivatives of units with respect to weights */
+  Pk_ijm_mod[max_units][max_units][max_units], 
+  /* old values of dyk / dwij derivatives of units with respect to weights */
+  Pk_ijm_mod_o[max_units][max_units][max_units],
   /* learing rate */
   alpha, 
   /* interval of weight initialization is init_range*[-1,1] */
@@ -197,11 +175,10 @@ static char
 			"weis.par",
 			"weit.par"         };
 
-//long random();
-//void srandom();
+long random();
+void srandom();
 
 int seprand(int k)
-     
 {
   long l;
   int f;
@@ -212,221 +189,129 @@ int seprand(int k)
 
 void reset_net()
 {
-  int i,j,v,u;
+  int i,j,v;
 
   for (i=0;i<ges_mod;i++)
     {
       Yk_mod_new[i]=0.5;
       Yk_mod_old[i]=0.5;
     }
-  for (u=0;u<num_blocks;u++)
-    {
-      for (v=0;v<block_size[u];v++)	
+  for (i=in_mod;i<ges_mod;i++)
+    for (j=in_mod;j<ges_mod;j++)
+      for (v=0;v<ges_mod;v++)
 	{
-	  S[u][v]=0;
-	  G[u][v]=0;
-	  H[u][v]=0;
-	  Yc[u][v]=0.5;
-	  for (j=0;j<cell_mod;j++)
-	    {
-	      SI[u][v][j]=0;
-	      SC[u][v][j]=0;
-	    }
+	  Pk_ijm_mod[i][j][v]=0; 
+	  Pk_ijm_mod_o[i][j][v]=0;
 	}
-    }
+
 
 
 }
 
 void set_input_t()
 {
-	int i,j,k;
-	double max;
-	if (bias1==0)
+  int i,j,k;
+  double max;
+  if (bias1==0)
     {
-		for (i=0;i<in_mod;i++)
-		{
-			Yk_mod_new[i]=inp_t[example_t][element_t][i];
-			Yk_mod_old[i]=Yk_mod_new[i];
-		}
+      for (i=0;i<in_mod;i++)
+	{
+	  Yk_mod_new[i]=inp_t[example_t][element_t][i];
+	  Yk_mod_old[i]=Yk_mod_new[i];
+	}
     }
-	else
+  else
     {
-		for (i=0;i<in_mod-1;i++)
-		{
-			Yk_mod_new[i]=inp_t[example_t][element_t][i];
-			Yk_mod_old[i]=Yk_mod_new[i];
-		}
-		Yk_mod_new[in_mod-1]=1.0;
-		Yk_mod_old[in_mod-1]=1.0;
+      for (i=0;i<in_mod-1;i++)
+	{
+	  Yk_mod_new[i]=inp_t[example_t][element_t][i];
+	  Yk_mod_old[i]=Yk_mod_new[i];
+	}
+      Yk_mod_new[in_mod-1]=1.0;
+      Yk_mod_old[in_mod-1]=1.0;
     }
 
-	max=0;
-	for (k=cell_mod,j=0;k<ges_mod;k++,j++)
+  max=0;
+  for (k=hi_in_mod,j=0;k<ges_mod;k++,j++)
     {
-		target_a[j]=tar_t[example_t][element_t][j];
-
-		if (fabs(tar_t[example_t][element_t][j]) > max)
-			max=fabs(tar_t[example_t][element_t][j]);
+      target_a[j]=tar_t[example_t][element_t][j];
+      if (fabs(tar_t[example_t][element_t][j])>max)
+	max=fabs(tar_t[example_t][element_t][j]);
     }
-	targ=1;
-	if (max>1.0)
-		targ=0;
+  targ=1;
+  if (max>1.0)
+    targ=0;
 }
 
 
 void execute_act_test()
 {
-	set_input_t();
-	element_t++;
-	if (element_t>length_t[example_t])
+  set_input_t();
+  element_t++;
+  if (element_t>length_t[example_t])
+    {
+      element_t=0;
+      example_t++;
+      seq_cor=1;
+      seq_err=0;
+      if (sequ_reset==1)
+	reset_net();
+      if (example_t>test_size-1)
 	{
-		element_t=0;
-		example_t++;
-		seq_cor=1;
-		seq_err=0;
-		if (sequ_reset==1)
-			reset_net();
-		if (example_t>test_size-1)
-		{
-			test_end=1;
-		}
-		set_input_t();
+	  test_end=1;
 	}
+      set_input_t();
+    }
 }
 
 void forward_pass()
 {
-	int i,j,u,v,k;
-	double sum;
+  int i,j;
+  double sum;
      
-	/* ### hidden units ### */
-
-	if (bias2==0)
+	for (i=in_mod;i<ges_mod;i++)
 	{
-		for (i=in_mod;i<hi_in_mod;i++)
-		{
-			sum = 0;
-			for (j=0;j<cell_mod;j++)
-			sum += W_mod[i][j]*Yk_mod_old[j];
-			Yk_mod_new[i] = 1/(1+exp(-sum));
-		};
-	}
-	else
-	{
-		for (i=in_mod;i<hi_in_mod-1;i++)
-		{
-			sum = 0;
-			for (j=0;j<cell_mod;j++)
-				sum += W_mod[i][j]*Yk_mod_old[j];
-
-			Yk_mod_new[i] = 1/(1+exp(-sum));
-		};
-
-		Yk_mod_new[hi_in_mod-1] = 1.0;
-	}
-
-
-	/* ### memory cells ### */
-
-	i=hi_in_mod;
-	for (u=0;u<num_blocks;u++)
-	{
-		/* input gate */
 		sum = 0;
-		for (j=0;j<cell_mod;j++)
-			sum += W_mod[i][j]*Yk_mod_old[j];
-
-		Y_in[u] = 1/(1+exp(-sum));
-		Yk_mod_new[i]= Y_in[u];
-		/* output gate */
-		i++;
-		sum = 0;
-		for (j=0;j<cell_mod;j++)
-			sum += W_mod[i][j]*Yk_mod_old[j];
 		
-		Y_out[u] = 1/(1+exp(-sum));
-		Yk_mod_new[i]= Y_out[u];
-		/* uth memory cell block */
-		for (v=0;v<block_size[u];v++)	
-		{
-			/* activation of function g of vth memory cell of block u  */
-			i++;
-			sum = 0;
-			for (j=0;j<cell_mod;j++)
-				sum += W_mod[i][j]*Yk_mod_old[j];
+		for (j=0;j<ges_mod;j++)
+			sum += W_mod[i][j]*Yk_mod_old[j];
 
-			G[u][v] = 4.0/(1+exp(-sum))-2.0;
-			/* update internal state  */
-			S[u][v] = S[u][v]  + Y_in[u]*G[u][v];
-			/* activation function h */
-			H[u][v]= 2.0/(1+exp(-S[u][v]))-1.0;
-			/* activation of vth memory cell of block u */
-			Yc[u][v] = H[u][v]*Y_out[u];
-			Yk_mod_new[i] = Yc[u][v];
-		};
-		i++;
+		Yk_mod_new[i] = 1/(1+exp(-sum));
 	};
-
-	/* ### output units activation ### */
-
-	if (targ==1) /* only if target for this input */
-	{
-		for (k=cell_mod;k<ges_mod;k++)
-		{
-			/* hidden units input */
-			sum = 0;
-			for (i=in_mod;i<hi_in_mod;i++)
-			{
-				sum += W_mod[k][i]*Yk_mod_new[i];
-			};
-			/* memory cells input */
-			i=hi_in_mod;
-			for (u=0;u<num_blocks;u++)
-			{
-				i++;
-				for (v=0;v<block_size[u];v++)	
-				{
-					i++;
-					sum += W_mod[k][i]*Yk_mod_new[i];
-				};
-				i++;
-			}
-			/* activation */
-			Yk_mod_new[k] = 1/(1+exp(-sum));
-		};
-	}
 }
+
+
 
 void comp_err() 
 {
-  int k,j,maxout;
-  double err,max;
+	int k,j,maxout;
+	double err,max;
 
-  /* MSE */
-  for (k=cell_mod,j=0;k<ges_mod;k++,j++)
-    {
-      err=  error[j]*error[j];
-    };
-  seq_err+=err;
-  epoch_err+=err;
-
-  /* Maximal error output */
-
-  max=0;
-  for (k=cell_mod,j=0;k<ges_mod;k++,j++)
-    {
-      if (fabs(error[j])>max)
+	/* MSE */
+	for (k=hi_in_mod,j=0;k<ges_mod;k++,j++)
 	{
-	  max=fabs(error[j]);
-	  maxout=j;
+		err=  error[j]*error[j];
+	};
+	seq_err+=err;
+	epoch_err+=err;
+
+	/* Maximal error output */
+
+	max=0;
+	for (k=hi_in_mod,j=0;k<ges_mod;k++,j++)
+	{
+		if (fabs(error[j])>max)
+		{
+			max=fabs(error[j]);
+			maxout=j;
+		}
+	};
+
+	if ((seq_cor==1)&&(max>seq_max))
+	{
+		seq_cor=0;
+		class_err++;
 	}
-    };
-  if ((seq_cor==1)&&(max>seq_max))
-    {
-      seq_cor=0;
-      class_err++;
-    }
 }
 
 void test()
@@ -440,34 +325,37 @@ void test()
   seq_err=0;
   test_end=0;
 
-	while (test_end==0)
+  while (test_end==0)
     {
 
       /* executing the environment
 	 and setting the input
 	 */
-		execute_act_test();
+      execute_act_test();
 
       /* forward pass */
-		forward_pass();
 
-		if (targ==1) /* only if target for this input */
-		{
-		  /* compute error */
+      forward_pass();
 
-			for (k=cell_mod,j=0;k<ges_mod;k++,j++)
-			{
-				error[j]=  target_a[j] - Yk_mod_new[k];
-			};
 
-		  /* Training error */
-			comp_err();
-		}
+      if (targ==1) /* only if target for this input */
+	{
+	  /* compute error */
+
+	  for (k=hi_in_mod,j=0;k<ges_mod;k++,j++)
+	    {
+	      error[j]=  target_a[j] - Yk_mod_new[k];
+	    };
+
+	  /* Training error */
+
+	  comp_err();
+	}
 
       /* set old activations */
-		for (i=0;i<ges_mod;i++)
-		{
-			Yk_mod_old[i] = Yk_mod_new[i];
+      for (i=0;i<ges_mod;i++)
+	{
+	  Yk_mod_old[i] = Yk_mod_new[i];
         }
 
     }
@@ -497,7 +385,7 @@ void weight_out()
   int i,j;
   fp2 = fopen(weightfile, "w");
   fprintf(fp2,"anz:%d\n",numb_seq);
-  for (i=0;i<ges_mod;i++)
+  for (i=in_mod;i<ges_mod;i++)
     {
       for (j=0;j<ges_mod;j++)
 	fprintf(fp2,"(%.2d,%.2d): %.3f ",i,j,W_mod[i][j]);
@@ -509,8 +397,8 @@ void weight_out()
 
 void set_input()
 {
-	int i,j,k;
-	double max;
+  int i,j,k;
+  double max;
 	if (bias1==0)
 	{
 		for (i=0;i<in_mod;i++)
@@ -526,18 +414,20 @@ void set_input()
 			Yk_mod_new[i]=inp[example][element][i];
 			Yk_mod_old[i]=Yk_mod_new[i];
 		}
+
 		Yk_mod_new[in_mod-1]=1.0;
 		Yk_mod_old[in_mod-1]=1.0;
 	}
 
-	max=0;
-	for (k=cell_mod,j=0;k<ges_mod;k++,j++)
+  max=0;
+	for (k=hi_in_mod,j=0;k<ges_mod;k++,j++)
 	{
 		target_a[j]=tar[example][element][j];
+		
 		if (fabs(tar[example][element][j])>max)
 			max=fabs(tar[example][element][j]);
 	}
-	/* is there a target for this input */
+  /* is there a target for this input */
 	targ=1;
 	if (max>1.0)
 		targ=0;
@@ -613,7 +503,7 @@ void execute_act()
 
 void initia()
 {
-  int i, j, u, v;
+  int i, j;
 
   example=0;
   epoch=0;
@@ -626,7 +516,7 @@ void initia()
    
 
   /* weight initialization */
-  for (i=0;i<ges_mod;i++)
+  for (i=in_mod;i<ges_mod;i++)
     {
       for (j=0;j<ges_mod;j++)
 	{
@@ -637,23 +527,6 @@ void initia()
 	};
 
     };
-
-  /* gates bias initalization */
-  if (bias1==1)
-    {
-      i=hi_in_mod;
-      for (u=0;u<num_blocks;u++)
-	{
-	  W_mod[i][in_mod-1]+= bias_inp[u];
-	  i++;
-	  W_mod[i][in_mod-1]+= bias_out[u];
-	  for (v=0;v<block_size[u];v++)	
-	    {
-  	      i++;
-	    };
-	  i++;
-	};
-    }
 
   /* reset activations and derivatives */
 
@@ -666,203 +539,61 @@ void initia()
 
 
 
-void derivatives()
-{
-	int u,v,j;
-	for (u=0;u<num_blocks;u++)
-	{
-		for (v=0;v<block_size[u];v++)	
-		{
-			/* weights to input gate */
-			for (j=0;j<cell_mod;j++)
-				SI[u][v][j]=SI[u][v][j] + G[u][v]*(1.0-Y_in[u])*Y_in[u]*Yk_mod_old[j];
-			/* weights to cell input */
-			for (j=0;j<cell_mod;j++)
-				SC[u][v][j]=SC[u][v][j] + Y_in[u]*(0.25*(2.0-G[u][v])*(2.0+G[u][v]))*Yk_mod_old[j];
-		};
-	};
-}
 
 
 void backward_pass()
 {
-	int k,i,j,u,v;
-	double sum,
-	e[max_units],
-	ec[max_blocks][max_size],
-	eo[max_blocks],
-	es[max_blocks][max_size];
-	
-	/* output units */
+	int k,i,j,l;
+	double sum,kron_y;
 
-	for (k=cell_mod,j=0;k<ges_mod;k++,j++)
-	{
-		e[k]=error[j]*(1.0-Yk_mod_new[k])*Yk_mod_new[k];
-		/* weight update contribution */
-		for (i=in_mod;i<hi_in_mod;i++)
-		{
-			DW[k][i] += alpha*e[k]*Yk_mod_new[i];
-		};
-		i=hi_in_mod;
-		for (u=0;u<num_blocks;u++)
-		{
-			i++;
-			for (v=0;v<block_size[u];v++)	
+	for (i=in_mod;i<ges_mod;i++)
+		for (j=0;j<ges_mod;j++)
+			for (k=in_mod;k<ges_mod;k++)
 			{
-				i++;
-				DW[k][i] += alpha*e[k]*Yk_mod_new[i];
+				sum = 0;
+				for (l=in_mod;l<ges_mod;l++)
+					sum += W_mod[k][l]*Pk_ijm_mod_o[l][i][j];
+				if (i==k)
+					kron_y = Yk_mod_old[j];
+				else
+					kron_y = 0;
+
+				Pk_ijm_mod[k][i][j] = Yk_mod_new[k]*(1-Yk_mod_new[k])*(sum + kron_y);
 			};
-			i++;
-		}
-          
-	};
-
-	/* hidden units */
-	for (i=in_mod;i<hi_in_mod;i++)
+  
+    
+	for (i=in_mod;i<ges_mod;i++)
 	{
-		sum=0;
-		for (k=cell_mod;k<ges_mod;k++)
-			sum+= W_mod[k][i]*e[k];
-		e[i]=sum*(1.0-Yk_mod_new[i])*Yk_mod_new[i];
-		/* weight update contribution */
-		for (j=0;j<cell_mod;j++)
-		{
-			DW[i][j] += alpha*e[i]*Yk_mod_old[j];
-		};
-	}
-
-
-	/* error to memory cells ec[][] and internal states es[][] */
-
-	i=hi_in_mod;
-	for (u=0;u<num_blocks;u++)
-	{
-		i++;
-		for (v=0;v<block_size[u];v++)	
-		{
-			i++;
-			sum = 0;
-			for (k=cell_mod;k<ges_mod;k++)
-				sum+= W_mod[k][i]*e[k];
-
-			ec[u][v]=sum;
-			es[u][v]=Y_out[u]*(0.5*(1.0+H[u][v])*(1.0-H[u][v]))*sum;
-		};
-		i++;
-	};
-
-	/* output gates */
-
-	for (u=0;u<num_blocks;u++)
-	{
-		sum=0;
-		for (v=0;v<block_size[u];v++)	
-		{
-			sum+= H[u][v]*ec[u][v];
-		};
-		eo[u]=sum*(1.0-Y_out[u])*Y_out[u];
-	};
-
-
-	/* Derivatives of the internal state */
-
-	derivatives();
-
-
-	/* updates for weights to input and output gates and memory cells */
-	i=hi_in_mod;
-	for (u=0;u<num_blocks;u++)
-	{
-		for (j=0;j<cell_mod;j++)
+		for (j=0;j<ges_mod;j++)
 		{
 			sum = 0;
-			for (v=0;v<block_size[u];v++)	
-			{
-				sum += es[u][v]*SI[u][v][j];  
-			}
+			for (k=hi_in_mod,l=0;k<ges_mod;k++,l++)
+				sum += error[l]*Pk_ijm_mod[k][i][j];
+	
 			DW[i][j] += alpha*sum;
-		}
-		i++;
-		for (j=0;j<cell_mod;j++)
-		{
-			DW[i][j]+= alpha*eo[u]*Yk_mod_old[j];
-		}
-		for (v=0;v<block_size[u];v++)	
-		{
-			i++;
-			for (j=0;j<cell_mod;j++)
-			DW[i][j]+= alpha*es[u][v]*SC[u][v][j];
 		};
-
-		i++;
-	}
-
+	};
+  
+	for (i=in_mod;i<ges_mod;i++)
+		for (j=0;j<ges_mod;j++)
+			for (k=in_mod;k<ges_mod;k++)
+				Pk_ijm_mod_o[k][i][j] = Pk_ijm_mod[k][i][j];
+  
+  
 }
 
 void weight_update()
 {
-  int i,j,k,u,v;
+  int i,j;
 
 
-  /* output units */
-
-  for (k=cell_mod,j=0;k<ges_mod;k++,j++)
+  for (i=in_mod;i<ges_mod;i++)
     {
-      for (i=in_mod;i<hi_in_mod;i++)
-	{
-	  W_mod[k][i] += DW[k][i];
-	  DW[k][i] = 0;
-	};
-      i=hi_in_mod;
-      for (u=0;u<num_blocks;u++)
-	{
-	  i++;
-	  for (v=0;v<block_size[u];v++)	
-	    {
-	      i++;
-	      W_mod[k][i] += DW[k][i];
-	      DW[k][i] = 0;
-	    };
-	  i++;
-	}
-          
-    };
-  /* hidden units */
-
-  for (i=in_mod;i<hi_in_mod;i++)
-    {
-      for (j=0;j<cell_mod;j++)
+      for (j=0;j<ges_mod;j++)
 	{
 	  W_mod[i][j] += DW[i][j];
 	  DW[i][j] = 0;
 	};
-    }
-
-  /* memory cells with gates */
-  i=hi_in_mod;
-  for (u=0;u<num_blocks;u++)
-    {
-      for (j=0;j<cell_mod;j++)
-	{
-	  W_mod[i][j] += DW[i][j];
-	  DW[i][j] = 0;
-	}
-      i++;
-      for (j=0;j<cell_mod;j++)
-	{
-	  W_mod[i][j] += DW[i][j];
-	  DW[i][j] = 0;
-	}
-      for (v=0;v<block_size[u];v++)	
-	{
-	  i++;
-	  for (j=0;j<cell_mod;j++)
-	    {
-	      W_mod[i][j] += DW[i][j];
-	      DW[i][j] = 0;
-	    }
-	};
-      i++;
     }
 
 }
@@ -870,16 +601,12 @@ void weight_update()
 
 void getpars()
 {
-  int j,u,v,dummy,corr[50],corr1[4][30],sav,max_b_size;
+  int u,v,corr[50];
   char *wrong1[] = {
     "number inputs: ?",
     "number outputs: ?",
-    "output layer biased: ?",
     "number hidden units: ?",
-    "hidden layer biased: ?",
-    "number memory cell blocks: ?",
-    "###here definitions for each block###",
-    "###end definitions for each block###",
+    "biased: ?",
     "learning rate: ?",
     "max. error for correct sequence: ?",
     "half interval length for intialization: ?",
@@ -895,12 +622,8 @@ void getpars()
     "weight update after sequence or epoch?: ?",
     "max. number of epochs: ?",
     "size of training set: ?",
-    "size of test set: ?" } ,
- *wrong2[] = {
-    "**block number: ?**",
-    "block size: ?",
-    "initial input gate bias: ?",
-    "initial output gate bias: ?" };
+    "size of test set: ?" } ;
+
 
 
   FILE *fp5;
@@ -909,14 +632,9 @@ void getpars()
     {
       corr[u]=1;
     }
-  for (v=0;v<4;v++)
-    for (u=0;u<30;u++)
-      {
-	corr1[v][u]=1;
-      }
 
   v=0;
-  fp5=fopen("lstmpars.txt","r");
+  fp5=fopen("rtrlpars.txt","r");
   corr[v]=fscanf(fp5,"number inputs: %d\n",&in_mod);
   /* are the maximal ranges correct? */
   if (in_mod>max_inputs)
@@ -939,51 +657,9 @@ void getpars()
       exit(0);
     }
   v++;
-  corr[v]=fscanf(fp5,"output layer biased: %d\n",&bias2);
-  v++;
   corr[v]=fscanf(fp5,"number hidden units: %d\n",&hid_mod);
   v++;
-  corr[v]=fscanf(fp5,"hidden layer biased: %d\n",&bias1);
-  v++;
-  corr[v]=fscanf(fp5,"number memory cell blocks: %d\n",&num_blocks);
-  /* are the maximal ranges correct? */
-  if (num_blocks>max_blocks)
-    {
-      printf("Program terminated!\n");
-      printf("You have to set the constant max_blocks at begin\n");
-      printf("of the program file greater or equal %d and then\n",num_blocks);
-      printf("compile the program again.\n");
-      exit(0);
-    }
-  v++;
-  corr[v]=fscanf(fp5,"###here definitions for each block###\n");
-  corr[v]=1;
-  v++;
-  sav=v;
-  max_b_size=0;
-  for (u=0;u<num_blocks;u++)
-    {
-      corr1[0][u]=fscanf(fp5,"**block number: %d**\n",&dummy);
-      corr1[1][u]=fscanf(fp5,"block size: %d\n",&block_size[u]);
-      if (block_size[u]>max_b_size)
-	max_b_size=block_size[u];
-      if (bias1==1)
-	{
-	  corr1[2][u]=fscanf(fp5,"initial input gate bias: %lf\n",&bias_inp[u]);
-	  corr1[3][u]=fscanf(fp5,"initial output gate bias: %lf\n",&bias_out[u]);
-	}
-    }
-  /* are the maximal ranges correct? */
-  if (max_b_size>max_size)
-    {
-      printf("Program terminated!\n");
-      printf("You have to set the constant max_size at begin\n");
-      printf("of the program file greater or equal %d and then\n",max_b_size);
-      printf("compile the program again.\n");
-      exit(0);
-    }
-  corr[v]=fscanf(fp5,"###end definitions for each block###\n");
-  corr[v]=1;
+  corr[v]=fscanf(fp5,"biased: %d\n",&bias1);
   v++;
   corr[v]=fscanf(fp5,"learning rate: %lf\n",&alpha);
   v++;
@@ -1011,7 +687,7 @@ void getpars()
   v++;
   corr[v]=fscanf(fp5,"weight update after sequence or epoch?: %d\n",&w_up);
   v++;
-  corr[v]=fscanf(fp5,"max. number of epochs: %d\n",&maxepoch_init);
+  corr[v]=fscanf(fp5,"max. number of epochs: %d\n",&maxepoch);
   v++;
   corr[v]=fscanf(fp5,"size of training set: %d\n",&training_size);
   /* are the maximal ranges correct? */
@@ -1037,26 +713,7 @@ void getpars()
   v++;
   fclose(fp5);
 
-  for (u=0;u<sav;u++)
-    {
-      if (corr[u]==0)
-	{
-	  printf("Error in lstmpars.txt at line:\n");
-	  printf("%s\n",wrong1[u]);
-	  exit(0);
-	}
-    }
-  for (u=0;u<num_blocks;u++)
-    for (j=0;j<4;j++)
-      {
-	if (corr1[j][u]==0)
-	  {
-	    printf("Error in lstmpars.txt at block %d 's definition at line:\n",u+1);
-	    printf("%s\n",wrong2[j]);
-	    exit(0);
-	  }
-      }
-  for (u=sav;u<v;u++)
+  for (u=0;u<v;u++)
     {
       if (corr[u]==0)
 	{
@@ -1090,7 +747,7 @@ void getsets()
   int end_seq,elm,end,trains,i;
 
 
-  fp3=fopen("lstmtrain.txt","r");
+  fp3=fopen("rtrltrain.txt","r");
   end=0;
   trains=0;
   while (end==0)
@@ -1147,7 +804,7 @@ void getsets()
       exit(0);
     }
 
-  fp4=fopen("lstmtest.txt","r");
+  fp4=fopen("rtrltest.txt","r");
   end=0;
   trains=0;
   while (end==0)
@@ -1206,49 +863,46 @@ void getsets()
 void main()
 {
 
-	int i, j, k,
-	trialnr;
+  int i, j, k,
+    trialnr;
 
     
-	/* input pars */
-	getpars();
+  /* input pars */
 
-	/* input training set and test set */
-	getsets();
+  getpars();
 
-	if (maxtrials>20)
-		maxtrials=20;
+  /* input training set and test set */
 
-	if (bias1==1)
-		in_mod++;
-	
-	if (bias2==1)
-		hid_mod++;
+  getsets();
 
-	hi_in_mod = in_mod+hid_mod;
-	cell_mod=hi_in_mod;
+  if (maxtrials>20)
+    maxtrials=20;
 
-	for (i=0;i<num_blocks;i++)
-		cell_mod+=(2+block_size[i]);
+  if (bias1==1)
+    in_mod++;
+  hi_in_mod = in_mod+hid_mod;
+  ges_mod = hi_in_mod+out_mod;
 
-	ges_mod = cell_mod+out_mod;
-	if (ges_mod>max_units)
-	{
-		printf("Program terminated!\n");
-		printf("You have to set the constant max_units at begin\n");
-		printf("of the program file greater or equal %d and then\n",ges_mod);
-		printf("compile the program again.\n");
-		exit(0);
-	}
+  if (ges_mod>max_units)
+    {
+      printf("Program terminated!\n");
+      printf("You have to set the constant max_units at begin\n");
+      printf("of the program file greater or equal %d and then\n",ges_mod);
+      printf("compile the program again.\n");
+      exit(0);
+    }
+
+
 
 	srand(ran_sta);
 	for (trialnr=0;trialnr<maxtrials;trialnr++)
-	{
-
+    {
 
 		outfile = outf[trialnr];
 
 		weightfile = weig[trialnr];
+
+
 
 		fp1 = fopen(outfile, "w");
 		fprintf(fp1,"Trial Nr.:%.1d\n",trialnr);
@@ -1264,53 +918,47 @@ void main()
 		examples=0;
 		epoch=0;
 
-		maxepoch=maxepoch_init;
+
 
 		stop_learn=0;
 		learn = 1;
 
 		while (learn == 1)
 		{
-
 			/* executing the environment
 				and setting the input
 				*/
 			execute_act();
 
 			/* forward pass */
+
 			forward_pass();
 
 
 			if (targ==1) /* only if target for this input */
 			{
 				/* compute error */
-				for (k=cell_mod,j=0;k<ges_mod;k++,j++)
+
+				for (k=hi_in_mod,j=0;k<ges_mod;k++,j++)
 				{
 					error[j]=  target_a[j] - Yk_mod_new[k];
 				};
+
 				/* Training error */
 				comp_err();
 			}
 
 			/* backward pass */
-			if (targ==1) /* only if target for this input */
-			{
-				backward_pass();
-			}
-			else
-			{
-				derivatives();
-			}
-	
+			backward_pass();
 
 			/* set old activations */
 			for (i=0;i<ges_mod;i++)
 			{
 				Yk_mod_old[i] = Yk_mod_new[i];
 			}
-
-
+			
 			/* update weights */
+
 			if (weight_up==1)
 			{
 				weight_up=0;
@@ -1319,14 +967,15 @@ void main()
 
 			/* stop if maxepoch reached */
 			if (epoch>maxepoch)
-				learn=0;
+			learn=0;
+
 		}
 
 		weight_out();
 		test();
-	}
+    }
 
-	exit(0);
+  exit(0);
 }
 
 
