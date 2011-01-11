@@ -361,7 +361,8 @@ void TPatternManager::MixSequences(struct TPatData &apsPatData) {
   unsigned int NbPatTmp, NbClassTmp;
   // We mix 10% (x2) of the sequences
   unsigned int NbMixSeq = (unsigned int) (apsPatData.NbSeq / 10);
-  if(!NbMixSeq && (apsPatData.NbSeq>2)) NbMixSeq = 1;
+  if(!NbMixSeq && (apsPatData.NbSeq>2)) 
+		NbMixSeq = 1;
   unsigned int SwitchSeq1, SwitchSeq2;
 #ifdef RNN_RUNTIME_DEBUG
   cerr<<"NbSeq: "<<apsPatData.NbSeq <<'\n';

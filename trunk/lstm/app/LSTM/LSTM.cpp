@@ -78,374 +78,391 @@ char LSTM::Run()
       // Epo loop.
     do 
 	{ 
-	  Epo++;
-	  // Skip rest of trial if matherr (nan) occured.
-	  if( errno ) { continue; }
-	  start_ctime=clock(); //ddd
-	  //time_t  TimeNow = time(NULL);//ddd
-	  //cout <<"Epo:"<<Epo
-	  //<<" Train...time now:"<<ctime(&TimeNow); //ddd
-#ifdef DO_ONLINE_PAT_PRODUCTION
-	  // This Seq will be overwritten, 
-	  // we init the Nb variables here.
-      ONLINE_PAT_FUNCNAME(TrainData, true);
-#else 
-#ifdef PATTERN_GENERATION_FROM_DATA_SEQWISE
-      // For Protein2D task to know how to sample from which data set.
-      if(Generate_Pat) { Set_RefData(&TrainDataOrg,true,true,true); }
-#else
-      // This Seq will be overwritten, we init the Nb variables here.
-      if(Generate_Pat && (Generate_Pat_Each_Epoch>0))
-      {
-		  if((unsigned int)(Epo % Generate_Pat_Each_Epoch) == 0)
-		  {
-			  GeneratePattern(TrainData, Pat_FuncName);
-		  }
-	  }
+		Epo++;
+		// Skip rest of trial if matherr (nan) occured.
+		if( errno ) 
+			{ continue; }
+		start_ctime=clock(); //ddd
+		//time_t  TimeNow = time(NULL);//ddd
+		//cout <<"Epo:"<<Epo
+		//<<" Train...time now:"<<ctime(&TimeNow); //ddd
+		#ifdef DO_ONLINE_PAT_PRODUCTION
+		// This Seq will be overwritten, 
+		// we init the Nb variables here.
+		ONLINE_PAT_FUNCNAME(TrainData, true);
+		#else 
+		#ifdef PATTERN_GENERATION_FROM_DATA_SEQWISE
+		// For Protein2D task to know how to sample from which data set.
+		if(Generate_Pat) { Set_RefData(&TrainDataOrg,true,true,true); }
+		#else
+		// This Seq will be overwritten, we init the Nb variables here.
+		if(Generate_Pat && (Generate_Pat_Each_Epoch>0))
+		{
+			if((unsigned int)(Epo % Generate_Pat_Each_Epoch) == 0)
+			{
+				GeneratePattern(TrainData, Pat_FuncName);
+			}
+		}
 
-      if( MixTrainSeqs ) { MixTrainSequences(); }
-#endif
-#endif
+		if( MixTrainSeqs )
+			{ MixTrainSequences(); }
+		#endif
+		#endif
 
-      //Clamping duration for iterated prediction.
-      if((unsigned int)( Epo % AverageTrainBuf) == 0) 
-	  {
-		if(MeanPatCorrectTrain)	
-			MeanPatCorrectTrain/=MeanPatCorrectTrainCount;
-		else MeanPatCorrectTrain=0;
+		//Clamping duration for iterated prediction.
+		if((unsigned int)( Epo % AverageTrainBuf) == 0) 
+		{
+			if(MeanPatCorrectTrain)	
+				MeanPatCorrectTrain/=MeanPatCorrectTrainCount;
+			else MeanPatCorrectTrain=0;
+
 			DebugFile<<Epo<<" "
-		   <<MinPatCorrectTrain<<" "
-		   <<MeanPatCorrectTrain<<" "
-		   <<MaxPatCorrectTrain<<" "
-		   <<endl; //ddd
+			<<MinPatCorrectTrain<<" "
+			<<MeanPatCorrectTrain<<" "
+			<<MaxPatCorrectTrain<<" "
+			<<endl; //ddd
 
-		MaxPatCorrectTrain=0; MinPatCorrectTrain=DBL_MAX; 
-		MeanPatCorrectTrain=0; MeanPatCorrectTrainCount=0; 
-	}
+			MaxPatCorrectTrain=0; MinPatCorrectTrain=DBL_MAX; 
+			MeanPatCorrectTrain=0; MeanPatCorrectTrainCount=0; 
+		}
 
-      //
-    ClassesWrong=0; MSEEpo=0; PatCorrect=0; PatCount=0;
-    SeqOnline=0; SeqOnlinePatCount=0; AlphaDecayInSeq=1;
-      // Seq loop.
-    for(Seq=0;Seq<TrainData.NbSeq;FreezeSeqLoop ? Seq=0 : Seq++) {
-		MSESeq=0; PatWrong=0; ClampOut=false; Clamping=false; 
-		ClampPatStart=0; ClampPatStop=0;
+		//
+		ClassesWrong=0; MSEEpo=0; PatCorrect=0; PatCount=0;
+		SeqOnline=0; SeqOnlinePatCount=0; AlphaDecayInSeq=1;
+		// Seq loop.
+		for(Seq=0;Seq<TrainData.NbSeq;FreezeSeqLoop ? Seq=0 : Seq++) 
+		{
+			MSESeq=0; PatWrong=0; ClampOut=false; Clamping=false; 
+			ClampPatStart=0; ClampPatStop=0;
 
-	// Reset the network.
-#ifndef DO_ONLINE_PAT_PRODUCTION
- 	ResetNet(0,0);
-#else
-	if(!SeqOnline) ResetNet(0,0); //For sequential online
-#endif
+			// Reset the network.
+			#ifndef DO_ONLINE_PAT_PRODUCTION
+			ResetNet(0,0);
+			#else
+			if(!SeqOnline) ResetNet(0,0); //For sequential online
+			#endif
 
-	// Generate a new seq (or not).
-#ifdef DO_ONLINE_PAT_PRODUCTION
-#if defined(NO_RESET_AFTER_ONLINE_SEQ) || defined(SETSTEPTARGET_BUT_COUNT_SEQUENCEWISE)
-	if(SeqOnline) ONLINE_PAT_FUNCNAME(TrainData, false);
-	else ONLINE_PAT_FUNCNAME(TrainData, true);
-#else
-	ONLINE_PAT_FUNCNAME(TrainData, true);
-#endif
-#else
-#ifdef PATTERN_GENERATION_FROM_DATA_SEQWISE
-	if(Generate_Pat) 
-	  {
-	    GeneratePattern(TrainData, Pat_FuncName);
-	    // Fix NbPat of actual seq, 
-	    // because TPatternManager does not know seq.
-	    TrainData.NbPat[Seq] = TrainData.NbPat[0];
-	}
-#endif
-#endif
-	//	if(PatCorrectTest>10)
-	//	  {cout<< "\n";cout.flush();}//Debug on-line.
-	//DumpAll("dump.log.init");
-	//DisplayNet(TrainData); DisplayWeights(); KeyCheck();
-	//AlphaPredict = Alpha / TrainData.NbPat[Seq]; // AlphaPredict
-	if(RandomPrediction) 
-	{
-	    RandomPredictionStart=
-	      (unsigned int)fmod((double)lrand48(),RandomPrediction);
-	}
+			// Generate a new seq (or not).
+			#ifdef DO_ONLINE_PAT_PRODUCTION
+			#if defined(NO_RESET_AFTER_ONLINE_SEQ) || defined(SETSTEPTARGET_BUT_COUNT_SEQUENCEWISE)
+			if(SeqOnline) ONLINE_PAT_FUNCNAME(TrainData, false);
+			else ONLINE_PAT_FUNCNAME(TrainData, true);
+			#else
+			ONLINE_PAT_FUNCNAME(TrainData, true);
+			#endif
+			#else
+			#ifdef PATTERN_GENERATION_FROM_DATA_SEQWISE
+			if(Generate_Pat) 
+			{
+			GeneratePattern(TrainData, Pat_FuncName);
+			// Fix NbPat of actual seq, 
+			// because TPatternManager does not know seq.
+			TrainData.NbPat[Seq] = TrainData.NbPat[0];
+			}
+			#endif
+			#endif
+			//	if(PatCorrectTest>10)
+			//	  {cout<< "\n";cout.flush();}//Debug on-line.
+			//DumpAll("dump.log.init");
+			//DisplayNet(TrainData); DisplayWeights(); KeyCheck();
+			//AlphaPredict = Alpha / TrainData.NbPat[Seq]; // AlphaPredict
+			if(RandomPrediction) 
+			{
+				RandomPredictionStart=	(unsigned int)fmod((double)lrand48(),RandomPrediction);
+			}
 	
-	// Pattern loop.
-	for( Pat = RandomPredictionStart; 
-	     Pat < TrainData.NbPat[Seq]; Pat++ ) 
-	  { 
-	    // DisplayNet(TrainData); //ddd
-	    // DisplayWeights(); KeyCheck();//ddd
+			// Pattern loop.
+			for( Pat = RandomPredictionStart; Pat < TrainData.NbPat[Seq]; Pat++ ) 
+			{ 
+				// DisplayNet(TrainData); //ddd
+				// DisplayWeights(); KeyCheck();//ddd
 
-#ifdef CLAMPING
-	    // Stop train clamp when Pat errro to big 
-	    // (assuming NbOut==1).
-#ifdef STAT_OUT
-	    if((MaxMSE && Clamping && (fabs(StatOut[0].e)>MaxMSE)) ||
-	       (Pat==ClampPatStop && Clamping) ) {
-	      if(Pat-ClampPatStart>MaxPatCorrectTrain)
-		MaxPatCorrectTrain=Pat-ClampPatStart;
-	      if(Pat-ClampPatStart<MinPatCorrectTrain)
-		MinPatCorrectTrain=Pat-ClampPatStart;
-	      MeanPatCorrectTrain+=Pat-ClampPatStart;
-	      MeanPatCorrectTrainCount++;
-	    Pat=ClampPatStop; 
-	    }
-#else	
-	    if(MaxMSE && Clamping && (fabs(Out[0].e)>MaxMSE) ) {
-	      Pat=ClampPatStop; 
-	    }
-#endif
-	  // Predict ahead (clamp) steps.
-	    if(ClampOutTrainPredictSteps && ClampOutPredictSteps) {
-	      if(!Clamping) {
-		Clamping=true; // Once with external input.
-		ClampPatStart=Pat; // Set Start and Stop.
-		ClampPatStop=
-		  Pat + ClampOutTrainPredictSteps*PredictionOffset;
-	    if(ClampPatStop>TrainData.NbPat[Seq]) {//Train set ends.
-	      ClampPatStop=TrainData.NbPat[Seq]; }
-	  } else if(!ClampOut) { // Second pass: Clamp now.
-	    // Clamping already or start now.
-	    ResetNet(1,0); //Save state.
-	    ClampOut=true;
-	  }
-	  if(ClampOut || Clamping) {
-	    if(Pat>=ClampPatStop) { // Relieve clamp and set back.
-	      Clamping=false; ClampOut=false;
-	      ResetNet(0,1); // Restore state.
-	      Pat=ClampPatStart;// Set back.
-	      continue; // finish and restart loop;
-	    }
-	  }
-	}
-#endif
+				#ifdef CLAMPING
+				// Stop train clamp when Pat errro to big 
+				// (assuming NbOut==1).
+				#ifdef STAT_OUT
+				if((MaxMSE && Clamping && (fabs(StatOut[0].e)>MaxMSE)) ||
+				(Pat==ClampPatStop && Clamping) ) {
+				if(Pat-ClampPatStart>MaxPatCorrectTrain)
+				MaxPatCorrectTrain=Pat-ClampPatStart;
+				if(Pat-ClampPatStart<MinPatCorrectTrain)
+				MinPatCorrectTrain=Pat-ClampPatStart;
+				MeanPatCorrectTrain+=Pat-ClampPatStart;
+				MeanPatCorrectTrainCount++;
+				Pat=ClampPatStop; 
+				}
+				#else	
+				if(MaxMSE && Clamping && (fabs(Out[0].e)>MaxMSE) ) {
+				Pat=ClampPatStop; 
+				}
+				#endif
+				// Predict ahead (clamp) steps.
+				if(ClampOutTrainPredictSteps && ClampOutPredictSteps) {
+				if(!Clamping) {
+				Clamping=true; // Once with external input.
+				ClampPatStart=Pat; // Set Start and Stop.
+				ClampPatStop=
+				Pat + ClampOutTrainPredictSteps*PredictionOffset;
+				if(ClampPatStop>TrainData.NbPat[Seq]) {//Train set ends.
+				ClampPatStop=TrainData.NbPat[Seq]; }
+				} else if(!ClampOut) { // Second pass: Clamp now.
+				// Clamping already or start now.
+				ResetNet(1,0); //Save state.
+				ClampOut=true;
+				}
+				if(ClampOut || Clamping) {
+				if(Pat>=ClampPatStop) { // Relieve clamp and set back.
+				Clamping=false; ClampOut=false;
+				ResetNet(0,1); // Restore state.
+				Pat=ClampPatStart;// Set back.
+				continue; // finish and restart loop;
+				}
+				}
+				}
+				#endif
 	
-	  // ForwardPass.
-	  if(Reverse_Input) {
-	    ResetNet(0,0); //Reset before each Pat.
-	    PatReInStart=Pat;
-	    if(Pat>Reverse_Input) PatReInStop=Pat-Reverse_Input;
-	    else PatReInStop=0;
-	    // Pat is unsigned!!
-	    for(;(Pat>=PatReInStop)&&(Pat<=PatReInStart);Pat--) {
-	      ForwardPass(TrainData,FreezeEndBlock,NbMemoBlocks);
-	      //  	      cout<<"Train "<<Epo <<"-" //ddd
-	      //  		  <<Seq<<"-"<<SeqOnline<<"-"<<Pat<<" :";
-	      //  	      cout<<"["<<TrainData.NbPat[Seq]<< "] ";
-	      //  	      for(unsigned int Val=0;Val<TrainData.NbVal;Val++) 
-	      //            	    cout<<((TrainData.SeqList[Seq])[Pat])[Val]<<"=";
-	      //  	      //<<GetInput(TrainData,Seq,Pat,Val)<<" ";
-	      //  	      //cout<<" = "<<TrainData.NbClass[Seq];
-	      //  	      cout<<" -> ("<<MSEPat<<") "<<PatCorrect;
-	      //  	      for(unsigned int iO=0;iO<NbOut;iO++)
-	      //  		cout<<"("<<Out[iO].y<<"->"<< Out[iO].e<<")";
-	      //  	      cout<<"\n"; cout.flush();
-	    }
-	    Pat=PatReInStart;
-	  } else {
-	    ForwardPass(TrainData,FreezeEndBlock,NbMemoBlocks); 
-	  }
-	  //        if(PatCorrectTest>10) { // Debug on-line pat generation. // ddd
-//   	  cout<<"Train "<<Epo <<"-"<<Seq<<"-"<<SeqOnline<<"-"<<Pat<<" :";
-//  	  cout<<"["<<TrainData.NbPat[Seq]<< "] ";
-//  	  for(unsigned int Val=0;Val<TrainData.NbVal;Val++) 
-//  	    cout<<((TrainData.SeqList[Seq])[Pat])[Val]<<"=";
-//  	  //<<GetInput(TrainData,Seq,Pat,Val)<<" ";
-//  	  //cout<<" = "<<TrainData.NbClass[Seq];
-//  	  cout<<" -> ("<<MSEPat<<") "<<PatCorrect;
-//  	  for(unsigned int iO=0;iO<NbOut;iO++)
-//  	    cout<<"("<<Out[iO].y<<"->"<< Out[iO].e<<")";
-//  	  cout<<"\n"; cout.flush();
-	  //	}
-	  // Do BackwardPass if................................
-#ifdef LOCAL_ALPHA_SEQUENCEWISE
-	  BackwardPass(FreezeEndBlock,NbMemoBlocks);
-#endif
-	  if( ((Pat==TrainData.NbPat[Seq]-1) || SetStepTarget || 
-	       AllTimeTarget || 
-	       (NbPredictNextIn>0) || (NbPredictClass>0) )
-#ifndef TARGET_777
-	      && (((TrainData.SeqList[Seq])[Pat])[NbExtIn]!=-777)
-#endif
-	      ){
-#ifdef ALPHA_DECAY_IN_SEQ
-	    if(SetStepTarget) {
-#ifdef ALPHA_DECAY_IN_SEQ_LINEAR
-	      AlphaDecayInSeq = ALPHA_DECAY_IN_SEQ/
-		(Pat+ALPHA_DECAY_IN_SEQ);
-#elif ALPHA_DECAY_IN_SEQ
-	      //if(Pat*ALPHA_DECAY_IN_SEQ>709) AlphaDecayInSeq=0;
-	      //else AlphaDecayInSeq = EXP(-(Pat*ALPHA_DECAY_IN_SEQ));
-	      AlphaDecayInSeq*=0.5;
-#endif
-	    } else {
-#ifdef ALPHA_DECAY_IN_SEQ_LINEAR
-	      AlphaDecayInSeq = ALPHA_DECAY_IN_SEQ/
-		(SeqOnline+ALPHA_DECAY_IN_SEQ);
-#elif ALPHA_DECAY_IN_SEQ
-	      if(SeqOnline*ALPHA_DECAY_IN_SEQ>709) AlphaDecayInSeq=0;
-	      else AlphaDecayInSeq =
-		     EXP(-(SeqOnline*ALPHA_DECAY_IN_SEQ)); 
-#endif
-	    }
-	    //     cout << Pat << "-"  << Seq <<  "-" << Epo << ":" 
-	    // 	 << AlphaDecayInSeq << " ";
-#endif
-#ifndef LOCAL_ALPHA_SEQUENCEWISE
-	    BackwardPass(FreezeEndBlock,NbMemoBlocks);
-#endif
-	    if(!AllTimeTarget || (Pat==TrainData.NbPat[Seq]-1))
-	      if(!ClampOutTrainPredictSteps || 
-		 // (Pat+PredictionOffset>=ClampPatStop))
-		 (Pat==ClampPatStart))//Log SingleStep prediction.
-		PatStatistics(TrainData);
-#ifdef DO_ONLINE_PAT_PRODUCTION
-	    if(SetStepTarget) {
-#ifndef SETSTEPTARGET_BUT_COUNT_SEQUENCEWISE
-	      if(!PatWrong) { 
-		ONLINE_PAT_FUNCNAME(TrainData, false); 
-	      } else break; // PatWrong.
-#else
-	      if(!PatWrong) { 
-		; // Generate seq only before Pat loop.
-	      } else break; // PatWrong.
-#endif
-	      //if(ReberGrammarState==-1) ResetNet(0,0);
-	    }
-#endif
-	  } // end if go through back pass.
+				// ForwardPass.
+				if(Reverse_Input) {
+					ResetNet(0,0); //Reset before each Pat.
 
-	  // Do some logging.
-	  if( Epo == MaxEpochs && 0) // or not. 
-	    if( Pat < 1000 )
-	      Dump_Inner_States("Train", TrainData);
+					PatReInStart=Pat;
+					if(Pat>Reverse_Input) 
+						PatReInStop=Pat-Reverse_Input;
+					else 
+						PatReInStop=0;
 
-	  //WriteOutLogFile(OUT_LOGFILE);
-	  //
-	  //
-	  //sprintf(cBuf, "w.Pat.%d",Pat); WriteWeightFile(cBuf); exit(0);
-	  //sprintf(cBuf, "dump.log.Pat.%d",Pat);DumpAll(cBuf);
-	  //Display after the back pass. //ddd
-	  //DisplayNet(TrainData); 
-	  //DisplayWeights(); 
-	  //KeyCheck();//ddd
-	  //if(cKey=='w') { DisplayWeights(); KeyCheck(); }
-	  //if(cKey=='d'){ Dump_Inner_States("Train",TrainData);KeyCheck();}
-	  //if((Pat==0 || Pat==1)&&(Epo==0 || Epo==1) )
-	  //if(PatCorrectTest>90) 
-	    //Dump_Inner_States("Train", TrainData);//ddd
-	  //{ sprintf(cBuf, "dump.log.%d.%d",Epo,Pat);DumpAll(cBuf); }
-	  ////ddd
-//  	    //        if(PatCorrectTest>10) {
-//    	    cout<<"Train "<<Epo <<"-"<<Seq<<"-"<<SeqOnline<<"-"<<Pat<<" :";
-//    	    cout<<"["<<TrainData.NbPat[0]<< "] ";
-//    	    for(unsigned int Val=0;Val<TrainData.NbVal;Val++) 
-//    	      cout<<((TrainData.SeqList[Seq])[Pat])[Val]<<"=";
-//    	    //<<GetInput(TrainData,Seq,Pat,Val)<<" ";
-//    	    //cout<<" = "<<TrainData.NbClass[Seq];
-//    	    cout<<" -> ("<<MSEPat<<") "<<PatCorrect;
-//    	    for(unsigned int iO=0;iO<NbOut;iO++)
-//    	      cout<<"("<<Out[iO].y<<"->"<< Out[iO].e<<")";
-//    	    cout<<"\n"; cout.flush();
-	    // 	  }
-	  ////ddd
+					// Pat is unsigned!!
+					for(;(Pat>=PatReInStop)&&(Pat<=PatReInStart);Pat--) 
+					{
+						ForwardPass(TrainData,FreezeEndBlock,NbMemoBlocks);
+					//  	      cout<<"Train "<<Epo <<"-" //ddd
+					//  		  <<Seq<<"-"<<SeqOnline<<"-"<<Pat<<" :";
+					//  	      cout<<"["<<TrainData.NbPat[Seq]<< "] ";
+					//  	      for(unsigned int Val=0;Val<TrainData.NbVal;Val++) 
+					//            	    cout<<((TrainData.SeqList[Seq])[Pat])[Val]<<"=";
+					//  	      //<<GetInput(TrainData,Seq,Pat,Val)<<" ";
+					//  	      //cout<<" = "<<TrainData.NbClass[Seq];
+					//  	      cout<<" -> ("<<MSEPat<<") "<<PatCorrect;
+					//  	      for(unsigned int iO=0;iO<NbOut;iO++)
+					//  		cout<<"("<<Out[iO].y<<"->"<< Out[iO].e<<")";
+					//  	      cout<<"\n"; cout.flush();
+					}
+					Pat=PatReInStart;
+				} else {
+					ForwardPass(TrainData,FreezeEndBlock,NbMemoBlocks); 
+				}
+				//        if(PatCorrectTest>10) { // Debug on-line pat generation. // ddd
+				//   	  cout<<"Train "<<Epo <<"-"<<Seq<<"-"<<SeqOnline<<"-"<<Pat<<" :";
+				//  	  cout<<"["<<TrainData.NbPat[Seq]<< "] ";
+				//  	  for(unsigned int Val=0;Val<TrainData.NbVal;Val++) 
+				//  	    cout<<((TrainData.SeqList[Seq])[Pat])[Val]<<"=";
+				//  	  //<<GetInput(TrainData,Seq,Pat,Val)<<" ";
+				//  	  //cout<<" = "<<TrainData.NbClass[Seq];
+				//  	  cout<<" -> ("<<MSEPat<<") "<<PatCorrect;
+				//  	  for(unsigned int iO=0;iO<NbOut;iO++)
+				//  	    cout<<"("<<Out[iO].y<<"->"<< Out[iO].e<<")";
+				//  	  cout<<"\n"; cout.flush();
+				//	}
+				// Do BackwardPass if................................
+				#ifdef LOCAL_ALPHA_SEQUENCEWISE
+				BackwardPass(FreezeEndBlock,NbMemoBlocks);
+				#endif
+				if( ((Pat==TrainData.NbPat[Seq]-1) || SetStepTarget || 	AllTimeTarget || (NbPredictNextIn>0) || (NbPredictClass>0) )
+				#ifndef TARGET_777
+					&& (((TrainData.SeqList[Seq])[Pat])[NbExtIn]!=-777)
+				#endif
+				){
+
+					#ifdef ALPHA_DECAY_IN_SEQ
+					if(SetStepTarget) {
+					#ifdef ALPHA_DECAY_IN_SEQ_LINEAR
+					AlphaDecayInSeq = ALPHA_DECAY_IN_SEQ/
+					(Pat+ALPHA_DECAY_IN_SEQ);
+					#elif ALPHA_DECAY_IN_SEQ
+					//if(Pat*ALPHA_DECAY_IN_SEQ>709) AlphaDecayInSeq=0;
+					//else AlphaDecayInSeq = EXP(-(Pat*ALPHA_DECAY_IN_SEQ));
+					AlphaDecayInSeq*=0.5;
+					#endif
+					} else {
+					#ifdef ALPHA_DECAY_IN_SEQ_LINEAR
+					AlphaDecayInSeq = ALPHA_DECAY_IN_SEQ/
+					(SeqOnline+ALPHA_DECAY_IN_SEQ);
+					#elif ALPHA_DECAY_IN_SEQ
+					if(SeqOnline*ALPHA_DECAY_IN_SEQ>709) AlphaDecayInSeq=0;
+					else AlphaDecayInSeq =
+						EXP(-(SeqOnline*ALPHA_DECAY_IN_SEQ)); 
+					#endif
+					}
+					//     cout << Pat << "-"  << Seq <<  "-" << Epo << ":" 
+					// 	 << AlphaDecayInSeq << " ";
+					#endif
+					#ifndef LOCAL_ALPHA_SEQUENCEWISE
+					BackwardPass(FreezeEndBlock,NbMemoBlocks);
+					#endif
+					if(!AllTimeTarget || (Pat==TrainData.NbPat[Seq]-1))
+					if(!ClampOutTrainPredictSteps || 
+						// (Pat+PredictionOffset>=ClampPatStop))
+						(Pat==ClampPatStart))//Log SingleStep prediction.
+						PatStatistics(TrainData);
+					#ifdef DO_ONLINE_PAT_PRODUCTION
+					if(SetStepTarget) {
+					#ifndef SETSTEPTARGET_BUT_COUNT_SEQUENCEWISE
+					if(!PatWrong) { 
+					ONLINE_PAT_FUNCNAME(TrainData, false); 
+					} else break; // PatWrong.
+					#else
+					if(!PatWrong) { 
+					; // Generate seq only before Pat loop.
+					} else break; // PatWrong.
+					#endif
+					//if(ReberGrammarState==-1) ResetNet(0,0);
+					}
+					#endif
+					} // end if go through back pass.
+
+				// Do some logging.
+				if( Epo == MaxEpochs && 0) // or not. 
+				if( Pat < 1000 )
+				Dump_Inner_States("Train", TrainData);
+
+				//WriteOutLogFile(OUT_LOGFILE);
+				//
+				//
+				//sprintf(cBuf, "w.Pat.%d",Pat); WriteWeightFile(cBuf); exit(0);
+				//sprintf(cBuf, "dump.log.Pat.%d",Pat);DumpAll(cBuf);
+				//Display after the back pass. //ddd
+				//DisplayNet(TrainData); 
+				//DisplayWeights(); 
+				//KeyCheck();//ddd
+				//if(cKey=='w') { DisplayWeights(); KeyCheck(); }
+				//if(cKey=='d'){ Dump_Inner_States("Train",TrainData);KeyCheck();}
+				//if((Pat==0 || Pat==1)&&(Epo==0 || Epo==1) )
+				//if(PatCorrectTest>90) 
+				//Dump_Inner_States("Train", TrainData);//ddd
+				//{ sprintf(cBuf, "dump.log.%d.%d",Epo,Pat);DumpAll(cBuf); }
+				////ddd
+				//  	    //        if(PatCorrectTest>10) {
+				//    	    cout<<"Train "<<Epo <<"-"<<Seq<<"-"<<SeqOnline<<"-"<<Pat<<" :";
+				//    	    cout<<"["<<TrainData.NbPat[0]<< "] ";
+				//    	    for(unsigned int Val=0;Val<TrainData.NbVal;Val++) 
+				//    	      cout<<((TrainData.SeqList[Seq])[Pat])[Val]<<"=";
+				//    	    //<<GetInput(TrainData,Seq,Pat,Val)<<" ";
+				//    	    //cout<<" = "<<TrainData.NbClass[Seq];
+				//    	    cout<<" -> ("<<MSEPat<<") "<<PatCorrect;
+				//    	    for(unsigned int iO=0;iO<NbOut;iO++)
+				//    	      cout<<"("<<Out[iO].y<<"->"<< Out[iO].e<<")";
+				//    	    cout<<"\n"; cout.flush();
+				// 	  }
+				////ddd
 	  
-#ifdef UPDATE_WEIGHTS_AFTER_SEQ
-	if((update_weights_after_seq &&
-	    ((double)((unsigned int) (Pat/update_weights_after_seq))*
-	     update_weights_after_seq==Pat) ) ) {
-	    ExecuteWeightChanges(FreezeEndBlock,NbMemoBlocks); 
-	    // Set next stochastic update time.
-	    update_weights_after_seq=UPDATE_WEIGHTS_AFTER_SEQ+
-	      (unsigned int)fmod((double)lrand48(),
-				 UPDATE_WEIGHTS_AFTER_SEQ);
-	}
-#endif
-	} // End Pat loop.
+				#ifdef UPDATE_WEIGHTS_AFTER_SEQ
+				if((update_weights_after_seq &&  ((double)((unsigned int) (Pat/update_weights_after_seq))*	update_weights_after_seq==Pat) ) ) 
+				{
+					ExecuteWeightChanges(FreezeEndBlock,NbMemoBlocks); 
+					// Set next stochastic update time.
+					update_weights_after_seq=UPDATE_WEIGHTS_AFTER_SEQ+
+					(unsigned int)fmod((double)lrand48(),
+							UPDATE_WEIGHTS_AFTER_SEQ);
+				}
+				#endif
+			} // End Pat loop.
 
-#ifdef UPDATE_WEIGHTS_AFTER_SEQ
-	// Update weights in any case at the end of a seq.
-	    ExecuteWeightChanges(FreezeEndBlock,NbMemoBlocks);
-#endif
-	SeqStatistics(TrainData);
-	//sprintf(cBuf, "w.Seq.%d",Seq); WriteWeightFile(cBuf); exit(0);
-	//DisplayNet(TrainData); DisplayWeights(); KeyCheck();
-#ifdef DO_ONLINE_PAT_PRODUCTION
-#ifndef SETSTEPTARGET_BUT_COUNT_SEQUENCEWISE
-	if(!SetStepTarget)
-#endif
-	  if(!PatWrong) { 
-	    SeqOnline++; 
-	    if(PatCorrect>=MaxOnlineStreamLengthTrain) break; 
-	  } else break;
-#endif
-      } // End Seq loop. 
+			#ifdef UPDATE_WEIGHTS_AFTER_SEQ
+			// Update weights in any case at the end of a seq.
+			ExecuteWeightChanges(FreezeEndBlock,NbMemoBlocks);
+			#endif
+			SeqStatistics(TrainData);
+			//sprintf(cBuf, "w.Seq.%d",Seq); WriteWeightFile(cBuf); exit(0);
+			//DisplayNet(TrainData); DisplayWeights(); KeyCheck();
+			#ifdef DO_ONLINE_PAT_PRODUCTION
+			#ifndef SETSTEPTARGET_BUT_COUNT_SEQUENCEWISE
+			if(!SetStepTarget)
+			#endif
+			if(!PatWrong) { 
+			SeqOnline++; 
+			if(PatCorrect>=MaxOnlineStreamLengthTrain) break; 
+			} else break;
+			#endif
+			} // End Seq loop. 
 
-      //DumpSomeAlphas();
-      // The last test is the final one if every epoch is tested.
-      if( ( TestEach_Epo==1 ) && ( Epo==MaxEpochs) )
-	{ 
-	  OutputDebug=true;
-	} 
-      else 
-	{ 
-	  OutputDebug=false; 
-	}
+		//DumpSomeAlphas();
+		// The last test is the final one if every epoch is tested.
+		if( ( TestEach_Epo==1 ) && ( Epo==MaxEpochs) )
+		{ 
+		OutputDebug=true;
+		} 
+		else 
+		{ 
+		OutputDebug=false; 
+		}
 
-      EpoStatistics(TrainData);
+		EpoStatistics(TrainData);
 
-      //ExecuteWeightChanges(FreezeEndBlock,NbMemoBlocks);
-      //sprintf(cBuf, "w.Epo.%d",Epo); WriteWeightFile(cBuf);
-      //sprintf(cBuf, "%s.%d", OUT_LOGFILE,Epo); rename(OUT_LOGFILE,cBuf);
-      //if(Epo==7384) DumpAll("dump.log.end.log");
-      //if((unsigned int)fmod(Epo,1000) == 0) {
-      //sprintf(cBuf,"%s%d.%d",FINAL_W_LOGFILE,Tri,Epo);
-      //WriteWeightFile(cBuf);}
-      if(StopLern) EpochsAfterLearned--;
-#ifdef DO_ONLINE_PAT_PRODUCTION
-      //if((Epo>=MaxEpochs)||(PatCorrect>=MaxOnlineStreamLengthTrain)
-      // ||(MSEEpo<MSEStop)) StopLern=true;
-      // StopLearn when the taing set is leerand -> test.
-      //if(StopLern && (Epo<MaxEpochs)) {
-      //if(LastTestEpo+TestMaxEach_Epo<=Epo) // Not test too much.
-      //  Test(); // If not just tested during the EpoStatistics.
-      // Here StopLern only then trainig requirements met..
-      //StopLern=((PatCorrectTest>=MaxOnlineStreamLengthTest) || 
-      //	  (TestMSEEpo<MSEStop));
-      //}
-      // StopLearn also when the test is learnd but the trainig not.
-      // The first or is for the case that we give up (MaxEpochs).
-      // Test results may come from test during EpoStatistics.
-      StopLern=((Epo>=MaxEpochs)||(TestMSEEpo<MSEStop));
-      if(!NoClassesOnlyPredict) 
-	StopLearn=StopLearn || (PatCorrectTest>=MaxOnlineStreamLengthTest);
-      //       cout<<" StopLern:"<<StopLern //ddd
-      //  	  <<" PatCorrect :"<<PatCorrect
-      //  	  <<" PatCorrectTest :"<<PatCorrectTest
-      //  	  <<endl;
-#else
-      if((Epo>=MaxEpochs)||(MSEEpo<MSEStop)) StopLern=true;
-      if(!NoClassesOnlyPredict) if(!ClassesWrong)  StopLern=true;
-      // Test when Traing set learned..
-      //       if(LastTestEpo+TestMaxEach_Epo<=Epo) { // Not test too much
-      // 	if(StopLern&&(Epo<MaxEpochs)) StopLern = !Test();
-      //       } else StopLern = false;
-#endif
-      if((double)((unsigned int)
-		  (Epo/AverageTrainBuf))*AverageTrainBuf==Epo) 
-	{
-	  //finish_ctime=clock(); // ddd . See how fast
-	  //finish_time=time(NULL); // ddd
-	  //cout<<"Train"<<" Tri:"<<Tri<<" Epo:"<<Epo<<" sec:"
-	  //    <<((double)(finish_ctime-start_ctime)/CLOCKS_PER_SEC)
-	  //    <<" total sec:"<<difftime(finish_time,start_time)
-	  //    <<endl;//ddd
-	  //WriteWeightLog(); //ddd !!! Discspace
-	}
-    } while (!StopLern || (EpochsAfterLearned>0));// End Epo loop.
+		//ExecuteWeightChanges(FreezeEndBlock,NbMemoBlocks);
+		//sprintf(cBuf, "w.Epo.%d",Epo); WriteWeightFile(cBuf);
+		//sprintf(cBuf, "%s.%d", OUT_LOGFILE,Epo); rename(OUT_LOGFILE,cBuf);
+		//if(Epo==7384) DumpAll("dump.log.end.log");
+		//if((unsigned int)fmod(Epo,1000) == 0) {
+		//sprintf(cBuf,"%s%d.%d",FINAL_W_LOGFILE,Tri,Epo);
+		//WriteWeightFile(cBuf);}
+		if(StopLern) 
+			EpochsAfterLearned--;
+
+		#ifdef DO_ONLINE_PAT_PRODUCTION
+		//if((Epo>=MaxEpochs)||(PatCorrect>=MaxOnlineStreamLengthTrain)
+		// ||(MSEEpo<MSEStop)) StopLern=true;
+		// StopLearn when the taing set is leerand -> test.
+		//if(StopLern && (Epo<MaxEpochs)) {
+		//if(LastTestEpo+TestMaxEach_Epo<=Epo) // Not test too much.
+		//  Test(); // If not just tested during the EpoStatistics.
+		// Here StopLern only then trainig requirements met..
+		//StopLern=((PatCorrectTest>=MaxOnlineStreamLengthTest) || 
+		//	  (TestMSEEpo<MSEStop));
+		//}
+		// StopLearn also when the test is learnd but the trainig not.
+		// The first or is for the case that we give up (MaxEpochs).
+		// Test results may come from test during EpoStatistics.
+		StopLern=((Epo>=MaxEpochs)||(TestMSEEpo<MSEStop));
+		if(!NoClassesOnlyPredict) 
+		StopLearn=StopLearn || (PatCorrectTest>=MaxOnlineStreamLengthTest);
+		//       cout<<" StopLern:"<<StopLern //ddd
+		//  	  <<" PatCorrect :"<<PatCorrect
+		//  	  <<" PatCorrectTest :"<<PatCorrectTest
+		//  	  <<endl;
+		#else
+		if((Epo>=MaxEpochs)||(MSEEpo<MSEStop)) 
+			StopLern=true;
+		if(!NoClassesOnlyPredict) if(!ClassesWrong)  
+			StopLern=true;
+		// Test when Traing set learned..
+		//       if(LastTestEpo+TestMaxEach_Epo<=Epo) { // Not test too much
+		// 	if(StopLern&&(Epo<MaxEpochs)) StopLern = !Test();
+		//       } else StopLern = false;
+		#endif
+		if((double)((unsigned int)	(Epo/AverageTrainBuf))*AverageTrainBuf==Epo) 
+		{
+			//finish_ctime=clock(); // ddd . See how fast
+			//finish_time=time(NULL); // ddd
+			//cout<<"Train"<<" Tri:"<<Tri<<" Epo:"<<Epo<<" sec:"
+			//    <<((double)(finish_ctime-start_ctime)/CLOCKS_PER_SEC)
+			//    <<" total sec:"<<difftime(finish_time,start_time)
+			//    <<endl;//ddd
+			//WriteWeightLog(); //ddd !!! Discspace
+		}
+	} while (!StopLern || (EpochsAfterLearned>0));// End Epo loop.
     //if(Epo>=MaxEpochs) { Test();}// Final test if unsolved.
     if(TestEach_Epo!=1) {
-      if(Epo>=MaxEpochs) {OutputDebug=true; Test();}// ddd
-      if(Epo<MaxEpochs) {OutputDebug=true; Test();}//ddd
+      if(Epo>=MaxEpochs) 
+	  {
+		  OutputDebug=true; 
+		  Test();
+	  }// ddd
+
+      if(Epo<MaxEpochs)
+	  {
+		  OutputDebug=true;
+		  Test();
+	  }//ddd
     }
     //if(!TimeWindowSize) FreeRunTest();///ddd
     OutputDebug=false; //ddd
@@ -489,147 +506,171 @@ char LSTM::Run()
 
 char LSTM::LoadPar() 
 {
-#ifdef DEBUG
-  cout<<"LSTM::LoadPar......."<<endl;//ddd
-#endif
-  char s[256];
-  char dummy[256];
-  int TmpEndSrcBlockNb; // To have the sign.
+	#ifdef DEBUG
+	cout<<"LSTM::LoadPar......."<<endl;//ddd
+	#endif
+	char s[256];
+	char dummy[256];
+	int TmpEndSrcBlockNb; // To have the sign.
 
-  int errStatus = 0;
-  fstream pF; // = new ifstream(); 
-  sprintf(cBuf,PARFILE);
-  if (OpenFile(&pF,cBuf,ios::in)) return 1;
-  if (ReadComment(&pF)) return 1;
-  // Scan for the starting point of the LSTM part in the parameter file.
-//    pF.scan("NbPredictNextIn:"); 
-//    while(!pF.good()) { 
-//      pF.seekg(1, pF.cur);
-//      if(pF.eof()) { cout << "eof\n"; return 1;}
-//      pF.clear();    
-//      pF.scan("NbPredictNextIn:"); // First parameter of LSTM.
-//    }
-  while(strcmp("NbPredictNextIn:",s)&&!pF.eof()) pF>>s;
-  if( pF.eof() ) 
-    { 
-      cerr << "eof in LSTM.par\n"; 
-      return 1; 
-    }
-  pF>> NbPredictNextIn;
-  //
-  errStatus = loadOnePara( "NbPredictClass:", pF, 
-			   NbPredictClass );
-  errStatus = loadOnePara( "InternalBlockConect:", pF,
-			   InternalBlockConect );
-  errStatus = loadOnePara( "NbMemoBlocks:", pF,
-			   NbMemoBlocks );
-  if(NbMemoBlocks>MAX_BLOCKS) { 
-    cerr << "NbMemoBlocks>MAX_BLOCKS\n"; exit(1); }
-  //To assign sizes MemoBlock newed here, deleted in ~LSTM.
-  if(!MemoBlock) MemoBlock = new TMemoBlock[NbMemoBlocks];
-  //MemoBlock = new TMemoBlock[MAX_BLOCKS];
-  errStatus = loadOnePara( "# parameters for each memo block", pF, 
-			   dummy );
-  // Compensate that parameter assumed one word.
-  pF.ignore(1000, '\n'); 
-  for(unsigned int iB=0;iB<NbMemoBlocks;iB++) 
-    {
-      errStatus = loadOnePara( "# memo block number", pF, dummy ); 
-      // Compensate that parameter assumed one word.
-      pF.ignore(1000, '\n'); 
-      errStatus = loadOnePara( "MemoBlockSize:", pF, 
-			       MemoBlock[iB].MemoBlockSize );
-      errStatus = loadOnePara( "BegSrcBlockNb:", pF,
-			       MemoBlock[iB].BegSrcBlockNb );
-      errStatus = loadOnePara( "EndSrcBlockNb:", pF,
-			       TmpEndSrcBlockNb );
-      if(TmpEndSrcBlockNb==-1) MemoBlock[iB].EndSrcBlockNb = NbMemoBlocks;
-      errStatus = loadOnePara( "InputGateBias:", pF,
-			       MemoBlock[iB].InGate.W.Bias.w[0] );
-      errStatus = loadOnePara( "OutputGateBias:", pF,
-			       MemoBlock[iB].OutGate.W.Bias.w[0] );
-#ifdef FORGET_GATES
-      errStatus = loadOnePara( "ForgetGateBias:", pF,
-			       MemoBlock[iB].FgGate.W.Bias.w[0] );
-#else
-      double NotUsed;
-    errStatus = loadOnePara( "ForgetGateBias:", pF,
-			     NotUsed );
-#endif
-    }
-#ifdef DEBUG
-  //cout<<"NbMemoBlocks:"<<NbMemoBlocks<<endl;//ddd
-  cout<<"LSTM::LoadPar done."<<endl;//ddd
-#endif
+	int errStatus = 0;
+	fstream pF; // = new ifstream(); 
+	sprintf(cBuf,PARFILE);
+	if (OpenFile(&pF,cBuf,ios::in)) return 1;
+	if (ReadComment(&pF)) return 1;
+	// Scan for the starting point of the LSTM part in the parameter file.
+	//    pF.scan("NbPredictNextIn:"); 
+	//    while(!pF.good()) { 
+	//      pF.seekg(1, pF.cur);
+	//      if(pF.eof()) { cout << "eof\n"; return 1;}
+	//      pF.clear();    
+	//      pF.scan("NbPredictNextIn:"); // First parameter of LSTM.
+	//    }
+	while(strcmp("NbPredictNextIn:",s)&&!pF.eof()) 
+		pF>>s;
 
-  if( errStatus ) 
-    { 
-      cout << "Parameter error\n"; 
-    }
-  CloseFile( &pF );
+	if( pF.eof() ) 
+	{ 
+		cerr << "eof in LSTM.par\n"; 
+		return 1; 
+	}
+	pF>> NbPredictNextIn;
+	//
+	errStatus = loadOnePara( "NbPredictClass:", pF, 
+			NbPredictClass );
+	errStatus = loadOnePara( "InternalBlockConect:", pF,
+			InternalBlockConect );
+	errStatus = loadOnePara( "NbMemoBlocks:", pF,
+			NbMemoBlocks );
+	if(NbMemoBlocks>MAX_BLOCKS) { 
+	cerr << "NbMemoBlocks>MAX_BLOCKS\n"; exit(1); }
+	//To assign sizes MemoBlock newed here, deleted in ~LSTM.
+	if(!MemoBlock) 
+		MemoBlock = new TMemoBlock[NbMemoBlocks];
+	//MemoBlock = new TMemoBlock[MAX_BLOCKS];
+	errStatus = loadOnePara( "# parameters for each memo block", pF, 
+			dummy );
+	// Compensate that parameter assumed one word.
+	pF.ignore(1000, '\n'); 
+	for(unsigned int iB=0;iB<NbMemoBlocks;iB++) 
+	{
+		errStatus = loadOnePara( "# memo block number", pF, dummy ); 
+		// Compensate that parameter assumed one word.
+		pF.ignore(1000, '\n'); 
+		errStatus = loadOnePara( "MemoBlockSize:", pF, 
+					MemoBlock[iB].MemoBlockSize );
+		errStatus = loadOnePara( "BegSrcBlockNb:", pF,
+					MemoBlock[iB].BegSrcBlockNb );
+		errStatus = loadOnePara( "EndSrcBlockNb:", pF,
+					TmpEndSrcBlockNb );
+		if(TmpEndSrcBlockNb==-1) MemoBlock[iB].EndSrcBlockNb = NbMemoBlocks;
+		errStatus = loadOnePara( "InputGateBias:", pF,
+					MemoBlock[iB].InGate.W.Bias.w[0] );
+		errStatus = loadOnePara( "OutputGateBias:", pF,
+					MemoBlock[iB].OutGate.W.Bias.w[0] );
+		#ifdef FORGET_GATES
+		errStatus = loadOnePara( "ForgetGateBias:", pF,
+					MemoBlock[iB].FgGate.W.Bias.w[0] );
+		#else
+		double NotUsed;
+		errStatus = loadOnePara( "ForgetGateBias:", pF,
+					NotUsed );
+		#endif
+	}
+	#ifdef DEBUG
+	//cout<<"NbMemoBlocks:"<<NbMemoBlocks<<endl;//ddd
+	cout<<"LSTM::LoadPar done."<<endl;//ddd
+	#endif
 
-  return errStatus; 
+	if( errStatus ) 
+	{ 
+		cout << "Parameter error\n"; 
+	}
+	CloseFile( &pF );
+
+	return errStatus; 
 }
 
 char LSTM::InitOrDeleteNet(bool init) {
-  if(init) {
-    // Open a debug file.
-    sprintf(cBuf,"%s.%d",DEBUG_LOGFILE,Tri);
-    OpenFile(&DebugFile,cBuf, ios::out);
-    // Seperate input Nb. for recurent output.
-    NbExtIn=NbIn;
-#ifdef RECURRENT_OUTPUT
-    NbIn+=NbOut;
-#endif
-    // Read the complete par file again to restore values (e.g.Biases).
-    // Also par file part of TNeuralNetBase (maybe for AlphaBase).
-    if(TNeuralNetBase::LoadPar()) return 1;
-    if(LoadPar()) return 1;
-  } else {
-    CloseFile(&DebugFile);   // Close a debug file.
-  }
-  InitOrDeleteMemoBlocks(init,0,NbMemoBlocks);
-  // Init other units.
-  // Current input.
-  if(init) { 
-    CurInput = new double *[NbIn];
-    for(unsigned int iI=0;iI<NbIn;iI++)
-      CurInput[iI] = new double[ORDER_WEIGHT];
-  } else {
-    for(unsigned int iI=0;iI<NbIn;iI++) delete CurInput[iI];
-    delete[] CurInput; 
-  }
-  // Init Out units.
-  if(init) Out = new TOut[NbOut];
-  for(unsigned int iO=0;iO<NbOut;iO++) {
-    if(init) NewWeight(Out[iO].W.Bias,OutUnitBiasInitWeight);
-#ifndef NO_IN_OUT_SHORTCUTS
-    if(init) {
-      NewWeight(Out[iO].W.In,NbIn); 
-      // Change the matching (direct 1to1, 2to2...) connections.
-      if(InOutBiasForMatchingUnits) { 
-	unsigned int MinNbInOut=NbIn; 
-	if(MinNbInOut>NbOut) MinNbInOut=NbOut;
-	for(unsigned int iM=0;iM<MinNbInOut;iM++)     
-	  Out[iM].W.In[iM].w[0]=InOutBiasForMatchingUnits; }
-      }
-    else delete[] Out[iO].W.In;
-#endif
-#ifdef STAT_OUT
-    if (init) StatOut = new TStatOut[NbStatOut];
-    else if(StatOut) delete[] StatOut;
-#endif
-#ifdef USE_HIDDEN_UNITS
-    if(init) NewWeight(Out[iO].W.Hidden,NbHidden);
-    else delete[] Out[iO].W.Hidden;
-#endif
-    if(init) Out[iO].W.Cell = new TWeight *[MAX_BLOCKS];
-    for(unsigned int iB=0;iB<NbMemoBlocks;iB++) 
-      if(init) NewWeight(Out[iO].W.Cell[iB], MemoBlock[iB].MemoBlockSize);
-      else delete[] Out[iO].W.Cell[iB];
-    if(!init) delete[] Out[iO].W.Cell;
-  }
-  if(!init) delete[] Out;
+	if(init) 
+	{
+		// Open a debug file.
+		sprintf(cBuf,"%s.%d",DEBUG_LOGFILE,Tri);
+		OpenFile(&DebugFile,cBuf, ios::out);
+		// Seperate input Nb. for recurent output.
+		NbExtIn=NbIn;
+		#ifdef RECURRENT_OUTPUT
+		NbIn+=NbOut;
+		#endif
+		// Read the complete par file again to restore values (e.g.Biases).
+		// Also par file part of TNeuralNetBase (maybe for AlphaBase).
+		if(TNeuralNetBase::LoadPar()) 
+			return 1;
+		if(LoadPar()) 
+			return 1;
+	} else {
+		CloseFile(&DebugFile);   // Close a debug file.
+	}
+
+	InitOrDeleteMemoBlocks(init,0,NbMemoBlocks);
+	// Init other units.
+	// Current input.
+	if(init) 
+	{ 
+		CurInput = new double *[NbIn];
+		for(unsigned int iI=0;iI<NbIn;iI++)
+			CurInput[iI] = new double[ORDER_WEIGHT];
+		} else {
+			for(unsigned int iI=0;iI<NbIn;iI++) 
+				delete CurInput[iI];
+			delete[] CurInput; 
+		}
+
+	// Init Out units.
+	if(init) 
+		Out = new TOut[NbOut];
+	for(unsigned int iO=0;iO<NbOut;iO++) 
+	{
+		if(init) 
+			NewWeight(Out[iO].W.Bias,OutUnitBiasInitWeight);
+		#ifndef NO_IN_OUT_SHORTCUTS
+		if(init) {
+			NewWeight(Out[iO].W.In,NbIn); 
+			// Change the matching (direct 1to1, 2to2...) connections.
+			if(InOutBiasForMatchingUnits) { 
+				unsigned int MinNbInOut=NbIn; 
+				if(MinNbInOut>NbOut) 
+					MinNbInOut=NbOut;
+				for(unsigned int iM=0;iM<MinNbInOut;iM++)     
+					Out[iM].W.In[iM].w[0]=InOutBiasForMatchingUnits; 
+			}
+		}
+		else 
+			delete[] Out[iO].W.In;
+		#endif
+
+		#ifdef STAT_OUT
+		if (init) StatOut = new TStatOut[NbStatOut];
+		else if(StatOut) delete[] StatOut;
+		#endif
+
+		#ifdef USE_HIDDEN_UNITS
+		if(init) NewWeight(Out[iO].W.Hidden,NbHidden);
+		else delete[] Out[iO].W.Hidden;
+		#endif
+
+		if(init)
+			Out[iO].W.Cell = new TWeight *[MAX_BLOCKS];
+		for(unsigned int iB=0;iB<NbMemoBlocks;iB++) 
+			if(init) 
+				NewWeight(Out[iO].W.Cell[iB], MemoBlock[iB].MemoBlockSize);
+			else 
+				delete[] Out[iO].W.Cell[iB];
+
+		if(!init) delete[] Out[iO].W.Cell;
+	}
+
+				if(!init) delete[] Out;
 #ifdef USE_HIDDEN_UNITS
   // Init Hidden units.
   if(init) Hidden = new THidden[NbHidden];
@@ -649,12 +690,15 @@ char LSTM::InitOrDeleteNet(bool init) {
   if(!init) delete[] Hidden;
 #endif
   // OutWindow.
-  if(TimeWindowSize && ClampOutPredictSteps) {
-    if(init) {
-      OutWindow = new double[ClampOutPredictSteps];
-      OutWindowPos=0; }
-    else if(OutWindow) delete OutWindow;
-  } else OutWindow=NULL;
+	if(TimeWindowSize && ClampOutPredictSteps) {
+		if(init) {
+			OutWindow = new double[ClampOutPredictSteps];
+			OutWindowPos=0; 
+		}
+	else if(OutWindow)
+		delete OutWindow;
+	} else OutWindow=NULL;
+
   // Init NextIn predict.
   // Init PredictNextIn units.
 //    if(init) PredictNextIn = new TPredictNextIn[NbPredictNextIn];
@@ -757,176 +801,249 @@ void LSTM::InitOrDeleteMemoBlocks(bool init,
   // BegSrcBlockNb will be zero(or small) in most cases anyway. 
   // But instead of newing until NbMemoBlocks we will use 
   // MemoBlock[iB].EndSrcBlockNb (not any more for full Add).
-  for(unsigned int iB=BegBlock;iB<EndBlock;iB++) {
-    // InGate.
-    if(init) NewWeight(MemoBlock[iB].InGate.W.Bias,
-		       MemoBlock[iB].InGate.W.Bias.w[0]);
-    if(init) NewWeight(MemoBlock[iB].InGate.W.In, NbIn);
-    else delete[] MemoBlock[iB].InGate.W.In;
-#ifdef CONNECT_GATES_TO_S
-    if(init) NewWeight(MemoBlock[iB].InGate.W.s, MemoBlock[iB].MemoBlockSize);
-    else delete[] MemoBlock[iB].InGate.W.s;
-#endif
-    if(init) MemoBlock[iB].InGate.W.Cell = new TWeight *[MAX_BLOCKS];
-    for(unsigned int iiB=MemoBlock[iB].BegSrcBlockNb;
-	iiB<MemoBlock[iB].EndSrcBlockNb;iiB++)
-      if(init) NewWeight(MemoBlock[iB].InGate.W.Cell[iiB],
-			 MemoBlock[iiB].MemoBlockSize);
-      else delete[] MemoBlock[iB].InGate.W.Cell[iiB];
-    if(!init) delete[] MemoBlock[iB].InGate.W.Cell;
-#ifdef CONNECT_TO_GATES
-    if(init) NewWeight(MemoBlock[iB].InGate.W.InGate, MAX_BLOCKS);
-    else delete[] MemoBlock[iB].InGate.W.InGate;
-    if(init) NewWeight(MemoBlock[iB].InGate.W.OutGate ,MAX_BLOCKS);
-    else delete[] MemoBlock[iB].InGate.W.OutGate;
-#endif
-    // OutGate.
-    if(init) NewWeight(MemoBlock[iB].OutGate.W.Bias,
-		       MemoBlock[iB].OutGate.W.Bias.w[0]);
-    if(init) NewWeight(MemoBlock[iB].OutGate.W.In ,NbIn);
-    else delete[] MemoBlock[iB].OutGate.W.In;
-#ifdef CONNECT_GATES_TO_S
-    if(init) NewWeight(MemoBlock[iB].OutGate.W.s, 
-		       MemoBlock[iB].MemoBlockSize);
-    else delete[] MemoBlock[iB].OutGate.W.s;
-#endif
-    if(init) MemoBlock[iB].OutGate.W.Cell = 
-	       new TWeight *[MAX_BLOCKS]; //[MemoBlock[iB].EndSrcBlockNb];
-    for(unsigned int iiB=MemoBlock[iB].BegSrcBlockNb;
-	iiB<MemoBlock[iB].EndSrcBlockNb;iiB++) 
-      if(init) NewWeight(MemoBlock[iB].OutGate.W.Cell[iiB], 
-			 MemoBlock[iiB].MemoBlockSize);
-      else delete[] MemoBlock[iB].OutGate.W.Cell[iiB];
-    if(!init) delete[] MemoBlock[iB].OutGate.W.Cell;
-#ifdef CONNECT_TO_GATES
-    if(init) NewWeight(MemoBlock[iB].OutGate.W.InGate ,MAX_BLOCKS);
-    else delete[] MemoBlock[iB].OutGate.W.InGate;
-    if(init) NewWeight(MemoBlock[iB].OutGate.W.OutGate ,MAX_BLOCKS);
-    else delete[] MemoBlock[iB].OutGate.W.OutGate;
-#endif
-#ifdef FORGET_GATES
-    // FgGate.
-    if(init) NewWeight(MemoBlock[iB].FgGate.W.Bias,
-		       MemoBlock[iB].FgGate.W.Bias.w[0]);
-    if(init) NewWeight(MemoBlock[iB].FgGate.W.In, NbIn);
-    else delete[] MemoBlock[iB].FgGate.W.In;
-#ifdef CONNECT_GATES_TO_S
-    if(init) NewWeight(MemoBlock[iB].FgGate.W.s, MemoBlock[iB].MemoBlockSize);
-    else delete[] MemoBlock[iB].FgGate.W.s;
-#endif
-    if(init) MemoBlock[iB].FgGate.W.Cell = new TWeight *[MAX_BLOCKS];
-    for(unsigned int iiB=MemoBlock[iB].BegSrcBlockNb;
-	iiB<MemoBlock[iB].EndSrcBlockNb;iiB++) 
-      if(init) NewWeight(MemoBlock[iB].FgGate.W.Cell[iiB],
-			 MemoBlock[iiB].MemoBlockSize);
-      else delete[] MemoBlock[iB].FgGate.W.Cell[iiB];
-    if(!init) delete[] MemoBlock[iB].FgGate.W.Cell;
-#ifdef CONNECT_TO_GATES
-    if(init) NewWeight(MemoBlock[iB].FgGate.W.InGate, MAX_BLOCKS);
-    else delete[] MemoBlock[iB].FgGate.W.InGate;
-    if(init) NewWeight(MemoBlock[iB].FgGate.W.OutGate ,MAX_BLOCKS);
-    else delete[] MemoBlock[iB].FgGate.W.OutGate;
-#endif
-#endif
-    // Cells.
-    if(init) MemoBlock[iB].Cell = new TCell[MemoBlock[iB].MemoBlockSize];
-    for(unsigned int iC=0;iC<MemoBlock[iB].MemoBlockSize;iC++) {
-#ifdef CELL_BIAS
-      if(init) NewWeight(MemoBlock[iB].Cell[iC].W.Bias,0); // Random init.
-#endif
-      if(init) NewWeight(MemoBlock[iB].Cell[iC].W.In ,NbIn);
-      else delete[] MemoBlock[iB].Cell[iC].W.In;
-      if(init) MemoBlock[iB].Cell[iC].W.Cell = 
-		 new TWeight *[MAX_BLOCKS];
-      for(unsigned int iiB=MemoBlock[iB].BegSrcBlockNb;
-	  iiB<MemoBlock[iB].EndSrcBlockNb;iiB++) 
-	if(init) NewWeight(MemoBlock[iB].Cell[iC].W.Cell[iiB],
-			   MemoBlock[iiB].MemoBlockSize);
-	else delete[] MemoBlock[iB].Cell[iC].W.Cell[iiB];
-      if(!init) delete[] MemoBlock[iB].Cell[iC].W.Cell;
-#ifdef CONNECT_TO_GATES
-      if(init) NewWeight(MemoBlock[iB].Cell[iC].W.InGate, MAX_BLOCKS);
-      else delete[] MemoBlock[iB].Cell[iC].W.InGate;
-      if(init) NewWeight(MemoBlock[iB].Cell[iC].W.OutGate, MAX_BLOCKS);
-      else delete[] MemoBlock[iB].Cell[iC].W.OutGate;
-#endif
-    }
-  }
-  // Init the derivatives s_d.
-  for(unsigned int iB=BegBlock;iB<EndBlock;iB++) {
-    // For Cells.
-    for(unsigned int iC=0;iC<MemoBlock[iB].MemoBlockSize;iC++) {
-      if(init) NewTs_d_Gate(MemoBlock[iB].Cell[iC].s_d_In, NbIn);
-      else delete[] MemoBlock[iB].Cell[iC].s_d_In;
-      if(init) MemoBlock[iB].Cell[iC].s_d_Cell = 
-		 new Ts_d_Gate *[MAX_BLOCKS];
-      for(unsigned int iiB=MemoBlock[iB].BegSrcBlockNb;
-	  iiB<MemoBlock[iB].EndSrcBlockNb;iiB++) 
-        if(init)NewTs_d_Gate(MemoBlock[iB].Cell[iC].s_d_Cell[iiB],
-		   MemoBlock[iiB].MemoBlockSize);
-	else delete[] MemoBlock[iB].Cell[iC].s_d_Cell[iiB];
-      if(!init) delete[] MemoBlock[iB].Cell[iC].s_d_Cell;
-#ifdef CONNECT_TO_GATES
-      if(init)NewTs_d_Gate(MemoBlock[iB].Cell[iC],MAX_BLOCKS);
-      else delete[] MemoBlock[iB].Cell[iC].s_d_InGate;
-      if(init)NewTs_d_Gate(MemoBlock[iB].Cell[iC],MAX_BLOCKS);
-      else delete[] MemoBlock[iB].Cell[iC].s_d_OutGate;
-#endif
-      // For InGate.
-      if(init) NewTs_d_Gate(MemoBlock[iB].Cell[iC].s_d_InGate_Bias);
-      if(init) NewTs_d_Gate(MemoBlock[iB].Cell[iC].s_d_InGate_In,NbIn);
-      else delete[] MemoBlock[iB].Cell[iC].s_d_InGate_In;
-#ifdef CONNECT_GATES_TO_S
-      if(init) NewTs_d_Gate(MemoBlock[iB].Cell[iC].s_d_InGate_s,
-			    MemoBlock[iB].MemoBlockSize);
-      else delete[] MemoBlock[iB].Cell[iC].s_d_InGate_s;
-#endif
-      if(init) MemoBlock[iB].Cell[iC].s_d_InGate_Cell = 
-		 new Ts_d_Gate *[MAX_BLOCKS];
-      for(unsigned int iiB=MemoBlock[iB].BegSrcBlockNb;
-	  iiB<MemoBlock[iB].EndSrcBlockNb;iiB++) 
-	if(init) NewTs_d_Gate(MemoBlock[iB].Cell[iC].s_d_InGate_Cell[iiB],
-			      MemoBlock[iiB].MemoBlockSize);
-	else delete[] MemoBlock[iB].Cell[iC].s_d_InGate_Cell[iiB];
-      if(!init) delete[] MemoBlock[iB].Cell[iC].s_d_InGate_Cell;
-#ifdef CONNECT_TO_GATES
-      if(init) NewTs_d_Gate(MemoBlock[iB].Cell[iC].s_d_InGate_InGate,
-			    MAX_BLOCKS);
-      else delete[] MemoBlock[iB].Cell[iC].s_d_InGate_InGate;
-      if(init) NewTs_d_Gate(MemoBlock[iB].Cell[iC].s_d_InGate_OutGate,
-			    MAX_BLOCKS);
-      else delete[] MemoBlock[iB].Cell[iC].s_d_InGate_OutGate;
-#endif
-#ifdef FORGET_GATES
-      // For FgGate.
-      if(init) NewTs_d_Gate(MemoBlock[iB].Cell[iC].s_d_FgGate_Bias);
-      if(init) NewTs_d_Gate(MemoBlock[iB].Cell[iC].s_d_FgGate_In,NbIn);
-      else delete[] MemoBlock[iB].Cell[iC].s_d_FgGate_In;
-#ifdef CONNECT_GATES_TO_S
-      if(init) NewTs_d_Gate(MemoBlock[iB].Cell[iC].s_d_FgGate_s,
-			    MemoBlock[iB].MemoBlockSize);
-      else delete[] MemoBlock[iB].Cell[iC].s_d_FgGate_s;
-#endif
-      if(init) MemoBlock[iB].Cell[iC].s_d_FgGate_Cell = 
-		 new Ts_d_Gate *[MAX_BLOCKS];
-      for(unsigned int iiB=MemoBlock[iB].BegSrcBlockNb;
-	  iiB<MemoBlock[iB].EndSrcBlockNb;iiB++) 
-	if(init) NewTs_d_Gate(MemoBlock[iB].Cell[iC].s_d_FgGate_Cell[iiB],
-			      MemoBlock[iiB].MemoBlockSize);
-	else delete[] MemoBlock[iB].Cell[iC].s_d_FgGate_Cell[iiB];
-      if(!init) delete[] MemoBlock[iB].Cell[iC].s_d_FgGate_Cell;
-#ifdef CONNECT_TO_GATES
-      if(init) NewTs_d_Gate(MemoBlock[iB].Cell[iC].s_d_FgGate_InGate,
-			    MAX_BLOCKS);
-      else delete[] MemoBlock[iB].Cell[iC].s_d_FgGate_InGate;
-      if(init) NewTs_d_Gate(MemoBlock[iB].Cell[iC].s_d_FgGate_OutGate,
-			    MAX_BLOCKS);
-      else delete[] MemoBlock[iB].Cell[iC].s_d_FgGate_OutGate;
-#endif
-#endif
-    } // cell loop.
-    if(!init) delete[] MemoBlock[iB].Cell;
-  } // block loop.
+	for(unsigned int iB=BegBlock;iB<EndBlock;iB++) 
+	{
+		// InGate.
+		if(init) 
+			NewWeight(MemoBlock[iB].InGate.W.Bias,	MemoBlock[iB].InGate.W.Bias.w[0]);
+		if(init) 
+			NewWeight(MemoBlock[iB].InGate.W.In, NbIn);
+		else 
+			delete[] MemoBlock[iB].InGate.W.In;
+
+		#ifdef CONNECT_GATES_TO_S
+		if(init) 
+			NewWeight(MemoBlock[iB].InGate.W.s, MemoBlock[iB].MemoBlockSize);
+		else 
+			delete[] MemoBlock[iB].InGate.W.s;
+
+		#endif
+		if(init) 
+			MemoBlock[iB].InGate.W.Cell = new TWeight *[MAX_BLOCKS];
+
+		for(unsigned int iiB=MemoBlock[iB].BegSrcBlockNb;iiB<MemoBlock[iB].EndSrcBlockNb;iiB++)
+			if(init) 
+				NewWeight(MemoBlock[iB].InGate.W.Cell[iiB],	MemoBlock[iiB].MemoBlockSize);
+			else 
+				delete[] MemoBlock[iB].InGate.W.Cell[iiB];
+
+		if(!init)
+			delete[] MemoBlock[iB].InGate.W.Cell;
+
+		#ifdef CONNECT_TO_GATES
+		if(init) NewWeight(MemoBlock[iB].InGate.W.InGate, MAX_BLOCKS);
+		else delete[] MemoBlock[iB].InGate.W.InGate;
+		if(init) NewWeight(MemoBlock[iB].InGate.W.OutGate ,MAX_BLOCKS);
+		else delete[] MemoBlock[iB].InGate.W.OutGate;
+		#endif
+		// OutGate.
+		if(init) 
+			NewWeight(MemoBlock[iB].OutGate.W.Bias,MemoBlock[iB].OutGate.W.Bias.w[0]);
+		if(init) 
+			NewWeight(MemoBlock[iB].OutGate.W.In ,NbIn);
+		else 
+			delete[] MemoBlock[iB].OutGate.W.In;
+
+		#ifdef CONNECT_GATES_TO_S
+		if(init) 
+			NewWeight(MemoBlock[iB].OutGate.W.s, 	MemoBlock[iB].MemoBlockSize);
+		else 
+			delete[] MemoBlock[iB].OutGate.W.s;
+		#endif
+
+		if(init) 
+			MemoBlock[iB].OutGate.W.Cell = new TWeight *[MAX_BLOCKS]; //[MemoBlock[iB].EndSrcBlockNb];
+
+		for(unsigned int iiB=MemoBlock[iB].BegSrcBlockNb;	iiB<MemoBlock[iB].EndSrcBlockNb;iiB++) 
+			if(init) 
+				NewWeight(MemoBlock[iB].OutGate.W.Cell[iiB], MemoBlock[iiB].MemoBlockSize);
+			else 
+				delete[] MemoBlock[iB].OutGate.W.Cell[iiB];
+
+		if(!init) 
+			delete[] MemoBlock[iB].OutGate.W.Cell;
+
+		#ifdef CONNECT_TO_GATES
+		if(init) NewWeight(MemoBlock[iB].OutGate.W.InGate ,MAX_BLOCKS);
+		else delete[] MemoBlock[iB].OutGate.W.InGate;
+		if(init) NewWeight(MemoBlock[iB].OutGate.W.OutGate ,MAX_BLOCKS);
+		else delete[] MemoBlock[iB].OutGate.W.OutGate;
+		#endif
+
+		#ifdef FORGET_GATES
+		// FgGate.
+		if(init) 
+			NewWeight(MemoBlock[iB].FgGate.W.Bias,	MemoBlock[iB].FgGate.W.Bias.w[0]);
+		if(init) 
+			NewWeight(MemoBlock[iB].FgGate.W.In, NbIn);
+		else 
+			delete[] MemoBlock[iB].FgGate.W.In;
+
+		#ifdef CONNECT_GATES_TO_S
+		if(init) 
+			NewWeight(MemoBlock[iB].FgGate.W.s, MemoBlock[iB].MemoBlockSize);
+		else 
+			delete[] MemoBlock[iB].FgGate.W.s;
+
+		#endif
+		if(init) 
+			MemoBlock[iB].FgGate.W.Cell = new TWeight *[MAX_BLOCKS];
+
+		for(unsigned int iiB=MemoBlock[iB].BegSrcBlockNb;iiB<MemoBlock[iB].EndSrcBlockNb;iiB++) 
+		{
+			if(init) 
+				NewWeight(MemoBlock[iB].FgGate.W.Cell[iiB],MemoBlock[iiB].MemoBlockSize);
+			else 
+				delete[] MemoBlock[iB].FgGate.W.Cell[iiB];
+		}
+
+		if(!init)
+			delete[] MemoBlock[iB].FgGate.W.Cell;
+
+		#ifdef CONNECT_TO_GATES
+		if(init) NewWeight(MemoBlock[iB].FgGate.W.InGate, MAX_BLOCKS);
+		else delete[] MemoBlock[iB].FgGate.W.InGate;
+		if(init) NewWeight(MemoBlock[iB].FgGate.W.OutGate ,MAX_BLOCKS);
+		else delete[] MemoBlock[iB].FgGate.W.OutGate;
+		#endif
+		#endif
+		// Cells.
+		if(init) 
+			MemoBlock[iB].Cell = new TCell[MemoBlock[iB].MemoBlockSize];
+
+		for(unsigned int iC=0;iC<MemoBlock[iB].MemoBlockSize;iC++) {
+			#ifdef CELL_BIAS
+			if(init) 
+				NewWeight(MemoBlock[iB].Cell[iC].W.Bias,0); // Random init.
+			#endif
+			if(init) 
+				NewWeight(MemoBlock[iB].Cell[iC].W.In ,NbIn);
+			else 
+				delete[] MemoBlock[iB].Cell[iC].W.In;
+
+			if(init) 
+				MemoBlock[iB].Cell[iC].W.Cell = new TWeight *[MAX_BLOCKS];
+
+			for(unsigned int iiB=MemoBlock[iB].BegSrcBlockNb;	iiB<MemoBlock[iB].EndSrcBlockNb;iiB++) 
+				if(init) 
+					NewWeight(MemoBlock[iB].Cell[iC].W.Cell[iiB],MemoBlock[iiB].MemoBlockSize);
+				else 
+					delete[] MemoBlock[iB].Cell[iC].W.Cell[iiB];
+
+			if(!init) 
+				delete[] MemoBlock[iB].Cell[iC].W.Cell;
+
+			#ifdef CONNECT_TO_GATES
+			if(init) NewWeight(MemoBlock[iB].Cell[iC].W.InGate, MAX_BLOCKS);
+			else delete[] MemoBlock[iB].Cell[iC].W.InGate;
+			if(init) NewWeight(MemoBlock[iB].Cell[iC].W.OutGate, MAX_BLOCKS);
+			else delete[] MemoBlock[iB].Cell[iC].W.OutGate;
+			#endif
+		}
+	}
+	// Init the derivatives s_d.
+	for(unsigned int iB=BegBlock;iB<EndBlock;iB++) 
+	{
+	// For Cells.
+		for(unsigned int iC=0;iC<MemoBlock[iB].MemoBlockSize;iC++) 
+		{
+			if(init) 
+				NewTs_d_Gate(MemoBlock[iB].Cell[iC].s_d_In, NbIn);
+			else 
+				delete[] MemoBlock[iB].Cell[iC].s_d_In;
+
+			if(init) 
+				MemoBlock[iB].Cell[iC].s_d_Cell = 	new Ts_d_Gate *[MAX_BLOCKS];
+
+			for(unsigned int iiB=MemoBlock[iB].BegSrcBlockNb;iiB<MemoBlock[iB].EndSrcBlockNb;iiB++) 
+			{
+				if(init)
+					NewTs_d_Gate(MemoBlock[iB].Cell[iC].s_d_Cell[iiB],	MemoBlock[iiB].MemoBlockSize);
+				else 
+					delete[] MemoBlock[iB].Cell[iC].s_d_Cell[iiB];
+			}
+
+			if(!init) 
+				delete[] MemoBlock[iB].Cell[iC].s_d_Cell;
+			#ifdef CONNECT_TO_GATES
+			if(init)NewTs_d_Gate(MemoBlock[iB].Cell[iC],MAX_BLOCKS);
+			else delete[] MemoBlock[iB].Cell[iC].s_d_InGate;
+			if(init)NewTs_d_Gate(MemoBlock[iB].Cell[iC],MAX_BLOCKS);
+			else delete[] MemoBlock[iB].Cell[iC].s_d_OutGate;
+			#endif
+		// For InGate.
+			if(init) 
+				NewTs_d_Gate(MemoBlock[iB].Cell[iC].s_d_InGate_Bias);
+			if(init) 
+				NewTs_d_Gate(MemoBlock[iB].Cell[iC].s_d_InGate_In,NbIn);
+			else 
+				delete[] MemoBlock[iB].Cell[iC].s_d_InGate_In;
+
+			#ifdef CONNECT_GATES_TO_S
+			if(init) 
+				NewTs_d_Gate(MemoBlock[iB].Cell[iC].s_d_InGate_s,MemoBlock[iB].MemoBlockSize);
+			else 
+				delete[] MemoBlock[iB].Cell[iC].s_d_InGate_s;
+			#endif
+			if(init) 
+				MemoBlock[iB].Cell[iC].s_d_InGate_Cell = new Ts_d_Gate *[MAX_BLOCKS];
+			for(unsigned int iiB=MemoBlock[iB].BegSrcBlockNb;iiB<MemoBlock[iB].EndSrcBlockNb;iiB++) 
+				if(init) 
+					NewTs_d_Gate(MemoBlock[iB].Cell[iC].s_d_InGate_Cell[iiB],	MemoBlock[iiB].MemoBlockSize);
+				else 
+					delete[] MemoBlock[iB].Cell[iC].s_d_InGate_Cell[iiB];
+
+			if(!init) 
+				delete[] MemoBlock[iB].Cell[iC].s_d_InGate_Cell;
+
+			#ifdef CONNECT_TO_GATES
+			if(init) NewTs_d_Gate(MemoBlock[iB].Cell[iC].s_d_InGate_InGate,
+			MAX_BLOCKS);
+			else delete[] MemoBlock[iB].Cell[iC].s_d_InGate_InGate;
+			if(init) NewTs_d_Gate(MemoBlock[iB].Cell[iC].s_d_InGate_OutGate,
+			MAX_BLOCKS);
+			else delete[] MemoBlock[iB].Cell[iC].s_d_InGate_OutGate;
+			#endif
+
+			#ifdef FORGET_GATES
+			// For FgGate.
+			if(init) 
+				NewTs_d_Gate(MemoBlock[iB].Cell[iC].s_d_FgGate_Bias);
+			if(init) 
+				NewTs_d_Gate(MemoBlock[iB].Cell[iC].s_d_FgGate_In,NbIn);
+			else 
+				delete[] MemoBlock[iB].Cell[iC].s_d_FgGate_In;
+
+			#ifdef CONNECT_GATES_TO_S
+			if(init) 
+				NewTs_d_Gate(MemoBlock[iB].Cell[iC].s_d_FgGate_s,MemoBlock[iB].MemoBlockSize);
+			else 
+				delete[] MemoBlock[iB].Cell[iC].s_d_FgGate_s;
+			#endif
+			if(init) 
+				MemoBlock[iB].Cell[iC].s_d_FgGate_Cell = new Ts_d_Gate *[MAX_BLOCKS];
+			for(unsigned int iiB=MemoBlock[iB].BegSrcBlockNb;iiB<MemoBlock[iB].EndSrcBlockNb;iiB++) 
+				if(init) 
+					NewTs_d_Gate(MemoBlock[iB].Cell[iC].s_d_FgGate_Cell[iiB],MemoBlock[iiB].MemoBlockSize);
+				else 
+					delete[] MemoBlock[iB].Cell[iC].s_d_FgGate_Cell[iiB];
+
+			if(!init) 
+				delete[] MemoBlock[iB].Cell[iC].s_d_FgGate_Cell;
+
+			#ifdef CONNECT_TO_GATES
+			if(init) NewTs_d_Gate(MemoBlock[iB].Cell[iC].s_d_FgGate_InGate,
+			MAX_BLOCKS);
+			else delete[] MemoBlock[iB].Cell[iC].s_d_FgGate_InGate;
+			if(init) NewTs_d_Gate(MemoBlock[iB].Cell[iC].s_d_FgGate_OutGate,
+			MAX_BLOCKS);
+			else delete[] MemoBlock[iB].Cell[iC].s_d_FgGate_OutGate;
+			#endif
+			#endif
+		} // cell loop.
+		if(!init) 
+			delete[] MemoBlock[iB].Cell;
+	} // block loop.
 }
 
 void LSTM::AddMemoBlockToExistingBlocks(unsigned int BegBlock, 
@@ -1037,147 +1154,151 @@ char LSTM::AddMemoBlock(int BegSrcBlockNb, int EndSrcBlockNb,
   return 0;
 }
 
-void LSTM::ResetNet(bool SaveState, bool RestoreState) {
-  // Save and restore not for partial and backpass variables.
-  // So save and rstore can only be used during testing.
-  // Reset MemoBlock varables.
-  for(unsigned int iB=0;iB<NbMemoBlocks;iB++) {
-    // Gate variables (In, Out, Fg).
-    // Even though No connection form the gates.
-    if(SaveState) {
-      MemoBlock[iB].InGate.y_save=MemoBlock[iB].InGate.y;
-      MemoBlock[iB].OutGate.y_save=MemoBlock[iB].OutGate.y;
-#ifdef FORGET_GATES      
-      MemoBlock[iB].FgGate.y_save=MemoBlock[iB].FgGate.y;
-#endif    
-    } else if(RestoreState) {
-      MemoBlock[iB].InGate.y=MemoBlock[iB].InGate.y_save;
-      MemoBlock[iB].OutGate.y=MemoBlock[iB].OutGate.y_save;
-#ifdef FORGET_GATES      
-      MemoBlock[iB].FgGate.y=MemoBlock[iB].FgGate.y_save;
-#endif    
-    } else { 
-      MemoBlock[iB].InGate.y=0.0;
-      MemoBlock[iB].OutGate.y=0.0;
-#ifdef FORGET_GATES      
-      MemoBlock[iB].FgGate.y=0.0;
-#endif    
-    }    
-    // Cells.
-    for(unsigned int o=0;o<ORDER_WEIGHT;o++) {
-      for(unsigned int iC=0;iC<MemoBlock[iB].MemoBlockSize;iC++) {
-      // Cell variables.
-      if(SaveState) {
-	MemoBlock[iB].Cell[iC].s_save[o]=MemoBlock[iB].Cell[iC].s[o];
-	MemoBlock[iB].Cell[iC].y_save[o]=MemoBlock[iB].Cell[iC].y[o];    
-      } else if(RestoreState) {
-	MemoBlock[iB].Cell[iC].s[o]=MemoBlock[iB].Cell[iC].s_save[o];
-	MemoBlock[iB].Cell[iC].y[o]=MemoBlock[iB].Cell[iC].y_save[o];    
-      } else {
-	MemoBlock[iB].Cell[iC].s[o]=0.0;
-	MemoBlock[iB].Cell[iC].y[o]=0.0;
-      }
-      // s_d for cells.
-      if(!SaveState && !RestoreState) {
-#ifdef CELL_BIAS
-	MemoBlock[iB].Cell[iC].s_d_Bias.s_d[o]=0;
-#endif
-      for(unsigned int iI=0;iI<NbIn;iI++)     
-	MemoBlock[iB].Cell[iC].s_d_In[iI].s_d[o]=0;
-      for(unsigned int iiB=MemoBlock[iB].BegSrcBlockNb;
-	  iiB<MemoBlock[iB].EndSrcBlockNb;iiB++) {
-	if(!InternalBlockConect && (iiB==iB)) continue;
-#ifdef CONNECT_TO_GATES
-	MemoBlock[iB].Cell[iC].s_d_InGate[iiB].s_d[o]=0;
-	MemoBlock[iB].Cell[iC].s_d_OutGate[iiB].s_d[o]=0;
-#endif
-	for(unsigned int iiC=0;iiC<MemoBlock[iiB].MemoBlockSize;iiC++)
-	  MemoBlock[iB].Cell[iC].s_d_Cell[iiB][iiC].s_d[o]=0;
-      }
-      // s_d for InGates.
-      MemoBlock[iB].Cell[iC].s_d_InGate_Bias.s_d[o]=0;
-      for(unsigned int iI=0;iI<NbIn;iI++)     
-	MemoBlock[iB].Cell[iC].s_d_InGate_In[iI].s_d[o]=0;
-#ifdef CONNECT_GATES_TO_S
-      for(unsigned int iiC=0;iiC<MemoBlock[iB].MemoBlockSize;iiC++)
-	MemoBlock[iB].Cell[iC].s_d_InGate_s[iiC].s_d[o]=0;
-#endif
-      for(unsigned int iiB=MemoBlock[iB].BegSrcBlockNb;
-	  iiB<MemoBlock[iB].EndSrcBlockNb;iiB++) {
-#ifdef CONNECT_TO_GATES
-	MemoBlock[iB].Cell[iC].s_d_InGate_InGate[iiB].s_d[o]=0;
-	MemoBlock[iB].Cell[iC].s_d_InGate_OutGate[iiB].s_d[o]=0;
-#endif
-	for(unsigned int iiC=0;iiC<MemoBlock[iiB].MemoBlockSize;iiC++)
-	  MemoBlock[iB].Cell[iC].s_d_InGate_Cell[iiB][iiC].s_d[o]=0;
-      }
-#ifdef FORGET_GATES
-      // s_d for FgGates.
-      MemoBlock[iB].Cell[iC].s_d_FgGate_Bias.s_d[o]=0;
-      for(unsigned int iI=0;iI<NbIn;iI++)     
-	MemoBlock[iB].Cell[iC].s_d_FgGate_In[iI].s_d[o]=0;
-#ifdef CONNECT_GATES_TO_S
-      for(unsigned int iiC=0;iiC<MemoBlock[iB].MemoBlockSize;iiC++)
-	MemoBlock[iB].Cell[iC].s_d_FgGate_s[iiC].s_d[o]=0;
-#endif
-      for(unsigned int iiB=MemoBlock[iB].BegSrcBlockNb;
-	  iiB<MemoBlock[iB].EndSrcBlockNb;iiB++) {
-#ifdef CONNECT_TO_GATES
-	MemoBlock[iB].Cell[iC].s_d_FgGate_InGate[iiB].s_d[o]=0;
-	MemoBlock[iB].Cell[iC].s_d_FgGate_OutGate[iiB].s_d[o]=0;
-#endif
-	for(unsigned int iiC=0;iiC<MemoBlock[iiB].MemoBlockSize;iiC++)
-	  MemoBlock[iB].Cell[iC].s_d_FgGate_Cell[iiB][iiC].s_d[o]=0;
-      }
-#endif
-    }
-      }
-    } // End o loop.
-  } //end (!SaveState && !RestoreState) {
-  // Reset Out units varables only for RECURRENT_OUTPUT. 
-#if defined(RECURRENT_OUTPUT)
-  for(unsigned int iO=0;iO<NbOut;iO++) {
-    if(SaveState) Out[iO].y_save=Out[iO].y;
-    else if(RestoreState) Out[iO].y=Out[iO].y_save;
-    else Out[iO].y=0;
-  }
-#ifdef STAT_OUT
-  for(unsigned int iO=0;iO<NbStatOut;iO++) {
-    if(SaveState) StatOut[iO].y_save=StatOut[iO].y;
-    else if(RestoreState) StatOut[iO].y=StatOut[iO].y_save;
-    else StatOut[iO].y=0;
-  }
-#endif
-#endif
-#if defined(SELF_RECURRENT_OUTPUT)
-  for(unsigned int iO=0;iO<NbOut;iO++) {
-    if(SaveState) Out[iO].net_save=Out[iO].net;
-    else if(RestoreState) Out[iO].net=Out[iO].net_save;
-    else Out[iO].net=0;
-  }
-#endif
-  // Reset Hidden units varables.
-#ifdef USE_HIDDEN_UNITS
-  for(unsigned int o=0;o<ORDER_WEIGHT;o++) {
-    for(unsigned int iH=0;iH<NbHidden;iH++) {
-      if(SaveState) Hidden[iH].y_save[o] = Hidden[iH].y[o];
-      else if(RestoreState) Hidden[iH].y[o] = Hidden[iH].y_save[o];
-      else Hidden[iH].y[o]=0; 
-    }
-  }
-#endif
-  // Only resst the OutWindow buffer.
-  if(TimeWindowSize && OutWindow) {
-    if(!SaveState && !RestoreState)
-      for(unsigned int i=0;i<ClampOutPredictSteps;i++) OutWindow[i]=0;
-    OutWindowPos=0;
-  }
-  // Reset PredictNextIn units varables.
-  //  for(unsigned int iP=0;iP<NbPredictNextIn;iP++) PredictNextIn[iP].y=0; 
-  // Reset NextIn units varables not necessary.
-  // Reset PredictClass units varables.
-  //  for(unsigned int iP=0;iP<NbPredictClass;iP++)  PredictClass[iP].y=0; 
-  // Reset PredictClassOut units varables not necessary.
+void LSTM::ResetNet(bool SaveState, bool RestoreState)
+{
+	// Save and restore not for partial and backpass variables.
+	// So save and rstore can only be used during testing.
+	// Reset MemoBlock varables.
+	for(unsigned int iB=0;iB<NbMemoBlocks;iB++) 
+	{
+		// Gate variables (In, Out, Fg).
+		// Even though No connection form the gates.
+		if(SaveState) 
+		{
+			MemoBlock[iB].InGate.y_save=MemoBlock[iB].InGate.y;
+			MemoBlock[iB].OutGate.y_save=MemoBlock[iB].OutGate.y;
+			#ifdef FORGET_GATES      
+			MemoBlock[iB].FgGate.y_save=MemoBlock[iB].FgGate.y;
+			#endif    
+		} else if(RestoreState) {
+			MemoBlock[iB].InGate.y=MemoBlock[iB].InGate.y_save;
+			MemoBlock[iB].OutGate.y=MemoBlock[iB].OutGate.y_save;
+			#ifdef FORGET_GATES      
+			MemoBlock[iB].FgGate.y=MemoBlock[iB].FgGate.y_save;
+			#endif    
+		} else { 
+			MemoBlock[iB].InGate.y=0.0;
+			MemoBlock[iB].OutGate.y=0.0;
+			#ifdef FORGET_GATES      
+			MemoBlock[iB].FgGate.y=0.0;
+			#endif    
+		}    
+		// Cells.
+		for(unsigned int o=0;o<ORDER_WEIGHT;o++) {
+			for(unsigned int iC=0;iC<MemoBlock[iB].MemoBlockSize;iC++) {
+			// Cell variables.
+			if(SaveState) {
+				MemoBlock[iB].Cell[iC].s_save[o]=MemoBlock[iB].Cell[iC].s[o];
+				MemoBlock[iB].Cell[iC].y_save[o]=MemoBlock[iB].Cell[iC].y[o];    
+			} else if(RestoreState) {
+				MemoBlock[iB].Cell[iC].s[o]=MemoBlock[iB].Cell[iC].s_save[o];
+				MemoBlock[iB].Cell[iC].y[o]=MemoBlock[iB].Cell[iC].y_save[o];    
+			} else {
+				MemoBlock[iB].Cell[iC].s[o]=0.0;
+				MemoBlock[iB].Cell[iC].y[o]=0.0;
+			}
+			// s_d for cells.
+			if(!SaveState && !RestoreState) 
+			{
+				#ifdef CELL_BIAS
+				MemoBlock[iB].Cell[iC].s_d_Bias.s_d[o]=0;
+				#endif
+				for(unsigned int iI=0;iI<NbIn;iI++)     
+					MemoBlock[iB].Cell[iC].s_d_In[iI].s_d[o]=0;
+				for(unsigned int iiB=MemoBlock[iB].BegSrcBlockNb;	iiB<MemoBlock[iB].EndSrcBlockNb;iiB++) 
+				{
+					if(!InternalBlockConect && (iiB==iB)) 
+						continue;
+					#ifdef CONNECT_TO_GATES
+					MemoBlock[iB].Cell[iC].s_d_InGate[iiB].s_d[o]=0;
+					MemoBlock[iB].Cell[iC].s_d_OutGate[iiB].s_d[o]=0;
+					#endif
+					for(unsigned int iiC=0;iiC<MemoBlock[iiB].MemoBlockSize;iiC++)
+						MemoBlock[iB].Cell[iC].s_d_Cell[iiB][iiC].s_d[o]=0;
+				}
+				// s_d for InGates.
+				MemoBlock[iB].Cell[iC].s_d_InGate_Bias.s_d[o]=0;
+				for(unsigned int iI=0;iI<NbIn;iI++)     
+					MemoBlock[iB].Cell[iC].s_d_InGate_In[iI].s_d[o]=0;
+				#ifdef CONNECT_GATES_TO_S
+				for(unsigned int iiC=0;iiC<MemoBlock[iB].MemoBlockSize;iiC++)
+					MemoBlock[iB].Cell[iC].s_d_InGate_s[iiC].s_d[o]=0;
+				#endif
+				for(unsigned int iiB=MemoBlock[iB].BegSrcBlockNb;	iiB<MemoBlock[iB].EndSrcBlockNb;iiB++) {
+				#ifdef CONNECT_TO_GATES
+				MemoBlock[iB].Cell[iC].s_d_InGate_InGate[iiB].s_d[o]=0;
+				MemoBlock[iB].Cell[iC].s_d_InGate_OutGate[iiB].s_d[o]=0;
+				#endif
+				for(unsigned int iiC=0;iiC<MemoBlock[iiB].MemoBlockSize;iiC++)
+					MemoBlock[iB].Cell[iC].s_d_InGate_Cell[iiB][iiC].s_d[o]=0;
+				}
+				#ifdef FORGET_GATES
+				// s_d for FgGates.
+				MemoBlock[iB].Cell[iC].s_d_FgGate_Bias.s_d[o]=0;
+				for(unsigned int iI=0;iI<NbIn;iI++)     
+					MemoBlock[iB].Cell[iC].s_d_FgGate_In[iI].s_d[o]=0;
+				#ifdef CONNECT_GATES_TO_S
+				for(unsigned int iiC=0;iiC<MemoBlock[iB].MemoBlockSize;iiC++)
+					MemoBlock[iB].Cell[iC].s_d_FgGate_s[iiC].s_d[o]=0;
+				#endif
+					for(unsigned int iiB=MemoBlock[iB].BegSrcBlockNb;iiB<MemoBlock[iB].EndSrcBlockNb;iiB++) 
+					{
+					#ifdef CONNECT_TO_GATES
+					MemoBlock[iB].Cell[iC].s_d_FgGate_InGate[iiB].s_d[o]=0;
+					MemoBlock[iB].Cell[iC].s_d_FgGate_OutGate[iiB].s_d[o]=0;
+					#endif
+					for(unsigned int iiC=0;iiC<MemoBlock[iiB].MemoBlockSize;iiC++)
+						MemoBlock[iB].Cell[iC].s_d_FgGate_Cell[iiB][iiC].s_d[o]=0;
+					}
+				#endif
+				}
+			}
+		} // End o loop.
+	} //end (!SaveState && !RestoreState) {
+	// Reset Out units varables only for RECURRENT_OUTPUT. 
+	#if defined(RECURRENT_OUTPUT)
+	for(unsigned int iO=0;iO<NbOut;iO++) {
+	if(SaveState) Out[iO].y_save=Out[iO].y;
+	else if(RestoreState) Out[iO].y=Out[iO].y_save;
+	else Out[iO].y=0;
+	}
+	#ifdef STAT_OUT
+	for(unsigned int iO=0;iO<NbStatOut;iO++) {
+	if(SaveState) StatOut[iO].y_save=StatOut[iO].y;
+	else if(RestoreState) StatOut[iO].y=StatOut[iO].y_save;
+	else StatOut[iO].y=0;
+	}
+	#endif
+	#endif
+	#if defined(SELF_RECURRENT_OUTPUT)
+	for(unsigned int iO=0;iO<NbOut;iO++) {
+	if(SaveState) Out[iO].net_save=Out[iO].net;
+	else if(RestoreState) Out[iO].net=Out[iO].net_save;
+	else Out[iO].net=0;
+	}
+	#endif
+	// Reset Hidden units varables.
+	#ifdef USE_HIDDEN_UNITS
+	for(unsigned int o=0;o<ORDER_WEIGHT;o++) {
+	for(unsigned int iH=0;iH<NbHidden;iH++) {
+	if(SaveState) Hidden[iH].y_save[o] = Hidden[iH].y[o];
+	else if(RestoreState) Hidden[iH].y[o] = Hidden[iH].y_save[o];
+	else Hidden[iH].y[o]=0; 
+	}
+	}
+	#endif
+	// Only resst the OutWindow buffer.
+	if(TimeWindowSize && OutWindow) {
+	if(!SaveState && !RestoreState)
+	for(unsigned int i=0;i<ClampOutPredictSteps;i++) OutWindow[i]=0;
+	OutWindowPos=0;
+	}
+	// Reset PredictNextIn units varables.
+	//  for(unsigned int iP=0;iP<NbPredictNextIn;iP++) PredictNextIn[iP].y=0; 
+	// Reset NextIn units varables not necessary.
+	// Reset PredictClass units varables.
+	//  for(unsigned int iP=0;iP<NbPredictClass;iP++)  PredictClass[iP].y=0; 
+	// Reset PredictClassOut units varables not necessary.
 }
 
 
@@ -1201,228 +1322,239 @@ void LSTM::ForwardPass( struct TPatData &PatData,
   // We assume: TimeWindowStepSize==PredictionOffset !!
   // The newest value is In[0].
 
-    if(ClampOut && TimeWindowSize && OutWindow) {
-      ClampOut=false;
-      for(unsigned int iI=1;iI<NbIn;iI++) {
-	//for(unsigned int iI=NbIn-1;iI>0;iI--) {
-	//CurInput[iI][0]=CurInput[iI-1][0];  // Shift the window.
-	CurInput[iI][0]=GetInput(PatData,Seq,Pat,iI); 
-      }
-      // Replace the already predicted steps 
-      // (the latest one further down).
-      if((TimeWindowStepSize == 
-	  (unsigned int)PredictionOffset) && OutWindow) 
-	{ 
-	  for(unsigned int iI=1;iI<NbIn;iI++) {
+    if(ClampOut && TimeWindowSize && OutWindow) 
+	{
+		ClampOut=false;
+		for(unsigned int iI=1;iI<NbIn;iI++) {
+		//for(unsigned int iI=NbIn-1;iI>0;iI--) {
+		//CurInput[iI][0]=CurInput[iI-1][0];  // Shift the window.
+			CurInput[iI][0]=GetInput(PatData,Seq,Pat,iI); 
+		}
+		// Replace the already predicted steps 
+		// (the latest one further down).
+		if((TimeWindowStepSize == (unsigned int)PredictionOffset) && OutWindow) 
+		{ 
+			for(unsigned int iI=1;iI<NbIn;iI++) 
+			{
 
-	    if( iI < ((unsigned int)((Pat-ClampPatStart) / 
-				     PredictionOffset)))
-	      CurInput[iI][0]=
-		OutWindow[(unsigned int)
-			  ((Pat-ClampPatStart)/PredictionOffset)-iI-1];
-	  } 
-      } else if(PredictionOffset==1) {
-	for(unsigned int iI=0;iI<NbIn;iI++) {
-	  OutWindowPos=(unsigned int)
-	    (Pat-ClampPatStart)-1-iI*TimeWindowStepSize;
-	  if(OutWindowPos>=0) CurInput[iI][0]=OutWindow[OutWindowPos];
+				if( iI < ((unsigned int)((Pat-ClampPatStart) / 
+							PredictionOffset)))
+				CurInput[iI][0]=OutWindow[(unsigned int)
+					((Pat-ClampPatStart)/PredictionOffset)-iI-1];
+			} 
+		} else if(PredictionOffset==1) 
+		{
+			for(unsigned int iI=0;iI<NbIn;iI++) 
+			{
+				OutWindowPos=(unsigned int)
+				(Pat-ClampPatStart)-1-iI*TimeWindowStepSize;
+				if(OutWindowPos>=0) CurInput[iI][0]=OutWindow[OutWindowPos];
+			}
+		}
+		ClampOut=true;
+		CurInput[0][0] = GetInput(PatData,Seq,Pat,0); //Get the new out.
+	} else for(unsigned int iI=0;iI<NbIn;iI++) 
+	{ 
+		CurInput[iI][0] = GetInput(PatData,Seq,Pat,iI);
+	
+		for(unsigned int o=1;o<ORDER_WEIGHT;o++) {
+			CurInput[iI][o] = CurInput[iI][o-1] * CurInput[iI][0]; 
+		}
 	}
-      }
-      ClampOut=true;
-      CurInput[0][0] = GetInput(PatData,Seq,Pat,0); //Get the new out.
-    } else for(unsigned int iI=0;iI<NbIn;iI++) {
-      CurInput[iI][0] = GetInput(PatData,Seq,Pat,iI);
-      for(unsigned int o=1;o<ORDER_WEIGHT;o++) {
-	CurInput[iI][o] = CurInput[iI][o-1] * CurInput[iI][0]; 
-      }
-    }
   // Input to MemoBlocks (net).
-  for(unsigned int iB=0;iB<NbMemoBlocks;iB++) {
-    // net InGate.
-    NetInputSum(MemoBlock[iB].InGate.net,
-		MemoBlock[iB].InGate.W,1,1,1,0);
-#ifdef CONNECT_GATES_TO_S
-    NetInputPeephole(MemoBlock[iB].InGate.net,MemoBlock[iB].InGate.W,iB);
-#endif
-    // net OutGate. Peephole (s) later.
-    NetInputSum(MemoBlock[iB].OutGate.net,MemoBlock[iB].OutGate.W,1,1,1,0);
-    // net FgGate.
-#ifdef FORGET_GATES
-    NetInputSum(MemoBlock[iB].FgGate.net,MemoBlock[iB].FgGate.W,1,1,1,0);
-#ifdef CONNECT_GATES_TO_S
-    NetInputPeephole(MemoBlock[iB].FgGate.net,MemoBlock[iB].FgGate.W,iB);
-#endif
-#endif
-    // net Cells.
-    for(unsigned int iC=0;iC<MemoBlock[iB].MemoBlockSize;iC++) {
-#ifdef CELL_BIAS
-      NetInputSum(MemoBlock[iB].Cell[iC].net,
-		  MemoBlock[iB].Cell[iC].W,1,1,1,0);
-#else
-      NetInputSum(MemoBlock[iB].Cell[iC].net,
-		  MemoBlock[iB].Cell[iC].W,1,0,1,0);
-#endif
-    }
-  } // End first loop over MemoBlocks.
+		for(unsigned int iB=0;iB<NbMemoBlocks;iB++) {
+			// net InGate.
+			NetInputSum(MemoBlock[iB].InGate.net,	MemoBlock[iB].InGate.W,1,1,1,0);
+			#ifdef CONNECT_GATES_TO_S
+			NetInputPeephole(MemoBlock[iB].InGate.net,MemoBlock[iB].InGate.W,iB);
+			#endif
+			// net OutGate. Peephole (s) later.
+			NetInputSum(MemoBlock[iB].OutGate.net,MemoBlock[iB].OutGate.W,1,1,1,0);
+			// net FgGate.
+			#ifdef FORGET_GATES
+			NetInputSum(MemoBlock[iB].FgGate.net,MemoBlock[iB].FgGate.W,1,1,1,0);
+			#ifdef CONNECT_GATES_TO_S
+			NetInputPeephole(MemoBlock[iB].FgGate.net,MemoBlock[iB].FgGate.W,iB);
+			#endif
+			#endif
+			// net Cells.
+			for(unsigned int iC=0;iC<MemoBlock[iB].MemoBlockSize;iC++) {
+			#ifdef CELL_BIAS
+				NetInputSum(MemoBlock[iB].Cell[iC].net,  MemoBlock[iB].Cell[iC].W,1,1,1,0);
+			#else
+				NetInputSum(MemoBlock[iB].Cell[iC].net,
+					MemoBlock[iB].Cell[iC].W,1,0,1,0);
+			#endif
+			}
+		} // End first loop over MemoBlocks.
   // MemoBlocks (g,s,h,y).
-  for(unsigned int iB=0;iB<NbMemoBlocks;iB++) {
-    // y InGate.
-    MemoBlock[iB].InGate.y_t1 = MemoBlock[iB].InGate.y;
-    log_sig(MemoBlock[iB].InGate.net, MemoBlock[iB].InGate.y);
-#ifdef FORGET_GATES
-    // y FgGate.
-    Yfg(MemoBlock[iB].FgGate.net, MemoBlock[iB].FgGate.y);
-#endif
-    // g,s,h,y Cell[iC].
-    for(unsigned int iC=0;iC<MemoBlock[iB].MemoBlockSize;iC++) {
-      for(unsigned int o=0;o<ORDER_WEIGHT;o++) {
-	MemoBlock[iB].Cell[iC].y_t1[o] = MemoBlock[iB].Cell[iC].y[o]; }
-      // G Input squashing.
-      G(MemoBlock[iB].Cell[iC].net, MemoBlock[iB].Cell[iC].g);
-      //MemoBlock[iB].Cell[iC].g = tanh(MemoBlock[iB].Cell[iC].net);
-#ifdef FORGET_GATES
-      // For the FgGate partials (and direct conection of the gates to s) 
-      // we keep the last s.
-      for(unsigned int o=0;o<ORDER_WEIGHT;o++) {
-	MemoBlock[iB].Cell[iC].s_t1[o] = MemoBlock[iB].Cell[iC].s[o]; }
-      MemoBlock[iB].Cell[iC].s[0] *= MemoBlock[iB].FgGate.y;
-#endif
-      //MemoBlock[iB].Cell[iC].s *= 0.9;
-      MemoBlock[iB].Cell[iC].s[0] +=
-	MemoBlock[iB].Cell[iC].g * MemoBlock[iB].InGate.y;
-      for(unsigned int o=1;o<ORDER_WEIGHT;o++) {
-	MemoBlock[iB].Cell[iC].s[o] =       
-	  MemoBlock[iB].Cell[iC].s[o-1] * MemoBlock[iB].Cell[iC].s[0]; }
-      // Do the overflow check for s (709 is max) in H() not here.
-      // H Output squashing.
-#ifdef USE_H
-      H(MemoBlock[iB].Cell[iC].s[0], MemoBlock[iB].Cell[iC].h);
-#else
-      MemoBlock[iB].Cell[iC].h = MemoBlock[iB].Cell[iC].s[0];
-#endif
-      //MemoBlock[iB].Cell[iC].h = tanh(MemoBlock[iB].Cell[iC].s);
-      // Now we finish the OutGate net input, because it should see
-      // the actual s before it lets it out.
-#ifdef CONNECT_GATES_TO_S
-      NetInputPeephole(MemoBlock[iB].OutGate.net,
-		       MemoBlock[iB].OutGate.W,iB);
-#endif      
-      // y OutGate (the outher gates'ys are updated before the s calc).
-      MemoBlock[iB].OutGate.y_t1 = MemoBlock[iB].OutGate.y;
-      log_sig(MemoBlock[iB].OutGate.net, MemoBlock[iB].OutGate.y);
-      // Gating cell output.
-      MemoBlock[iB].Cell[iC].y[0] = MemoBlock[iB].Cell[iC].h *
-	MemoBlock[iB].OutGate.y;
-      for(unsigned int o=1;o<ORDER_WEIGHT;o++) {
-	MemoBlock[iB].Cell[iC].y[o] =       
-	  MemoBlock[iB].Cell[iC].y[o-1] * MemoBlock[iB].Cell[iC].y[0]; }
-    }
-  }
-  // Partial derivatives s_d.
-  for(unsigned int iB=BegBlockDeriv;iB<EndBlockDeriv;iB++) {
-    log_sig_d(MemoBlock[iB].InGate.y,InGate_df); //For the s_d for InGate.
-#ifdef FORGET_GATES
-    Yfg_d(MemoBlock[iB].FgGate.y,FgGate_df); //For the s_d for FgGate.
-#endif
-    for(unsigned int iC=0;iC<MemoBlock[iB].MemoBlockSize;iC++) {
-      // For Cells.
-#if defined(G_SIGMOID) || defined(G_TANH)
-      G_d(MemoBlock[iB].Cell[iC].g, g_d);
-#elif defined(G_RATIONAL_FUNC) || defined(G_LINEAR)
-      G_d(g_d);
-#endif
-      g_d__y_in = g_d * MemoBlock[iB].InGate.y; // For all cells in block.
-      //s_d cells.
-#ifdef CELL_BIAS
-      Update_Cell_s_d(MemoBlock[iB].Cell[iC].s_d_Bias.s_d,iB,1);
-#endif
-      for(unsigned int iI=0;iI<NbIn;iI++)
-	Update_Cell_s_d(MemoBlock[iB].Cell[iC].s_d_In[iI].s_d,iB,
-			CurInput[iI]);
-      for(unsigned int iiB=MemoBlock[iB].BegSrcBlockNb;
-	  iiB<MemoBlock[iB].EndSrcBlockNb;iiB++) {
-	if(!InternalBlockConect && (iiB==iB)) continue;
-#ifdef CONNECT_TO_GATES
-	Update_Cell_s_d(MemoBlock[iB].Cell[iC].s_d_InGate[iiB].s_d,iB,
-			MemoBlock[iiB].InGate.y_t1);
-	Update_Cell_s_d(MemoBlock[iB].Cell[iC].s_d_OutGate[iiB].s_d,iB,
-			MemoBlock[iiB].OutGate.y_t1);
-#endif
-	for(unsigned int iiC=0;iiC<MemoBlock[iiB].MemoBlockSize;iiC++)
-	  Update_Cell_s_d(MemoBlock[iB].Cell[iC].s_d_Cell[iiB][iiC].s_d,iB,
-			  MemoBlock[iiB].Cell[iiC].y_t1);
-      }
-      // s_d for InGate.
-      y_in_d__g = InGate_df * MemoBlock[iB].Cell[iC].g;
-      Update_InGate_s_d(MemoBlock[iB].Cell[iC].s_d_InGate_Bias.s_d,iB,1);
-      for(unsigned int iI=0;iI<NbIn;iI++)
-	Update_InGate_s_d(MemoBlock[iB].Cell[iC].s_d_InGate_In[iI].s_d,iB,
-			  CurInput[iI]);
-#ifdef CONNECT_GATES_TO_S
-      //From s
-      for(unsigned int iiC=0;iiC<MemoBlock[iB].MemoBlockSize;iiC++) { 
-	Update_InGate_s_d(MemoBlock[iB].Cell[iC].s_d_InGate_s[iiC].s_d,iB,
-			  MemoBlock[iB].Cell[iiC].s_t1);
-#ifdef PEEPHOLE_W_TERM
-	// Only for order 0.
-      for(unsigned int iiiC=0;iiiC<MemoBlock[iB].MemoBlockSize;iiiC++)
-	MemoBlock[iB].Cell[iC].s_d_InGate_s[iiC].s_d[0]+=
-	  y_in_d__g*MemoBlock[iB].Cell[iiiC].s_t1[0]*
-	  MemoBlock[iB].InGate.W.s[iiiC].w[0];
-#endif
+	for(unsigned int iB=0;iB<NbMemoBlocks;iB++) {
+		// y InGate.
+		MemoBlock[iB].InGate.y_t1 = MemoBlock[iB].InGate.y;
+		log_sig(MemoBlock[iB].InGate.net, MemoBlock[iB].InGate.y);
+		#ifdef FORGET_GATES
+		// y FgGate.
+		Yfg(MemoBlock[iB].FgGate.net, MemoBlock[iB].FgGate.y);
+		#endif
+		// g,s,h,y Cell[iC].
+		for(unsigned int iC=0;iC<MemoBlock[iB].MemoBlockSize;iC++) 
+		{
+			for(unsigned int o=0;o<ORDER_WEIGHT;o++) 
+			{
+				MemoBlock[iB].Cell[iC].y_t1[o] = MemoBlock[iB].Cell[iC].y[o]; 
+			}
+			// G Input squashing.
+			G(MemoBlock[iB].Cell[iC].net, MemoBlock[iB].Cell[iC].g);
+			//MemoBlock[iB].Cell[iC].g = tanh(MemoBlock[iB].Cell[iC].net);
+			#ifdef FORGET_GATES
+			// For the FgGate partials (and direct conection of the gates to s) 
+			// we keep the last s.
+			for(unsigned int o=0;o<ORDER_WEIGHT;o++) {
+				MemoBlock[iB].Cell[iC].s_t1[o] = MemoBlock[iB].Cell[iC].s[o]; 
+			}
+			MemoBlock[iB].Cell[iC].s[0] *= MemoBlock[iB].FgGate.y;
+			#endif
+			//MemoBlock[iB].Cell[iC].s *= 0.9;
+			MemoBlock[iB].Cell[iC].s[0] +=
+			MemoBlock[iB].Cell[iC].g * MemoBlock[iB].InGate.y;
+			for(unsigned int o=1;o<ORDER_WEIGHT;o++) {
+				MemoBlock[iB].Cell[iC].s[o] =       
+				MemoBlock[iB].Cell[iC].s[o-1] * MemoBlock[iB].Cell[iC].s[0]; 
+			}
+			// Do the overflow check for s (709 is max) in H() not here.
+			// H Output squashing.
+			#ifdef USE_H
+			H(MemoBlock[iB].Cell[iC].s[0], MemoBlock[iB].Cell[iC].h);
+			#else
+			MemoBlock[iB].Cell[iC].h = MemoBlock[iB].Cell[iC].s[0];
+			#endif
+			//MemoBlock[iB].Cell[iC].h = tanh(MemoBlock[iB].Cell[iC].s);
+			// Now we finish the OutGate net input, because it should see
+			// the actual s before it lets it out.
+			#ifdef CONNECT_GATES_TO_S
+			NetInputPeephole(MemoBlock[iB].OutGate.net,	MemoBlock[iB].OutGate.W,iB);
+			#endif      
+			// y OutGate (the outher gates'ys are updated before the s calc).
+			MemoBlock[iB].OutGate.y_t1 = MemoBlock[iB].OutGate.y;
+			log_sig(MemoBlock[iB].OutGate.net, MemoBlock[iB].OutGate.y);
+			// Gating cell output.
+			MemoBlock[iB].Cell[iC].y[0] = MemoBlock[iB].Cell[iC].h *
+			MemoBlock[iB].OutGate.y;
+			for(unsigned int o=1;o<ORDER_WEIGHT;o++) {
+				MemoBlock[iB].Cell[iC].y[o] =       
+				MemoBlock[iB].Cell[iC].y[o-1] * MemoBlock[iB].Cell[iC].y[0]; 
+			}
+		}
 	}
-#endif
-      for(unsigned int iiB=MemoBlock[iB].BegSrcBlockNb;
-	  iiB<MemoBlock[iB].EndSrcBlockNb;iiB++) {
-#ifdef CONNECT_TO_GATES
-	Update_InGate_s_d(MemoBlock[iB].Cell[iC].s_d_InGate_InGate[iiB].s_d,
-			  iB,MemoBlock[iiB].InGate.y_t1);
-	Update_InGate_s_d(MemoBlock[iB].Cell[iC].s_d_InGate_OutGate[iiB].s_d,
-			  iB,MemoBlock[iiB].OutGate.y_t1);
-#endif
-	for(unsigned int iiC=0;iiC<MemoBlock[iiB].MemoBlockSize;iiC++)
-	  Update_InGate_s_d
-	    (MemoBlock[iB].Cell[iC].s_d_InGate_Cell[iiB][iiC].s_d,
-	     iB,MemoBlock[iiB].Cell[iiC].y_t1);
-      }
-#ifdef FORGET_GATES
-      // s_d for FgGate.
-      y__fg_d__s_t1 = FgGate_df * MemoBlock[iB].Cell[iC].s_t1[0];
-      Update_FgGate_s_d(MemoBlock[iB].Cell[iC].s_d_FgGate_Bias.s_d,iB,1);
-      for(unsigned int iI=0;iI<NbIn;iI++)
-	Update_FgGate_s_d(MemoBlock[iB].Cell[iC].s_d_FgGate_In[iI].s_d,
-			  iB,CurInput[iI]);
-#ifdef CONNECT_GATES_TO_S
-      //From s.
-      for(unsigned int iiC=0;iiC<MemoBlock[iB].MemoBlockSize;iiC++) {
-	Update_FgGate_s_d(MemoBlock[iB].Cell[iC].s_d_FgGate_s[iiC].s_d,iB,
-			  MemoBlock[iB].Cell[iiC].s_t1);
-#ifdef PEEPHOLE_W_TERM
-	// Only for order 0.
-      for(unsigned int iiiC=0;iiiC<MemoBlock[iB].MemoBlockSize;iiiC++)
-	MemoBlock[iB].Cell[iC].s_d_FgGate_s[iiC].s_d[0]+=
-	  y__fg_d__s_t1*MemoBlock[iB].Cell[iiiC].s_t1[0]*
-	  MemoBlock[iB].FgGate.W.s[iiiC].w[0];
-#endif
-      }
-#endif
-      for(unsigned int iiB=MemoBlock[iB].BegSrcBlockNb;
-	  iiB<MemoBlock[iB].EndSrcBlockNb;iiB++) {
-#ifdef CONNECT_TO_GATES
-	Update_FgGate_s_d(MemoBlock[iB].Cell[iC].s_d_FgGate_InGate[iiB].s_d,
-			  iB,MemoBlock[iiB].InGate.y_t1);
-	Update_FgGate_s_d
-	  (MemoBlock[iB].Cell[iC].s_d_FgGate_OutGate[iiB].s_d,
-	   iB,MemoBlock[iiB].OutGate.y_t1);
-#endif
-	for(unsigned int iiC=0;iiC<MemoBlock[iiB].MemoBlockSize;iiC++)
-	  Update_FgGate_s_d
-	    (MemoBlock[iB].Cell[iC].s_d_FgGate_Cell[iiB][iiC].s_d,
-	     iB,MemoBlock[iiB].Cell[iiC].y_t1);
-      }
-#endif
-    } // End iC loop.
-  } // End iB loop.
+  // Partial derivatives s_d.
+	for(unsigned int iB=BegBlockDeriv;iB<EndBlockDeriv;iB++) 
+	{
+		log_sig_d(MemoBlock[iB].InGate.y,InGate_df); //For the s_d for InGate.
+		#ifdef FORGET_GATES
+		Yfg_d(MemoBlock[iB].FgGate.y,FgGate_df); //For the s_d for FgGate.
+		#endif
+		for(unsigned int iC=0;iC<MemoBlock[iB].MemoBlockSize;iC++) 
+		{
+			// For Cells.
+			#if defined(G_SIGMOID) || defined(G_TANH)
+			G_d(MemoBlock[iB].Cell[iC].g, g_d);
+			#elif defined(G_RATIONAL_FUNC) || defined(G_LINEAR)
+			G_d(g_d);
+			#endif
+			g_d__y_in = g_d * MemoBlock[iB].InGate.y; // For all cells in block.
+			//s_d cells.
+			#ifdef CELL_BIAS
+			Update_Cell_s_d(MemoBlock[iB].Cell[iC].s_d_Bias.s_d,iB,1);
+			#endif
+			for(unsigned int iI=0;iI<NbIn;iI++)
+				Update_Cell_s_d(MemoBlock[iB].Cell[iC].s_d_In[iI].s_d,iB,			CurInput[iI]);
+
+			for(unsigned int iiB=MemoBlock[iB].BegSrcBlockNb;iiB<MemoBlock[iB].EndSrcBlockNb;iiB++) 
+			{
+
+				if(!InternalBlockConect && (iiB==iB)) 
+					continue;
+				#ifdef CONNECT_TO_GATES
+				Update_Cell_s_d(MemoBlock[iB].Cell[iC].s_d_InGate[iiB].s_d,iB,
+				MemoBlock[iiB].InGate.y_t1);
+				Update_Cell_s_d(MemoBlock[iB].Cell[iC].s_d_OutGate[iiB].s_d,iB,
+				MemoBlock[iiB].OutGate.y_t1);
+				#endif
+				for(unsigned int iiC=0;iiC<MemoBlock[iiB].MemoBlockSize;iiC++)
+					Update_Cell_s_d(MemoBlock[iB].Cell[iC].s_d_Cell[iiB][iiC].s_d,iB,MemoBlock[iiB].Cell[iiC].y_t1);
+			}
+			// s_d for InGate.
+			y_in_d__g = InGate_df * MemoBlock[iB].Cell[iC].g;
+			Update_InGate_s_d(MemoBlock[iB].Cell[iC].s_d_InGate_Bias.s_d,iB,1);
+
+			for(unsigned int iI=0;iI<NbIn;iI++)
+				Update_InGate_s_d(MemoBlock[iB].Cell[iC].s_d_InGate_In[iI].s_d,iB,	CurInput[iI]);
+			#ifdef CONNECT_GATES_TO_S
+			//From s
+			for(unsigned int iiC=0;iiC<MemoBlock[iB].MemoBlockSize;iiC++) 
+			{
+				Update_InGate_s_d(MemoBlock[iB].Cell[iC].s_d_InGate_s[iiC].s_d,iB,	MemoBlock[iB].Cell[iiC].s_t1);
+				#ifdef PEEPHOLE_W_TERM
+				// Only for order 0.
+				for(unsigned int iiiC=0;iiiC<MemoBlock[iB].MemoBlockSize;iiiC++)
+				MemoBlock[iB].Cell[iC].s_d_InGate_s[iiC].s_d[0]+=
+				y_in_d__g*MemoBlock[iB].Cell[iiiC].s_t1[0]*
+				MemoBlock[iB].InGate.W.s[iiiC].w[0];
+				#endif
+			}
+			#endif
+			for(unsigned int iiB=MemoBlock[iB].BegSrcBlockNb;
+			iiB<MemoBlock[iB].EndSrcBlockNb;iiB++) {
+			#ifdef CONNECT_TO_GATES
+			Update_InGate_s_d(MemoBlock[iB].Cell[iC].s_d_InGate_InGate[iiB].s_d,
+			iB,MemoBlock[iiB].InGate.y_t1);
+			Update_InGate_s_d(MemoBlock[iB].Cell[iC].s_d_InGate_OutGate[iiB].s_d,
+			iB,MemoBlock[iiB].OutGate.y_t1);
+			#endif
+			for(unsigned int iiC=0;iiC<MemoBlock[iiB].MemoBlockSize;iiC++)
+			Update_InGate_s_d
+			(MemoBlock[iB].Cell[iC].s_d_InGate_Cell[iiB][iiC].s_d,
+			iB,MemoBlock[iiB].Cell[iiC].y_t1);
+			}
+			#ifdef FORGET_GATES
+			// s_d for FgGate.
+			y__fg_d__s_t1 = FgGate_df * MemoBlock[iB].Cell[iC].s_t1[0];
+			Update_FgGate_s_d(MemoBlock[iB].Cell[iC].s_d_FgGate_Bias.s_d,iB,1);
+
+			for(unsigned int iI=0;iI<NbIn;iI++)
+				Update_FgGate_s_d(MemoBlock[iB].Cell[iC].s_d_FgGate_In[iI].s_d,	iB,CurInput[iI]);
+
+			#ifdef CONNECT_GATES_TO_S
+			//From s.
+			for(unsigned int iiC=0;iiC<MemoBlock[iB].MemoBlockSize;iiC++) {
+			Update_FgGate_s_d(MemoBlock[iB].Cell[iC].s_d_FgGate_s[iiC].s_d,iB,
+			MemoBlock[iB].Cell[iiC].s_t1);
+			#ifdef PEEPHOLE_W_TERM
+			// Only for order 0.
+			for(unsigned int iiiC=0;iiiC<MemoBlock[iB].MemoBlockSize;iiiC++)
+			MemoBlock[iB].Cell[iC].s_d_FgGate_s[iiC].s_d[0]+=
+			y__fg_d__s_t1*MemoBlock[iB].Cell[iiiC].s_t1[0]*
+			MemoBlock[iB].FgGate.W.s[iiiC].w[0];
+			#endif
+			}
+			#endif
+			for(unsigned int iiB=MemoBlock[iB].BegSrcBlockNb;
+			iiB<MemoBlock[iB].EndSrcBlockNb;iiB++) {
+			#ifdef CONNECT_TO_GATES
+			Update_FgGate_s_d(MemoBlock[iB].Cell[iC].s_d_FgGate_InGate[iiB].s_d,
+			iB,MemoBlock[iiB].InGate.y_t1);
+			Update_FgGate_s_d
+			(MemoBlock[iB].Cell[iC].s_d_FgGate_OutGate[iiB].s_d,
+			iB,MemoBlock[iiB].OutGate.y_t1);
+			#endif
+			for(unsigned int iiC=0;iiC<MemoBlock[iiB].MemoBlockSize;iiC++)
+			Update_FgGate_s_d
+			(MemoBlock[iB].Cell[iC].s_d_FgGate_Cell[iiB][iiC].s_d,
+			iB,MemoBlock[iiB].Cell[iiC].y_t1);
+			}
+			#endif
+			} // End iC loop.
+		} // End iB loop.
   //
   //
 #ifdef USE_HIDDEN_UNITS
@@ -1558,35 +1690,39 @@ void LSTM::BackwardPass(unsigned int BegBlock, unsigned int EndBlock) {
   // Calculate the errors (e,delta).
   // e,delta out units.
   //cout<<"Start BackwardPass."<<endl;//ddd
-  for(unsigned int iO=0;iO<NbOut;iO++) {
-    if(AllTimeTarget || SetStepTarget || (Pat==TrainData.NbPat[Seq]-1)) { 
-      Out[iO].e=((TrainData.SeqList[Seq])[Pat])[NbExtIn+iO] - Out[iO].y;
-      //if(Pat<TrainData.NbPat[Seq]-1) // Not the last Pat in Seq.
-      //Out[iO].e /= TrainData.NbPat[Seq];
-#if !defined(LOG_LIKELIHOOD_OUTPUT) && !defined(LINEAR_OUTPUT)
-#ifdef OUTPUT_SIGMOID
-      Out[iO].delta = Output_Sig_d(Out[iO].y,Out[iO].df) * Out[iO].e;
-#else 
-      Out[iO].delta = log_sig_d(Out[iO].y,Out[iO].df) * Out[iO].e;
-#endif
-#else 
-      Out[iO].delta = Out[iO].e; Out[iO].df=1;
-#endif
-    } else { 
-      // Keep track for local learning rate adaptation.
-      // If not defined the Backpass will not be called anyway.
-      Out[iO].e=0; Out[iO].delta=0; 
-#if !defined(LOG_LIKELIHOOD_OUTPUT) && !defined(LINEAR_OUTPUT)
-#ifdef OUTPUT_SIGMOID
-      Output_Sig_d(Out[iO].y,Out[iO].df); 
-#else 
-      log_sig_d(Out[iO].y,Out[iO].df); 
-#endif
-#else
-      Out[iO].df=1; 
-#endif
-    }
-  }
+  for(unsigned int iO=0;iO<NbOut;iO++) 
+	{
+		if(AllTimeTarget || SetStepTarget || (Pat==TrainData.NbPat[Seq]-1)) 
+		{ 
+			double temp = ((TrainData.SeqList[Seq])[Pat])[NbExtIn+iO];
+			Out[iO].e=temp - Out[iO].y;
+			//if(Pat<TrainData.NbPat[Seq]-1) // Not the last Pat in Seq.
+			//Out[iO].e /= TrainData.NbPat[Seq];
+			#if !defined(LOG_LIKELIHOOD_OUTPUT) && !defined(LINEAR_OUTPUT)
+			#ifdef OUTPUT_SIGMOID
+			Out[iO].delta = Output_Sig_d(Out[iO].y,Out[iO].df) * Out[iO].e;
+			#else 
+			Out[iO].delta = log_sig_d(Out[iO].y,Out[iO].df) * Out[iO].e;
+			#endif
+			#else 
+			Out[iO].delta = Out[iO].e; Out[iO].df=1;
+			#endif
+		} else 
+		{ 
+			// Keep track for local learning rate adaptation.
+			// If not defined the Backpass will not be called anyway.
+			Out[iO].e=0; Out[iO].delta=0; 
+			#if !defined(LOG_LIKELIHOOD_OUTPUT) && !defined(LINEAR_OUTPUT)
+			#ifdef OUTPUT_SIGMOID
+			Output_Sig_d(Out[iO].y,Out[iO].df); 
+			#else 
+			log_sig_d(Out[iO].y,Out[iO].df); 
+			#endif
+			#else
+			Out[iO].df=1; 
+			#endif
+		}
+	}
 #ifdef STAT_OUT
   for(unsigned int iO=0;iO<NbStatOut;iO++) {
     StatOut[iO].t=((TrainData.SeqList[Seq])[Pat])[NbExtIn+NbOut+iO];
@@ -2358,10 +2494,13 @@ void LSTM::EpoStatistics(struct TPatData &PatData) {
 #ifdef DO_ONLINE_PAT_PRODUCTION
   MSEEpo /= (SeqOnline+1);
 #else
-  if(PatData.NbSeq>1) MSEEpo /= PatData.NbSeq;   
+  if(PatData.NbSeq>1) 
+	  MSEEpo /= PatData.NbSeq;   
 #endif
-  if(MSEEpo<MinMSEEpoTrain) {
-    MinMSEEpoTrain=MSEEpo; NewBest=1; }
+  if(MSEEpo<MinMSEEpoTrain) 
+  {
+    MinMSEEpoTrain=MSEEpo; NewBest=1; 
+  }
 #ifdef BUFFER_EPO_LOG
   TrainMSEEpoLogBuf.AddValue(Epo, MSEEpo);
 #else
@@ -2420,7 +2559,10 @@ unsigned int LSTM::Test()
   //cout<<"Test...."<<endl;
   char tmpBuf[64];//ddd
   // Save network state after training.
-  if(NoResetBeforeTest) { ResetNet(1,0); } //Save state. 
+  if(NoResetBeforeTest) 
+  { 
+	  ResetNet(1,0); 
+  } //Save state. 
   // Do the test ClampOutPredictSteps times 
   // to calc the MSE for each step with clamp.
   unsigned int clampEpo=0;
@@ -2464,246 +2606,262 @@ unsigned int LSTM::Test()
       if(Generate_Pat) Set_RefData(&TestDataOrg,false,false,true);
 #endif
 #endif
-      for(Seq=0;Seq<TestData.NbSeq;FreezeSeqLoop ? Seq=0 : Seq++) {//Seq loop.
-	MSESeq=0; PatWrong=0; ClampOut=false; Clamping=false; 
-	ClampPatStart=0; ClampPatStop=0;
-	// Restore state saved after training.
-	// This only work if no intermediate train epos with clamping are run.
-	if(NoResetBeforeTest) { ResetNet(0,1); } // Restore state.
-	else  // Reset network.
-#ifndef DO_ONLINE_PAT_PRODUCTION
-	  ResetNet(0,0);
-#else
-	if(!SeqOnline) ResetNet(0,0); //For sequential online
-#endif
-	// Generate a new seq (or not).
-#ifdef DO_ONLINE_PAT_PRODUCTION
-#if defined(NO_RESET_AFTER_ONLINE_SEQ) || defined(SETSTEPTARGET_BUT_COUNT_SEQUENCEWISE)
-	if(SeqOnline) ONLINE_PAT_FUNCNAME(TestData, false);
-	else ONLINE_PAT_FUNCNAME(TestData, true);
-#else
-	ONLINE_PAT_FUNCNAME(TestData, true);
-#endif
-#else
-#ifdef PATTERN_GENERATION_FROM_DATA_SEQWISE
-	if(Generate_Pat) {
-	  GeneratePattern(TestData, Pat_FuncName);
-	  // Fix NbPat of actual seq,
-	  // because TPatternManager does not know seq.
-	  TestData.NbPat[Seq] = TestData.NbPat[0];
-	}
-#endif
-#endif
-	for(Pat=0;Pat<TestData.NbPat[Seq];
-	    clampEpo ? Pat+=PredictionOffset : Pat++) { //Pat loop.
-	  // Dump before the forward pass.//ddd
-	  //if(clampEpo==ClampOutPredictSteps)
-	  //sprintf(tmpBuf,"Test.C%d",clampEpo);//ddd
-	  //	  Dump_Inner_States("Test", TestData); //ddd
-	  //Dump_Inner_States(tmpBuf,TestData); //ddd 
-	  //if(Reverse_Input) {
-	  //  	  ResetNet(0,0); //Reset before each Pat.
-	  //  	  PatReInStart=Pat;
-	  //  	  if(Pat>Reverse_Input) PatReInStop=Pat-Reverse_Input;
-	  //  	  else PatReInStop=0;
-	  //  	  // Pat is unsigned!!
-	  //  	  for(;(Pat>=PatReInStop)&&(Pat<=PatReInStart);Pat--) {
-//  	    ForwardPass(TestData,0,0); // Pat loop, don't calc s_d.
-	  //  	  }
-	  //  	  Pat=PatReInStart;
-	  //	} else
-#ifdef CLAMPING
-	  if(clampEpo && ClampOutPredictSteps) {
-	    if(!Clamping) {
-	      Clamping=true; // Once with external input.
-	      ClampPatStart=Pat; // Set Start and Stop.
-	      ClampPatStop=Pat+clampEpo*PredictionOffset;
-	      if(ClampPatStop>TestData.NbPat[Seq]) {//Train set ends.
-		ClampPatStop=TestData.NbPat[Seq]; }
-	    } else if(!ClampOut) { // Second pass: Clamp now.
-	      // Clamping already or start now.
-	      ResetNet(1,0); //Save state.
-	      ClampOut=true;
-	    }
-	    if(ClampOut || Clamping) {
-	      if(Pat>=ClampPatStop) { // Relieve clamp and set back.
-	      Clamping=false; ClampOut=false;
-	      ResetNet(0,1); // Restore state.
-	      
-	      // Set back if not one free run test clamp (laser dat set A).
-	      if(ClampOutPredictSteps<TestData.NbPat[Seq]) 
-		Pat=ClampPatStart;
-	      //if(clampEpo==ClampOutPredictSteps)//ddd
-	      //if(Pat>2) Pat--;
-	      //cout<<Pat<<endl;//ddd 
-	      continue; // finish and restart loop;
-	      }
-	    }
-	}
-#endif
-	  ForwardPass(TestData,0,0); // Pat loop, don't calc s_d.
-	  // Calc output units' error instead of doing the Backpass, if.....
-	  if(((Pat==TestData.NbPat[Seq]-1) || SetStepTarget ||
-	      (NbPredictNextIn>0) || (NbPredictClass>0)) 
-#ifndef TARGET_777
-	   && (((TestData.SeqList[Seq])[Pat])[NbExtIn]!=-777)
-#endif
-	   ){
-	  for(unsigned int iO=0;iO<NbOut;iO++)
-	    Out[iO].e=
-	      ((TestData.SeqList[Seq])[Pat])[NbExtIn+iO] - Out[iO].y;
-#ifdef STAT_OUT
-	  for(unsigned int iO=0;iO<NbStatOut;iO++) {
-	    StatOut[iO].t=((TestData.SeqList[Seq])[Pat])[NbExtIn+NbOut+iO];
-	    StatOut[iO].e=StatOut[iO].t-StatOut[iO].y;
-	  }
-#endif
-	  if(!clampEpo  //ddd Laser data.
-	     || (clampEpo==ClampOutPredictSteps)
-	     //|| (clampEpo==100) //ddd Laser data.
-	    || (Pat+PredictionOffset>=ClampPatStop)
-	    || (ClampOutPredictSteps>=TestData.NbPat[Seq])
-	       )
-	    PatStatistics(TestData);
-	  //ddd
-	  //     	  cout <<"Test "<<Epo<<"-"<<TestEpo<<"-"<<Seq<<"-"
-	  //   	       <<SeqOnline<<"-"<<Pat<<":"; 
-	  //     	  for(unsigned int Val=0;Val<TestData.NbVal;Val++) 
-	  //     	    cout << ((TestData.SeqList[Seq])[Pat])[Val] << " ";
-	  //     	  cout << "->" << PatCorrect << "(" << PatWrong << ")"
-	  //   	       << "PCT:" << PatCorrectTest
-	  //     	       << "MSEPat:" << MSEPat << "TestMSEEpo:" << TestMSEEpo;
-	  //     	  cout << "\n"; //cout.flush();
-	  //ddd
-	  //if(/*(Epo<MaxEpochs) && StopLern /*&& (Seq<10*/) { //ddd
-	  //if(OutputDebug && !TestEpo) { 
-	  // Dump_Inner_States("Train", TrainData); //ddd
-	  //sprintf(cBuf,"DumpAll.log.%d-%d-%d-%d-%d",//ddd
-	  //    Tri,Epo,Seq,SeqOnline,Pat);//ddd
-	  //DumpAll(cBuf); //ddd
-	  //} //ddd
-#ifdef DO_ONLINE_PAT_PRODUCTION
-	  if(SetStepTarget) {
-#ifndef SETSTEPTARGET_BUT_COUNT_SEQUENCEWISE
-	    if(!PatWrong) 
-	      ONLINE_PAT_FUNCNAME(TestData, false); 
-	    else break; // PatWrong.
-#else
-	    if(!PatWrong) 
-	      ; // Generate seq only before Pat loop.
-	    else break; // PatWrong.
-#endif
-	    //if(ReberGrammarState==-1) ResetNet(0,0);
-	  }
-#endif
-	} // end of PatStatistics loop (replaces the backward pass).
-	//if(OutputDebug/*(Epo<MaxEpochs) && StopLern /*&& (Seq<10)*/) { //ddd
-	//   Dump_Inner_States("Train", TestData); //ddd
-	if((OutputDebug || (DumpBestNotLastTest && NewBest)) && !TestEpo) { 
-	  //if(!PatWrong || (GeneralizationStaus!=-1) )//ddd
-	  // Remove test dumps from the same trial.
-	  if((Pat==0)&&(DumpBestNotLastTest)) {
-	    sprintf(cBuf,"rm Test.*.log.%d-*",Tri);
-	    //cout <<cBuf<<" Epo:"<<Epo<<endl; //ddd
-	    system(cBuf);
-	  }
-	  if(Seq==5) {
-	    if((clampEpo==ClampOutPredictSteps)
-	       || (clampEpo==0) ) {
-	      
-	      sprintf(tmpBuf,"Test.C%d",clampEpo);
-	      Dump_Inner_States(tmpBuf, TestData);
-	      //Dump_Inner_States("Test", TestData);
-	      //	  Dump_Inner_States("Test", TestData); //ddd 
-	      //Dump_Inner_States(tmpBuf,TestData); //ddd 
-	      
-	      // 	  sprintf(cBuf,"DumpAll.log.%d-%d-%d-%d-%d",//ddd
-	      // 		  Tri,Epo,Seq,SeqOnline,Pat);//ddd
-	      // 	  DumpAll(cBuf); //ddd
-	    }
-	  }
-       	}
-//  	if(ClampOutPredictSteps) {
-//  	  ClampOut=false;
-//  	  ResetNet(0,1); // Restore state.
-//  	  Pat=ClampPatStart;
-//  	}
-//  	if(clampEpo) {//ddd
-//  	  DisplayNet(TestData); //ddd
-//  	  //DisplayWeights(); 
-//  	  KeyCheck();//ddd
-//  	}//ddd
-      } // End Pat loop.
-      SeqStatistics(TestData);
-#ifdef DO_ONLINE_PAT_PRODUCTION
-#ifndef SETSTEPTARGET_BUT_COUNT_SEQUENCEWISE
-      if(!SetStepTarget)
-#endif
-	if(!PatWrong) {
-	  SeqOnline++;
-	  if(PatCorrect>=MaxOnlineStreamLengthTest) break; 
-	} else break;
-#else
-#ifdef TEST_GENERALIZATION
-      //cout<<"TEST_GENERALIZATION...."<<endl;
-      // Set the Test_Generalize in LSTM.par to start of trainset.
-      //    	cout<<" before: "
-      //  	    << "Generate_Pat_NbLoopAllSeqs_Test:"
-      //  	    <<Generate_Pat_NbLoopAllSeqs_Test
-      //    	    <<" GeneralizationStaus:"<<GeneralizationStaus
-      //    	    <<" Test_Generalize:"<<Test_Generalize
-      //  	    <<" Seq:"<<Seq
-      //  	    <<" PatWrong:"<<PatWrong
-      //  	    <<" ClassesWrong:"<<ClassesWrong
-      //    	    <<endl;//ddd
-      // Note (end) region of correct seqs.
-
-      if(Generate_Pat) {
-	if( (PatWrong && (GeneralizationStaus==-1) && 
-	     (Seq>Test_Generalize) ) // Give up when Trainset not right.
-	    || (Seq==TestData.NbSeq-1) ) {
-	  if(GeneralizationStaus!=-1) { //Too good.
-	    Seq=TestData.NbSeq; PatWrong=1;
-	  } else {
-	    ClassesWrong=0; break; } }//Stop trying(ClassesWrong reverse).
-	  
-	if( (!PatWrong && (GeneralizationStaus==-1)) || 
-	    (PatWrong && (GeneralizationStaus!=-1)) ) 
-	  {
-	    // Open LogFile.
-	    sprintf(cBuf,"%s.%d", TEST_STATUS_LOGFILE, Tri );
-	    fstream pF;
-	    if( OpenFile( &pF,cBuf, ios::app ) ) { return 1; }
-
-	    if(!PatWrong) { // Start region.
-	      GeneralizationStaus=Seq; }
-	    else { //PatWrong: End region.
-	      if(GeneralizationStaus!=-1) { //(ClassesWrong if seqs right)
-	      if(
-		 //Start new if region under testset and now incorrect.
-		 (GeneralizationStaus < Test_Generalize) &&  
-		 (Seq-1<Test_Generalize)) 
-		// Continue if just n=1 incorrect.
-		//		   (GeneralizationStaus==0) && (Seq-1==0)) 
+    for(Seq=0;Seq<TestData.NbSeq;FreezeSeqLoop ? Seq=0 : Seq++) 
+	{//Seq loop.
+		MSESeq=0; PatWrong=0; ClampOut=false; Clamping=false; 
+		ClampPatStart=0; ClampPatStop=0;
+		// Restore state saved after training.
+		// This only work if no intermediate train epos with clamping are run.
+		if(NoResetBeforeTest) 
 		{ 
-		  GeneralizationStaus=-1; 
-		} else {
-		  ClassesWrong=(unsigned int)(Seq-GeneralizationStaus); 
-		  pF<<Epo<<" "<<GeneralizationStaus<<" "<<Seq-1<<"\n"; } }
-	    CloseFile(&pF); break; }
-	  CloseFile(&pF);
-	}
-	//    	  cout<<" after: "
-	//    	      <<" GeneralizationStaus:"<<GeneralizationStaus
-	//    	      <<" Test_Generalize:"<<Test_Generalize
-	//  	      <<" Seq:"<<Seq
-	//  	      <<" PatWrong:"<<PatWrong
-	//  	      <<" ClassesWrong:"<<ClassesWrong
-	//    	      <<endl;//ddd
-      } else {}
-#endif
-#endif
-    } // End Seq loop.
+			ResetNet(0,1); 
+		} // Restore state.
+
+		else  // Reset network.
+		#ifndef DO_ONLINE_PAT_PRODUCTION
+		ResetNet(0,0);
+		#else
+		if(!SeqOnline) ResetNet(0,0); //For sequential online
+		#endif
+		// Generate a new seq (or not).
+		#ifdef DO_ONLINE_PAT_PRODUCTION
+		#if defined(NO_RESET_AFTER_ONLINE_SEQ) || defined(SETSTEPTARGET_BUT_COUNT_SEQUENCEWISE)
+		if(SeqOnline) ONLINE_PAT_FUNCNAME(TestData, false);
+		else ONLINE_PAT_FUNCNAME(TestData, true);
+		#else
+		ONLINE_PAT_FUNCNAME(TestData, true);
+		#endif
+		#else
+		#ifdef PATTERN_GENERATION_FROM_DATA_SEQWISE
+		if(Generate_Pat) {
+		GeneratePattern(TestData, Pat_FuncName);
+		// Fix NbPat of actual seq,
+		// because TPatternManager does not know seq.
+		TestData.NbPat[Seq] = TestData.NbPat[0];
+		}
+		#endif
+		#endif
+		for(Pat=0;Pat<TestData.NbPat[Seq];	clampEpo ? Pat+=PredictionOffset : Pat++) 
+		{ //Pat loop.
+			// Dump before the forward pass.//ddd
+			//if(clampEpo==ClampOutPredictSteps)
+			//sprintf(tmpBuf,"Test.C%d",clampEpo);//ddd
+			//	  Dump_Inner_States("Test", TestData); //ddd
+			//Dump_Inner_States(tmpBuf,TestData); //ddd 
+			//if(Reverse_Input) {
+			//  	  ResetNet(0,0); //Reset before each Pat.
+			//  	  PatReInStart=Pat;
+			//  	  if(Pat>Reverse_Input) PatReInStop=Pat-Reverse_Input;
+			//  	  else PatReInStop=0;
+			//  	  // Pat is unsigned!!
+			//  	  for(;(Pat>=PatReInStop)&&(Pat<=PatReInStart);Pat--) {
+			//  	    ForwardPass(TestData,0,0); // Pat loop, don't calc s_d.
+			//  	  }
+			//  	  Pat=PatReInStart;
+			//	} else
+			#ifdef CLAMPING
+			if(clampEpo && ClampOutPredictSteps) {
+			if(!Clamping) {
+			Clamping=true; // Once with external input.
+			ClampPatStart=Pat; // Set Start and Stop.
+			ClampPatStop=Pat+clampEpo*PredictionOffset;
+			if(ClampPatStop>TestData.NbPat[Seq]) {//Train set ends.
+			ClampPatStop=TestData.NbPat[Seq]; }
+			} else if(!ClampOut) { // Second pass: Clamp now.
+			// Clamping already or start now.
+			ResetNet(1,0); //Save state.
+			ClampOut=true;
+			}
+			if(ClampOut || Clamping) {
+			if(Pat>=ClampPatStop) { // Relieve clamp and set back.
+			Clamping=false; ClampOut=false;
+			ResetNet(0,1); // Restore state.
+	      
+			// Set back if not one free run test clamp (laser dat set A).
+			if(ClampOutPredictSteps<TestData.NbPat[Seq]) 
+			Pat=ClampPatStart;
+			//if(clampEpo==ClampOutPredictSteps)//ddd
+			//if(Pat>2) Pat--;
+			//cout<<Pat<<endl;//ddd 
+			continue; // finish and restart loop;
+			}
+			}
+			}
+			#endif
+			ForwardPass(TestData,0,0); // Pat loop, don't calc s_d.
+			// Calc output units' error instead of doing the Backpass, if.....
+			if(((Pat==TestData.NbPat[Seq]-1) || SetStepTarget ||	(NbPredictNextIn>0) || (NbPredictClass>0)) 
+				#ifndef TARGET_777
+				&& (((TestData.SeqList[Seq])[Pat])[NbExtIn]!=-777)
+				#endif
+			){
+				for(unsigned int iO=0;iO<NbOut;iO++)
+					Out[iO].e= ((TestData.SeqList[Seq])[Pat])[NbExtIn+iO] - Out[iO].y;
+				#ifdef STAT_OUT
+				for(unsigned int iO=0;iO<NbStatOut;iO++) {
+				StatOut[iO].t=((TestData.SeqList[Seq])[Pat])[NbExtIn+NbOut+iO];
+				StatOut[iO].e=StatOut[iO].t-StatOut[iO].y;
+				}
+				#endif
+				if(!clampEpo  //ddd Laser data.
+					|| (clampEpo==ClampOutPredictSteps)
+					//|| (clampEpo==100) //ddd Laser data.
+					|| (Pat+PredictionOffset>=ClampPatStop)
+					|| (ClampOutPredictSteps>=TestData.NbPat[Seq])	)
+					PatStatistics(TestData);
+
+				//ddd
+				//     	  cout <<"Test "<<Epo<<"-"<<TestEpo<<"-"<<Seq<<"-"
+				//   	       <<SeqOnline<<"-"<<Pat<<":"; 
+				//     	  for(unsigned int Val=0;Val<TestData.NbVal;Val++) 
+				//     	    cout << ((TestData.SeqList[Seq])[Pat])[Val] << " ";
+				//     	  cout << "->" << PatCorrect << "(" << PatWrong << ")"
+				//   	       << "PCT:" << PatCorrectTest
+				//     	       << "MSEPat:" << MSEPat << "TestMSEEpo:" << TestMSEEpo;
+				//     	  cout << "\n"; //cout.flush();
+				//ddd
+				//if(/*(Epo<MaxEpochs) && StopLern /*&& (Seq<10*/) { //ddd
+				//if(OutputDebug && !TestEpo) { 
+				// Dump_Inner_States("Train", TrainData); //ddd
+				//sprintf(cBuf,"DumpAll.log.%d-%d-%d-%d-%d",//ddd
+				//    Tri,Epo,Seq,SeqOnline,Pat);//ddd
+				//DumpAll(cBuf); //ddd
+				//} //ddd
+				#ifdef DO_ONLINE_PAT_PRODUCTION
+				if(SetStepTarget) {
+				#ifndef SETSTEPTARGET_BUT_COUNT_SEQUENCEWISE
+				if(!PatWrong) 
+				ONLINE_PAT_FUNCNAME(TestData, false); 
+				else break; // PatWrong.
+				#else
+				if(!PatWrong) 
+				; // Generate seq only before Pat loop.
+				else break; // PatWrong.
+				#endif
+				//if(ReberGrammarState==-1) ResetNet(0,0);
+				}
+				#endif
+				} // end of PatStatistics loop (replaces the backward pass).
+			//if(OutputDebug/*(Epo<MaxEpochs) && StopLern /*&& (Seq<10)*/) { //ddd
+			//   Dump_Inner_States("Train", TestData); //ddd
+			if((OutputDebug || (DumpBestNotLastTest && NewBest)) && !TestEpo) 
+			{ 
+				//if(!PatWrong || (GeneralizationStaus!=-1) )//ddd
+				// Remove test dumps from the same trial.
+				if((Pat==0)&&(DumpBestNotLastTest)) {
+					sprintf(cBuf,"rm Test.*.log.%d-*",Tri);
+					//cout <<cBuf<<" Epo:"<<Epo<<endl; //ddd
+					system(cBuf);
+				}
+				if(Seq==5) 
+				{
+					if((clampEpo==ClampOutPredictSteps)
+					|| (clampEpo==0) ) {
+	      
+					sprintf(tmpBuf,"Test.C%d",clampEpo);
+					Dump_Inner_States(tmpBuf, TestData);
+					//Dump_Inner_States("Test", TestData);
+					//	  Dump_Inner_States("Test", TestData); //ddd 
+					//Dump_Inner_States(tmpBuf,TestData); //ddd 
+	      
+					// 	  sprintf(cBuf,"DumpAll.log.%d-%d-%d-%d-%d",//ddd
+					// 		  Tri,Epo,Seq,SeqOnline,Pat);//ddd
+					// 	  DumpAll(cBuf); //ddd
+					}
+				}
+				}
+			//  	if(ClampOutPredictSteps) {
+			//  	  ClampOut=false;
+			//  	  ResetNet(0,1); // Restore state.
+			//  	  Pat=ClampPatStart;
+			//  	}
+			//  	if(clampEpo) {//ddd
+			//  	  DisplayNet(TestData); //ddd
+			//  	  //DisplayWeights(); 
+			//  	  KeyCheck();//ddd
+			//  	}//ddd
+			} // End Pat loop.
+		SeqStatistics(TestData);
+		#ifdef DO_ONLINE_PAT_PRODUCTION
+		#ifndef SETSTEPTARGET_BUT_COUNT_SEQUENCEWISE
+		if(!SetStepTarget)
+		#endif
+		if(!PatWrong) {
+		SeqOnline++;
+		if(PatCorrect>=MaxOnlineStreamLengthTest) break; 
+		} else break;
+		#else
+		#ifdef TEST_GENERALIZATION
+		//cout<<"TEST_GENERALIZATION...."<<endl;
+		// Set the Test_Generalize in LSTM.par to start of trainset.
+		//    	cout<<" before: "
+		//  	    << "Generate_Pat_NbLoopAllSeqs_Test:"
+		//  	    <<Generate_Pat_NbLoopAllSeqs_Test
+		//    	    <<" GeneralizationStaus:"<<GeneralizationStaus
+		//    	    <<" Test_Generalize:"<<Test_Generalize
+		//  	    <<" Seq:"<<Seq
+		//  	    <<" PatWrong:"<<PatWrong
+		//  	    <<" ClassesWrong:"<<ClassesWrong
+		//    	    <<endl;//ddd
+		// Note (end) region of correct seqs.
+
+		if(Generate_Pat) 
+		{
+			if( (PatWrong && (GeneralizationStaus==-1) && (Seq>Test_Generalize) ) // Give up when Trainset not right.
+				|| (Seq==TestData.NbSeq-1) ) 
+			{
+				if(GeneralizationStaus!=-1) 
+				{ //Too good.
+					Seq=TestData.NbSeq; PatWrong=1;
+				} else {
+					ClassesWrong=0; break; 
+				} 
+			}//Stop trying(ClassesWrong reverse).
+	  
+			if( (!PatWrong && (GeneralizationStaus==-1)) || 	(PatWrong && (GeneralizationStaus!=-1)) ) 
+			{
+				// Open LogFile.
+				sprintf(cBuf,"%s.%d", TEST_STATUS_LOGFILE, Tri );
+				fstream pF;
+				if( OpenFile( &pF,cBuf, ios::app ) ) 
+					return 1;
+
+				if(!PatWrong) 
+				{ // Start region.
+					GeneralizationStaus=Seq; 
+				}
+				else 
+				{ //PatWrong: End region.
+					if(GeneralizationStaus!=-1) 
+					{ //(ClassesWrong if seqs right)
+						if(
+							//Start new if region under testset and now incorrect.
+							(GeneralizationStaus < Test_Generalize) &&  (Seq-1<Test_Generalize)) 
+							// Continue if just n=1 incorrect.
+							//		   (GeneralizationStaus==0) && (Seq-1==0)) 
+						{ 
+							GeneralizationStaus=-1; 
+						} else 
+						{
+							ClassesWrong=(unsigned int)(Seq-GeneralizationStaus); 
+							pF<<Epo<<" "<<GeneralizationStaus<<" "<<Seq-1<<"\n"; 
+						} 
+					}
+					CloseFile(&pF); break; 
+				}
+				CloseFile(&pF);
+			}
+			//    	  cout<<" after: "
+			//    	      <<" GeneralizationStaus:"<<GeneralizationStaus
+			//    	      <<" Test_Generalize:"<<Test_Generalize
+			//  	      <<" Seq:"<<Seq
+			//  	      <<" PatWrong:"<<PatWrong
+			//  	      <<" ClassesWrong:"<<ClassesWrong
+			//    	      <<endl;//ddd
+			} else {}
+		#endif
+		#endif
+		} // End Seq loop.
 #ifdef DO_ONLINE_PAT_PRODUCTION
     MSEEpo /= (SeqOnline+1);
 #else

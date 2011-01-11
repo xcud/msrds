@@ -243,73 +243,77 @@ private:
 #endif
     return ((PatData.SeqList[seq])[pat])[val]; }
 #endif
-  // Fields.
-  struct TSrc {
-    TWeight *In, **Cell, *s, Bias;   
-#ifdef CONNECT_TO_GATES 
-    TWeight *InGate, *OutGate;
-#endif
-#ifdef USE_HIDDEN_UNITS
-    TWeight *Hidden;
-#endif
-  };
+// Fields.
+struct TSrc {
+	TWeight *In, **Cell, *s, Bias;   
+	#ifdef CONNECT_TO_GATES 
+	TWeight *InGate, *OutGate;
+	#endif
+	#ifdef USE_HIDDEN_UNITS
+	TWeight *Hidden;
+	#endif
+};
   inline void NetInputSum(double &net, TSrc &W,
 			  bool Con2In, bool Con2Bias,
 			  bool Con2Cell, bool Con2Hidden);
 
   inline void NetInputPeephole(double &net, TSrc &W, 
 				     unsigned int &iB);
-  struct TCell 
-  {
-    double net;
-    double y[ORDER_WEIGHT];
-    double y_save[ORDER_WEIGHT];
-    double y_t1[ORDER_WEIGHT];//s_t1 for the forget gates.
-    // Order for s for peepholes
-    double g,
-      s[ORDER_WEIGHT],s_save[ORDER_WEIGHT],s_t1[ORDER_WEIGHT],h;
-    TSrc W;
-    //TWeight *w_In, **w_Cell, *w_InGate, *w_OutGate, w_Bias;   
-    Ts_d_Gate *s_d_In, **s_d_Cell, *s_d_InGate, *s_d_OutGate, s_d_Bias;
-    // Partials for the InGate.
-    Ts_d_Gate  *s_d_InGate_In, *s_d_InGate_s, **s_d_InGate_Cell, 
-      *s_d_InGate_InGate, *s_d_InGate_OutGate, s_d_InGate_Bias;
-#ifdef FORGET_GATES
-    Ts_d_Gate  *s_d_FgGate_In,  *s_d_FgGate_s, **s_d_FgGate_Cell, 
-      *s_d_FgGate_InGate, *s_d_FgGate_OutGate, s_d_FgGate_Bias;
-#endif
-    double e_unscaled,e;
-  };
+struct TCell 
+{
+	double net;
+	double y[ORDER_WEIGHT];
+	double y_save[ORDER_WEIGHT];
+	double y_t1[ORDER_WEIGHT];//s_t1 for the forget gates.
+	// Order for s for peepholes
+	double g,  s[ORDER_WEIGHT],s_save[ORDER_WEIGHT],s_t1[ORDER_WEIGHT],h;
+	TSrc W;
+	//TWeight *w_In, **w_Cell, *w_InGate, *w_OutGate, w_Bias;   
+	Ts_d_Gate *s_d_In, **s_d_Cell, *s_d_InGate, *s_d_OutGate, s_d_Bias;
+	// Partials for the InGate.
+	Ts_d_Gate  *s_d_InGate_In, *s_d_InGate_s, **s_d_InGate_Cell, *s_d_InGate_InGate, *s_d_InGate_OutGate, s_d_InGate_Bias;
+	#ifdef FORGET_GATES
+	Ts_d_Gate  *s_d_FgGate_In,  *s_d_FgGate_s, **s_d_FgGate_Cell, *s_d_FgGate_InGate, *s_d_FgGate_OutGate, s_d_FgGate_Bias;
+	#endif
+
+	double e_unscaled,e;
+};
+
   double g_d,g_d__y_in,y_in_d__g,InGate_df,FgGate_df; // For calculations.
 #ifdef FORGET_GATES
   double y__fg_d__s_t1;
 #endif
-  struct TMemoBlock {
-    unsigned int MemoBlockSize;
-    // For not fully connected growing net.
-    // InputBeginBlockNb<= b < InputEndBlockNb (if==-1 -> NbMemoBlocks).
-    unsigned int BegSrcBlockNb, EndSrcBlockNb;
-    struct {
-      double net,y,y_save,y_t1;
-      TSrc W;
-      //TWeight *w_In, *w_s, **w_Cell, *w_InGate, *w_OutGate, w_Bias; 
-    } InGate;
-    struct {
-      double net,y,y_save,y_t1;
-      double e,df,delta;
-      TSrc W;
-      //TWeight *w_In, *w_s, **w_Cell, *w_InGate, *w_OutGate, w_Bias; 
-    } OutGate;
-#ifdef FORGET_GATES
-    // No connections from the FgGate, so no y_t1 and also no self connection.
-    struct {
-      double net,y,y_save;//,y_t1;
-      TSrc W;
-      //TWeight *w_In, *w_s, **w_Cell, *w_InGate, *w_OutGate, w_Bias; 
-    } FgGate;
-#endif
-    TCell *Cell;
-  } *MemoBlock;
+struct TMemoBlock {
+	unsigned int MemoBlockSize;
+	// For not fully connected growing net.
+	// InputBeginBlockNb<= b < InputEndBlockNb (if==-1 -> NbMemoBlocks).
+	unsigned int BegSrcBlockNb, EndSrcBlockNb;
+	struct {
+		double net,y,y_save,y_t1;
+		TSrc W;
+		//TWeight *w_In, *w_s, **w_Cell, *w_InGate, *w_OutGate, w_Bias; 
+	} InGate;
+
+	struct {
+		double net,y,y_save,y_t1;
+		double e,df,delta;
+		TSrc W;
+		//TWeight *w_In, *w_s, **w_Cell, *w_InGate, *w_OutGate, w_Bias; 
+	} OutGate;
+
+	#ifdef FORGET_GATES
+	// No connections from the FgGate, so no y_t1 and also no self connection.
+	struct {
+		double net,y,y_save;//,y_t1;
+		TSrc W;
+	//TWeight *w_In, *w_s, **w_Cell, *w_InGate, *w_OutGate, w_Bias; 
+	} FgGate;
+	#endif
+
+	TCell *Cell;
+
+} *MemoBlock;
+
   struct TOut { 
     double net,y,y_save,e,df,delta;
     TSrc W;
