@@ -437,7 +437,8 @@ void TNeuralNetBase::NewWeight(TWeight &W, double InitWeight) {
     W.alpha = pWtmp[0].alpha;
     //W.h     = pWtmp[0].h;
 #endif
-    if(InitWeight) W.w[o] = InitWeight; // else stay random.
+    if(InitWeight) 
+		W.w[o] = InitWeight; // else stay random.
   }
   delete[] pWtmp;
 }
