@@ -1362,31 +1362,31 @@ void LSTM::ForwardPass( struct TPatData &PatData,
 		}
 	}
   // Input to MemoBlocks (net).
-		for(unsigned int iB=0;iB<NbMemoBlocks;iB++) {
-			// net InGate.
-			NetInputSum(MemoBlock[iB].InGate.net,	MemoBlock[iB].InGate.W,1,1,1,0);
-			#ifdef CONNECT_GATES_TO_S
-			NetInputPeephole(MemoBlock[iB].InGate.net,MemoBlock[iB].InGate.W,iB);
-			#endif
-			// net OutGate. Peephole (s) later.
-			NetInputSum(MemoBlock[iB].OutGate.net,MemoBlock[iB].OutGate.W,1,1,1,0);
-			// net FgGate.
-			#ifdef FORGET_GATES
-			NetInputSum(MemoBlock[iB].FgGate.net,MemoBlock[iB].FgGate.W,1,1,1,0);
-			#ifdef CONNECT_GATES_TO_S
-			NetInputPeephole(MemoBlock[iB].FgGate.net,MemoBlock[iB].FgGate.W,iB);
-			#endif
-			#endif
-			// net Cells.
-			for(unsigned int iC=0;iC<MemoBlock[iB].MemoBlockSize;iC++) {
-			#ifdef CELL_BIAS
-				NetInputSum(MemoBlock[iB].Cell[iC].net,  MemoBlock[iB].Cell[iC].W,1,1,1,0);
-			#else
-				NetInputSum(MemoBlock[iB].Cell[iC].net,
-					MemoBlock[iB].Cell[iC].W,1,0,1,0);
-			#endif
-			}
-		} // End first loop over MemoBlocks.
+	for(unsigned int iB=0;iB<NbMemoBlocks;iB++) {
+		// net InGate.
+		NetInputSum(MemoBlock[iB].InGate.net,	MemoBlock[iB].InGate.W,1,1,1,0);
+		#ifdef CONNECT_GATES_TO_S
+		NetInputPeephole(MemoBlock[iB].InGate.net,MemoBlock[iB].InGate.W,iB);
+		#endif
+		// net OutGate. Peephole (s) later.
+		NetInputSum(MemoBlock[iB].OutGate.net,MemoBlock[iB].OutGate.W,1,1,1,0);
+		// net FgGate.
+		#ifdef FORGET_GATES
+		NetInputSum(MemoBlock[iB].FgGate.net,MemoBlock[iB].FgGate.W,1,1,1,0);
+		#ifdef CONNECT_GATES_TO_S
+		NetInputPeephole(MemoBlock[iB].FgGate.net,MemoBlock[iB].FgGate.W,iB);
+		#endif
+		#endif
+		// net Cells.
+		for(unsigned int iC=0;iC<MemoBlock[iB].MemoBlockSize;iC++) {
+		#ifdef CELL_BIAS
+			NetInputSum(MemoBlock[iB].Cell[iC].net,  MemoBlock[iB].Cell[iC].W,1,1,1,0);
+		#else
+			NetInputSum(MemoBlock[iB].Cell[iC].net,
+				MemoBlock[iB].Cell[iC].W,1,0,1,0);
+		#endif
+		}
+	} // End first loop over MemoBlocks.
   // MemoBlocks (g,s,h,y).
 	for(unsigned int iB=0;iB<NbMemoBlocks;iB++) {
 		// y InGate.
