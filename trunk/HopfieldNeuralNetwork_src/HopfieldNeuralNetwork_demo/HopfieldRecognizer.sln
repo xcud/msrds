@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HopfieldRecognizer", "HopfieldRecognizer.csproj", "{A5B4A7E0-E19E-4894-BCB6-E5CEC69156FF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HopfieldNeuralNetwork", "..\HopfieldNeuralNetwork\HopfieldNeuralNetwork.csproj", "{50A0B132-215A-4FEE-A167-0ED6D7930B56}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageMagnifier", "..\ImageMagnifier\ImageMagnifier.csproj", "{4A5046E9-F9FC-40E4-B81D-49B3DE45E6B7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A5B4A7E0-E19E-4894-BCB6-E5CEC69156FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5B4A7E0-E19E-4894-BCB6-E5CEC69156FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5B4A7E0-E19E-4894-BCB6-E5CEC69156FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5B4A7E0-E19E-4894-BCB6-E5CEC69156FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50A0B132-215A-4FEE-A167-0ED6D7930B56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50A0B132-215A-4FEE-A167-0ED6D7930B56}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50A0B132-215A-4FEE-A167-0ED6D7930B56}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50A0B132-215A-4FEE-A167-0ED6D7930B56}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A5046E9-F9FC-40E4-B81D-49B3DE45E6B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A5046E9-F9FC-40E4-B81D-49B3DE45E6B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A5046E9-F9FC-40E4-B81D-49B3DE45E6B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A5046E9-F9FC-40E4-B81D-49B3DE45E6B7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
