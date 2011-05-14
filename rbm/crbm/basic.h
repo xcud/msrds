@@ -39,8 +39,8 @@ double gauss();
     
 #define EPS (1.e-20)
 #define INF (1.e20)
-#define PROGRESS(i,N)	if(!(i%(1+(N/100)))) lg("%d%%\r",(int)((100.*i)/(double)N))
-#define PROGRESS1(i,N)	if(!(i%(1+(N/1000)))) lg("%.1f%%\r",((100.*i)/N))
+#define PROGRESS(i,N)	if(!(i%(1+(N/100)))) printf("%d%%\r",(int)((100.*i)/(double)N))
+#define PROGRESS1(i,N)	if(!(i%(1+(N/1000)))) printf("%.1f%%\r",((100.*i)/N))
 
 int dvsearch(double *v, int d, double t);
 int fvsearch(float *v, int d, double t);
@@ -51,3 +51,4 @@ void fquickSortIdx(float *arr, int *idx, int elements);
 void uquickSortIdx(unsigned int *arr, int *idx, int elements);
 void iquickSortIdx(int *arr, int *idx, int elements);
 void uquickSort(unsigned int *arr, int elements);
+void lgopen(int argc, char**argv);

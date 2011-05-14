@@ -56,12 +56,13 @@ Math category.
 #include "utest.h"
 
 #define NSCORES (5)
+#define error printf
 
 void openfiles(FILE *fp[],char *fnames[], int nscores)
 {
 	int f;
 	for(f=0;f<nscores;f++) {
-		lg("Mixing %s\n",fnames[f]);
+		printf("Mixing %s\n",fnames[f]);
 		if(NULL==(fp[f]=fopen(fnames[f],"rb")))
 			error("Cant open");
 	}
@@ -81,7 +82,7 @@ void readfiles(FILE *fp[], float *s, int nscores)
 	int f;
 	for(f=0;f<nscores;f++)
 		if(1!=fread(&s[f],sizeof(float),1,fp[f])) {
-			lg("Error\n");
+			printf("Error\n");
 			exit(1);
 		}
 }
@@ -93,10 +94,10 @@ void closefiles(FILE *fp[], int nscores)
 		fclose(fp[f]);
 }
 
-computemix(char *fnames[], int nscores, double *xty)
+void computemix(char *fnames[], int nscores, double *xty)
 {
 #ifdef HOLDOUT
-	lg("With holdout\n");
+	printf("With holdout\n");
 #endif
 	int ns2=nscores+2;
 	int ns1=nscores+1;
@@ -145,43 +146,43 @@ computemix(char *fnames[], int nscores, double *xty)
 	int count=xtx[nscores][nscores];
 	int j1,j2;
 	for(j1=0;j1<nscores;j1++)
-		lg("File %d RMSE %f\n",j1,sqrt((xtx[j1][j1]+xtx[ns1][ns1]-2*xtx[ns1][j1])/count));
+		printf("File %d RMSE %f\n",j1,sqrt((xtx[j1][j1]+xtx[ns1][ns1]-2*xtx[ns1][j1])/count));
 	double avgs[NSCORES+2],std[NSCORES+2];
 	for(j1=0;j1<ns2;j1++) {
 		avgs[j1]=xtx[nscores][j1]/count;
 		std[j1]=sqrt(xtx[j1][j1]/count-avgs[j1]*avgs[j1]);
 	}
 	for(j1=0;j1<ns2;j1++)
-		lg("%f\t",avgs[j1]);
-	lg("\n");
+		printf("%f\t",avgs[j1]);
+	printf("\n");
 	for(j1=0;j1<ns2;j1++)
-		lg("%f\t",std[j1]);
-	lg("\n");
-	lg("-------------------------------------------------\n");
+		printf("%f\t",std[j1]);
+	printf("\n");
+	printf("-------------------------------------------------\n");
 	for(j1=0;j1<ns2;j1++) {
 		for(j2=0;j2<ns2;j2++) {
-			lg("%f\t",(xtx[j1][j2]/count-avgs[j1]*avgs[j2])/(std[j1]*std[j2]+1.e-6));
+			printf("%f\t",(xtx[j1][j2]/count-avgs[j1]*avgs[j2])/(std[j1]*std[j2]+1.e-6));
 		}
-		lg("\n");
+		printf("\n");
 	}
-	lg("-------------------------------------------------\n");
+	printf("-------------------------------------------------\n");
 	double eavgs[NSCORES],estd[NSCORES];
 	for(j1=0;j1<nscores;j1++) {
 		eavgs[j1]=avgs[ns1]-avgs[j1];
 		estd[j1]=sqrt((xtx[ns1][ns1]+ xtx[j1][j1]-2*xtx[j1][ns1])/count);
 	}
 	for(j1=0;j1<nscores;j1++)
-		lg("%f\t",eavgs[j1]);
-	lg("\n");
+		printf("%f\t",eavgs[j1]);
+	printf("\n");
 	for(j1=0;j1<nscores;j1++)
-		lg("%f\t",estd[j1]);
-	lg("\n");
-	lg("-------------------------------------------------\n");
+		printf("%f\t",estd[j1]);
+	printf("\n");
+	printf("-------------------------------------------------\n");
 	for(j1=0;j1<nscores;j1++) {
 		for(j2=0;j2<nscores;j2++) {
-			lg("%f\t",((xtx[j1][j2]+xtx[ns1][ns1]-xtx[ns1][j1]-xtx[ns1][j2])/count-eavgs[j1]*eavgs[j2])/(estd[j1]*estd[j2]+1.e-6));
+			printf("%f\t",((xtx[j1][j2]+xtx[ns1][ns1]-xtx[ns1][j1]-xtx[ns1][j2])/count-eavgs[j1]*eavgs[j2])/(estd[j1]*estd[j2]+1.e-6));
 		}
-		lg("\n");
+		printf("\n");
 	}
 
 
@@ -210,22 +211,22 @@ computemix(char *fnames[], int nscores, double *xty)
 	/*dgesv_(&N,&NRHS,A,&LDA,IPIV,B,&LDB,&INFO);*/
 	/*dgels_(&TRANS,&M,&N,&NRHS,A,&LDA,B,&LDB,WORK,&LWORK,&INFO);*/
 	/*dgelss_( &M, &N, &NRHS, A, &LDA, B, &LDB, S, &RCOND, &RANK, WORK, &LWORK, &INFO );*/
-	dposv_(&UFLO,&N,&NRHS,A,&LDA,B,&LDB,&INFO);
+//	dposv_(&UFLO,&N,&NRHS,A,&LDA,B,&LDB,&INFO);
 	if(INFO) error("failed %d\n",INFO);
 		
 	for(j1=0;j1<=nscores;j1++)
 		xty[j1]=B[j1];
 
-	lg("Check that the matrix inversion worked:\n");
+	printf("Check that the matrix inversion worked:\n");
 	for(j1=0;j1<=nscores;j1++) {
 		double sum=LAMBDA*B[j1];
 		for(j2=0;j2<=nscores;j2++)
 			sum+=xtx[j1][j2]*B[j2];
-		lg("%f\t%f\n",sum,xtx[nscores+1][j1]);
+		printf("%f\t%f\n",sum,xtx[nscores+1][j1]);
 	}
 }
 
-loadmix(char *fnames[], int nscores, double *weights) {
+void loadmix(char *fnames[], int nscores, double *weights) {
 	if(nscores<2 || nscores>NSCORES) error("Bad number of files\n");
 	
 	double xty[NSCORES+1];
@@ -235,11 +236,11 @@ loadmix(char *fnames[], int nscores, double *weights) {
 			xty[j]=weights[j];
 	} else
 		computemix(fnames, nscores, xty);
-	lg("Mixing coeeficients\n");
+	printf("Mixing coeeficients\n");
 	int f;
 	for(f=0;f<=nscores;f++)
-		lg("-lew %f ",xty[f]);
-	lg("\n");
+		printf("-lew %f ",xty[f]);
+	printf("\n");
 		
 	FILE *fp[NSCORES];
 	openfiles(fp,fnames,nscores);

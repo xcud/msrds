@@ -26,6 +26,17 @@
 #include <math.h>
 #include "basic.h"
 
+// For isinf() and isnan() on MSVC
+#ifdef _MSC_VER
+#  include <float.h>
+#  define isinf(x) (!_isnan(x) && !_finite(x))
+#  define isnan _isnan
+#else
+   using std::isinf;
+   using std::isnan;
+#endif
+
+
 double drand48() {
 	return ((double)rand())/((double)(RAND_MAX)+1.0);
 
@@ -65,6 +76,8 @@ double dvnorm(double *v, int n)
 	sum=1./sum;
 	pv=v;
 	for(i=0;i<n;i++) *pv++ *= sum;
+
+	return *v;
 }
 
 void dvscale(double *v, double scale, int n)
@@ -145,7 +158,7 @@ double fvsqr(float *v, int n)
 }
 
 FILE *lgfile=NULL;
-void lg(char *fmt,...)
+void printf(char *fmt,...)
 {
 	char buf[2048];
 	va_list ap;
@@ -168,8 +181,8 @@ void error(char *fmt,...)
 	va_start(ap, fmt);
 	vsprintf(buf,fmt,ap);
 	va_end(ap);
-	lg("%s",buf);
-	lg("\n");
+	printf("%s",buf);
+	printf("\n");
 	exit(1);
 }
 
@@ -177,28 +190,28 @@ void lgopen(int argc, char**argv)
 {
 	lgfile=fopen("data/log.txt","a");
 	if(!lgfile) error("Cant open log file");
-	lg("----------------------------------------------\n");
+	printf("----------------------------------------------\n");
 	/* Print out the date and time in the standard format.  */
 	time_t curtime=time(NULL);
-	lg("%s",ctime(&curtime));
+	printf("%s",ctime(&curtime));
 
 	int i;
 	for(i=0;i<argc;i++)
-		lg("%s ",argv[i]);
-	lg("\n");
+		printf("%s ",argv[i]);
+	printf("\n");
 }
 
 void load_bin(char *path, void *data, int len)
 {
     FILE *fp;
-    lg("Loading %s\n",path);
+    printf("Loading %s\n",path);
     fp=fopen(path,"rb");
 	if(!fp) {
-		lg("Cant open file\n");
+		printf("Cant open file\n");
 		exit(1);
 	}
     if(len!=fread(data,1,len,fp)) {
-        lg("Failed to read all data\n");
+        printf("Failed to read all data\n");
         exit(1);
     }
     fclose(fp);
@@ -207,10 +220,10 @@ void load_bin(char *path, void *data, int len)
 void dump_bin(char *path, void *data, int len)
 {
     FILE *fp;
-    lg("Writing %s\n",path);
+    printf("Writing %s\n",path);
     fp=fopen(path,"wb");
     if(len!=fwrite(data,1,len,fp)) {
-        lg("Failed to write all data\n");
+        printf("Failed to write all data\n");
         exit(1);
     }
     fclose(fp);
@@ -221,11 +234,11 @@ void ddump_bin(char *fname,double *vec,int M,int N,int N1)
 	int m;
 	FILE *fp;
 	
-	lg("Writing to %s\n",fname);
+	printf("Writing to %s\n",fname);
 	fp=fopen(fname,"wb");
 	for(m=0;m<M;m++) {
 		if(N!=fwrite(vec,sizeof(double),N,fp)) {
-			lg("Error\n");
+			printf("Error\n");
 			exit(1);
 		}
 		vec+=N1;
@@ -238,7 +251,7 @@ void dappend_bin(char *fname,double *vec,int N)
 	int m;
 	FILE *fp;
 	
-	lg("Appending to %s\n",fname);
+	printf("Appending to %s\n",fname);
 	if(NULL==(fp=fopen(fname,"ab")))
 		error("Cant append");
 	if(N!=fwrite(vec,sizeof(double),N,fp))
@@ -251,31 +264,31 @@ int dload_bin(char *fname,double *vec,int M,int N1)
 	int m,n,N,s;
 	FILE *fp;
 	
-	lg("Loading %s\n",fname);
+	printf("Loading %s\n",fname);
 	
 	fp=fopen(fname,"rb");
 	if(!fp) {
-		lg("Cant open file\n");
+		printf("Cant open file\n");
 		return 0;
 	}
 	fseek(fp,0,SEEK_END);
 	s=ftell(fp);
 	fseek(fp,0,SEEK_SET);
 	N=s/sizeof(double)/M;
-	lg("N=%d\n",N);
+	printf("N=%d\n",N);
 	if(N*sizeof(double)*M != s) {
-		lg("File size does not divide\n");
+		printf("File size does not divide\n");
 		exit(1);
 	}
 	if(N<1 || N>N1) {
-		lg("Bad N %d\n",N1);
+		printf("Bad N %d\n",N1);
 		exit(1);
 	}
 	
 	for(m=0;m<M;m++) {
 		n=fread(vec,sizeof(double),N,fp);
 		if(N!=n) {
-			lg("Error %d %d\n",m,n);
+			printf("Error %d %d\n",m,n);
 			exit(1);
 		}
 		vec+=N1;
@@ -298,7 +311,7 @@ int days(int year, int month, int day)
 	int extra=((year+1998)>>2)&1;
 	
 	if(year+1998>2005 || month>11 || day>30) {
-		lg("Bad date %d %d %d\n",year+1998,month+1,day);
+		printf("Bad date %d %d %d\n",year+1998,month+1,day);
 		return -1;
 	}
 	return yeardays[year]+monthdays[extra][month]+day;
@@ -311,7 +324,7 @@ int days(int year, int month, int day)
 #define MAXK (100)
 int totalNonNegativeQuadraticOpt=0;
 int problemNonNegativeQuadraticOpt=0;
-NonNegativeQuadraticOpt(double *A, double *b, double *x, int k)
+void NonNegativeQuadraticOpt(double *A, double *b, double *x, int k)
 {
 	totalNonNegativeQuadraticOpt++;
 	if(k>=MAXK) error("K %d is too big\n",k);
@@ -372,14 +385,14 @@ NonNegativeQuadraticOpt(double *A, double *b, double *x, int k)
 	/*for(i=0;i<k;i++) {*/
 		/*int j;*/
 		/*for(j=0;j<k;j++)*/
-			/*lg("%f,",*a++);*/
+			/*printf("%f,",*a++);*/
 	/*}*/
 	/*for(i=0;i<k;i++) {*/
-		/*lg("%f,\n",b[i]);*/
+		/*printf("%f,\n",b[i]);*/
 	/*}*/
 	/*error("Does not converage");*/
 	problemNonNegativeQuadraticOpt++;
-	lg("Does not converage %f %f %f\n",problemNonNegativeQuadraticOpt/(double)totalNonNegativeQuadraticOpt,bestrr,rr);
+	printf("Does not converage %f %f %f\n",problemNonNegativeQuadraticOpt/(double)totalNonNegativeQuadraticOpt,bestrr,rr);
 }
 
 /* Generate a random permutation */
@@ -414,7 +427,7 @@ int dvsearch(double *v, int d, double t)
 		else
 			return mid; 
 	}
-	lg("%d %d %f %f %f\n",low,d,v[low],t,v[low+1]);
+	printf("%d %d %f %f %f\n",low,d,v[low],t,v[low+1]);
 	return -1;
 }
 int fvsearch(float *v, int d, double t)
@@ -432,7 +445,7 @@ int fvsearch(float *v, int d, double t)
 		else
 			return mid; 
 	}
-	lg("%d %d %f %f %f\n",low,d,v[low],t,v[low+1]);
+	printf("%d %d %f %f %f\n",low,d,v[low],t,v[low+1]);
 	return -1;
 }
 

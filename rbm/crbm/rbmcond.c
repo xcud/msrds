@@ -201,6 +201,9 @@ void recordErrors() {
     }
 }
 
+
+int doAllFeatures() ;
+
 int score_train(int loop) {
     if (loop == 0)
         return doAllFeatures();
@@ -615,7 +618,7 @@ int doAllFeatures() {
         nrmse=sqrt(nrmse/ntrain);
         prmse = sqrt(s/n);
         
-        lg("%f\t%f\t%f\n",nrmse,prmse,(clock()-t0)/(double)CLOCKS_PER_SEC);
+        printf("%f\t%f\t%f\n",nrmse,prmse,(clock()-t0)/(double)CLOCKS_PER_SEC);
          if ( loopcount > 10 ) {
              EpsilonW  *= 0.91;
              EpsilonD  *= 0.91;
