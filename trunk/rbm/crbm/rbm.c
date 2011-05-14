@@ -190,7 +190,7 @@ void recordErrors() {
         }
     }
 }
-
+int doAllFeatures();
 int score_train(int loop) {
     if (loop == 0)
         return doAllFeatures();
@@ -573,7 +573,7 @@ int doAllFeatures() {
         nrmse=sqrt(nrmse/ntrain);
         prmse = sqrt(s/n);
         
-        lg("%f\t%f\t%f\n",nrmse,prmse,(clock()-t0)/(double)CLOCKS_PER_SEC);
+        printf("%f\t%f\t%f\n",nrmse,prmse,(clock()-t0)/(double)CLOCKS_PER_SEC);
 
         if ( TOTAL_FEATURES == 200 ) {
             if ( loopcount > 6 ) {

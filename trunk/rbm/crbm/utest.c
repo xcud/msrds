@@ -31,6 +31,10 @@
 #include "netflix.h"
 #include "utest.h"
 
+void loadmix(char *fnames[], int nscores, double *weights);
+void globalavg();
+//#define lg printf
+
 int aopt=0;
 int load_model=0;
 int save_model=0;
@@ -59,7 +63,8 @@ void clip(float *ein, unsigned int *uent, float *eout, int d)
 
 void cliperr()
 {
-	lg("Clipping errors\n");
+	
+
 	int u;
 	for(u=0;u<NUSERS;u++) {
 		int base=useridx[u][0];
@@ -87,7 +92,8 @@ double cliprmse(int k)
 	} else {
 		for(u=0;u<NUSERS;u++) {
 			int base=useridx[u][0];
-			for(i=1;i<k;i++) base+=useridx[u][i];
+			for(i=1;i<k;i++)
+				base+=useridx[u][i];
 			int d=useridx[u][k];
 			float etmp[NMOVIES];
 			clip(&err[base],&userent[base],etmp,d);		
@@ -136,7 +142,7 @@ void rmse_print(int copt)
 		double rmse_train_clipped=cliprmse(1);
 		double rmse_probe_clipped=cliprmse(2);
 		double rmse_both_clipped=cliprmse(3);
-		lg("RMSE Train %f (%.1f%%) Clipped %f (%.1f%%) Probe %f (%.1f%%) Clipped %f Both %f (%.1f%%) Clipped %f\n",
+		printf("RMSE Train %f (%.1f%%) Clipped %f (%.1f%%) Probe %f (%.1f%%) Clipped %f Both %f (%.1f%%) Clipped %f\n",
 			rmse_train,100.*(last_rmse_train-rmse_train)/rmse_train,
 			rmse_train_clipped,100.*(last_rmse_train_clipped-rmse_train_clipped)/rmse_train_clipped,
 			rmse_probe,100.*(last_rmse_probe-rmse_probe)/rmse_probe,
@@ -146,7 +152,7 @@ void rmse_print(int copt)
 		last_rmse_probe_clipped=rmse_probe_clipped;
 		last_rmse_train_clipped=rmse_train_clipped;
 	} else
-		lg("RMSE Train %f (%.1f%%) Probe %f (%.1f%%) Both %f (%.1f%%)\n",
+		printf("RMSE Train %f (%.1f%%) Probe %f (%.1f%%) Both %f (%.1f%%)\n",
 			rmse_train,100.*(last_rmse_train-rmse_train)/rmse_train,
 			rmse_probe,100.*(last_rmse_probe-rmse_probe)/rmse_probe,
 			rmse_both,100.*(last_rmse_both-rmse_both)/rmse_both
@@ -155,8 +161,9 @@ void rmse_print(int copt)
 	last_rmse_probe=rmse_probe;
 	last_rmse_train=rmse_train;
 }
-
-main(int argc, char**argv) {
+	void score_setup();
+	int score_train(int loop);
+int main(int argc, char**argv) {
 	lgopen(argc,argv);
 	char *fname_inerr[5];
 	int nscores=0;
@@ -167,7 +174,7 @@ main(int argc, char**argv) {
 	int copt=1;
 	int i;
 	for(i=1;i<argc;i++) {
-		int rc=score_argv(argv+i);
+		int rc= 0;//score_argv(argv+i);
 		if(rc>0) {
 			i+=rc-1;
 			continue;
@@ -193,26 +200,26 @@ main(int argc, char**argv) {
 		else if(!strcmp(argv[i],"-sm"))
 			save_model=1;
 		else {
-			lg("Unrecognized argument %d %s ?\n",i,argv[i]);
-			lg("-le <fname> - load precomputed error file.\n");
-			lg("-lew <weight> - In case of several -le, use wrights, instead of fit\n");
-			lg("-se <fname> - store resulted error file.\n");
-			lg("-l <n> - number of training loops to perform\n");
-			lg("-a - Perform training also on probe data\n");
-			lg("-c - Dont clip scores to be between 0...4\n");
-			lg("-sq <fname> - write qualifying submission to file.\n");
-			lg("-lm - load precomputed model.\n");
-			lg("-sm - save computed model.\n");
-			lg("-rm <fname> - restrict movies to list. Used with integrated model.\n");
+			printf("Unrecognized argument %d %s ?\n",i,argv[i]);
+			printf("-le <fname> - load precomputed error file.\n");
+			printf("-lew <weight> - In case of several -le, use wrights, instead of fit\n");
+			printf("-se <fname> - store resulted error file.\n");
+			printf("-l <n> - number of training loops to perform\n");
+			printf("-a - Perform training also on probe data\n");
+			printf("-c - Dont clip scores to be between 0...4\n");
+			printf("-sq <fname> - write qualifying submission to file.\n");
+			printf("-lm - load precomputed model.\n");
+			printf("-sm - save computed model.\n");
+			printf("-rm <fname> - restrict movies to list. Used with integrated model.\n");
 			exit(0);
 		}
 	}
 	if(fname_qualify && !aopt)
-		lg("WARNING: -sq without -a\n");
+		printf("WARNING: -sq without -a\n");
 	if(fname_qualify && !copt)
-		lg("WARNING: -sq with -c\n");
+		printf("WARNING: -sq with -c\n");
 	if(nweights && nscores && nweights!=nscores)
-		lg("Number of weights %d (-lew) does not match number of files %d (-le)\n",nweights,nscores);
+		printf("Number of weights %d (-lew) does not match number of files %d (-le)\n",nweights,nscores);
 	
 	load_bin(useridx_path,useridx,sizeof(useridx));
 	{
@@ -221,7 +228,7 @@ main(int argc, char**argv) {
 		for(u=0;u<NUSERS;u++)
 			for(k=1;k<4;k++)
 				count[k]+=useridx[u][k];
-		lg("Train=%d Probe=%d Qualify=%d\n",count[1],count[2],count[3]);
+		printf("Train=%d Probe=%d Qualify=%d\n",count[1],count[2],count[3]);
 	}	
 	load_bin(userent_path,userent,sizeof(userent));
 	if(nscores) {
@@ -250,11 +257,11 @@ main(int argc, char**argv) {
 	int loop;
 	int rc=1;
 	for(loop=0;loop<nloops;loop++) {
-		lg("Loop %d\n",loop);
+		printf("Loop %d\n",loop);
 		clock_t t0=clock();
 		if(!score_train(loop))
 			break;
-		lg("%f sec\n",(clock()-t0)/((double)CLOCKS_PER_SEC));
+		printf("%f sec\n",(clock()-t0)/((double)CLOCKS_PER_SEC));
 		if(copt && !dontclip) cliperr();
 		dontclip=0;
 		rmse_print(copt);
@@ -265,7 +272,7 @@ main(int argc, char**argv) {
 	if(fname_qualify) {
 		FILE *fp=fopen(fname_qualify,"w");
 		char *qualify_path="data/qualify.bin";
-		unsigned int *qualify=malloc(NQUALIFY_SIZE*4);
+		unsigned int *qualify=(unsigned int *)malloc(NQUALIFY_SIZE*4);
 		load_bin(qualify_path,qualify,NQUALIFY_SIZE*4);
 		unsigned int *q=qualify;
 		while (q<(qualify+NQUALIFY_SIZE)) {
@@ -281,9 +288,9 @@ main(int argc, char**argv) {
 				for(k=0;k<d2;k++) {
 					if((userent[base2+k]&USER_MOVIEMASK) == m)
 						break;
-					//lg("%d\n",userent[base2+k]&USER_MOVIEMASK);
+					//printf("%d\n",userent[base2+k]&USER_MOVIEMASK);
 				}
-				if(k==d2) error("Bad qualify %d %d\n",m,u);
+				if(k==d2) printf("Bad qualify %d %d\n",m,u);
 				fprintf(fp,"%.1f\n",8.-err[base2+k]);
 			}
 		}

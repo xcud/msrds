@@ -73,7 +73,7 @@ void weight_norm()
 		}
         total+=d;
 	}
-	lg("sum=%f\n",sum);
+	printf("sum=%f\n",sum);
     
     sum=total/sum;
     for(i=0;i<NENTRIES;i++) wgt[i]*=sum;

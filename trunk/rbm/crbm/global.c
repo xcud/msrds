@@ -44,7 +44,7 @@ void globalavg()
 		n+=d;
 	}
 	avgscore/=n;
-	lg("Removing global average score %f %d\n",avgscore,n);
+	printf("Removing global average score %f %d\n",avgscore,n);
 	int i;
 	for(i=0;i<NENTRIES;i++)
 		err[i]-=avgscore;
