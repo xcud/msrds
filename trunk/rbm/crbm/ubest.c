@@ -66,7 +66,7 @@
 //		}
 //	}
 //}
-//
+//int doAllFeatures();
 //int score_train(int loop) {
 //	if (loop == 0)
 //		return doAllFeatures();
