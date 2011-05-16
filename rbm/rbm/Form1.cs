@@ -26,6 +26,7 @@ namespace rbm
 
 		Bitmap _bitmap ;
 
+        private double gamma = 7;
 		
 
 		public void CalculateWeights(BasicNetwork network)
@@ -50,8 +51,8 @@ namespace rbm
 							weight = 0;
 							if (i != j)
 							{
-								predN3 = (n3 == 0 ? NUM_CITIES - 1 : n3 - 1);
-								succN3 = (n3 == NUM_CITIES - 1 ? 0 : n3 + 1);
+                                predN3 = (n3 == 0 ? _bitmap.Width - 1 : n3 - 1);
+                                succN3 = (n3 == _bitmap.Width - 1 ? 0 : n3 + 1);
 								if ((n1 == n3) || (n2 == n4))
 									weight = -gamma;
 								else if ((n1 == predN3) || (n1 == succN3))
