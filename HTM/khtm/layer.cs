@@ -11,9 +11,10 @@ namespace khtm
 
         internal void AddInput(Sequence input)
         {
-            if (IsExist(input) == true)
+            if (IsExist(input) == false)
             {
-
+                _list.Add(input);
+                input._Index = _list.Count;
             }
         }
 
@@ -21,8 +22,8 @@ namespace khtm
         {
             foreach (var sequence in _list)
             {
-
-                return true;
+                if( sequence._Data.SequenceEqual(input._Data) == true)
+                    return true;
             }
 
             return false;
