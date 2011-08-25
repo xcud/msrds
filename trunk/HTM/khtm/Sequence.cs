@@ -7,7 +7,7 @@ namespace khtm
 {
     class Sequence
     {
-        int index;
-        int[] _Data;
+        public int _Index;
+        public int[] _Data;
     }
 }
