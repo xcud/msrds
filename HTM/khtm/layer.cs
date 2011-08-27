@@ -7,26 +7,58 @@ namespace khtm
 {
     class layer
     {
+        layer _UpLayer ;//= new layer();
         List<Sequence> _list = new List<Sequence>();
 
-        internal void AddInput(Sequence input)
+        Sequence _UpInput ;//= new Sequence();
+        int[] _Data;
+        int _CurCount  = 0;
+        public layer(int dataSize)
         {
-            if (IsExist(input) == false)
+            _Data = new int[dataSize];
+ 
+        }
+
+        void AddInputData(int dataIndex)
+        {
+            _Data[_CurCount] = dataIndex;
+            _CurCount++;
+            if (_Data.Length == _CurCount)
             {
-                _list.Add(input);
-                input._Index = _list.Count;
+                AddInput(new Sequence(_Data));
+                _Data = new int[_Data.Length];
+                _CurCount = 0;
             }
         }
 
-        private bool IsExist(Sequence input)
+        internal void AddInput(Sequence input)
+        {
+            var sequence =  FindSequence(input) ;
+
+            if( sequence == null)
+            {
+                _list.Add(input);
+                input._Index = _list.Count;
+
+                sequence = input;
+            }
+
+
+            if (_UpLayer != null)
+            {
+                _UpLayer.AddInputData(input._Index);
+            }
+        }
+
+        private Sequence FindSequence(Sequence input)
         {
             foreach (var sequence in _list)
             {
                 if( sequence._Data.SequenceEqual(input._Data) == true)
-                    return true;
+                    return sequence;
             }
 
-            return false;
+            return null;
         }
     }
 }
