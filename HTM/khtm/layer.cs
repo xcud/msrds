@@ -13,25 +13,35 @@ namespace khtm
         Sequence _UpInput ;//= new Sequence();
         int[] _Data;
         int _CurCount  = 0;
-        public layer(int dataSize)
+
+        int[,] _Weights;
+        public layer(int dataSize,int upLayerDataSize)
         {
             _Data = new int[dataSize];
+
+            _Weights = new int[dataSize, upLayerDataSize];
  
         }
 
-        void AddInputData(int dataIndex)
+        int AddInputData(int dataIndex)
         {
             _Data[_CurCount] = dataIndex;
             _CurCount++;
+
+            int sequenceIndex = 0;
+            // 원하는 데이타만큼 다들어왔냐
             if (_Data.Length == _CurCount)
             {
-                AddInput(new Sequence(_Data));
+                sequenceIndex = AddInput(new Sequence(_Data));
                 _Data = new int[_Data.Length];
                 _CurCount = 0;
             }
+
+            return sequenceIndex;
+
         }
 
-        internal void AddInput(Sequence input)
+        internal int AddInput(Sequence input)
         {
             var sequence =  FindSequence(input) ;
 
@@ -46,8 +56,15 @@ namespace khtm
 
             if (_UpLayer != null)
             {
-                _UpLayer.AddInputData(input._Index);
+                int upLayerIndex = _UpLayer.AddInputData(input._Index);
+                if (upLayerIndex != 0)
+                {
+
+                }
+
             }
+
+            return sequence._Index;
         }
 
         private Sequence FindSequence(Sequence input)
