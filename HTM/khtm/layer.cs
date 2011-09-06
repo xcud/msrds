@@ -15,13 +15,25 @@ namespace khtm
         int _CurCount  = 0;
 
         int[,] _Weights;
-        public layer(int dataSize,int upLayerDataSize)
+        public layer(int dataSize)
         {
             _Data = new int[dataSize];
 
-            _Weights = new int[dataSize, upLayerDataSize];
- 
+            
+            
         }
+
+        public void SetUplayer(layer upLayer)
+        {
+            _UpLayer = upLayer;
+        }
+
+        public void Build()
+        {
+            if( _UpLayer != null)
+                _Weights = new int[_Data.Length, _UpLayer._Data.Length];
+        }
+
 
         int AddInputData(int dataIndex)
         {
