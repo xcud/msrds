@@ -26,6 +26,7 @@ namespace khtm
         public void SetUplayer(layer upLayer)
         {
             _UpLayer = upLayer;
+            Build();
         }
 
         public void Build()
@@ -35,7 +36,7 @@ namespace khtm
         }
 
 
-        int AddInputData(int dataIndex)
+        public int AddInputData(int dataIndex)
         {
             _Data[_CurCount] = dataIndex;
             _CurCount++;
