@@ -8,13 +8,16 @@ namespace khtm
     class layer
     {
         layer _UpLayer ;//= new layer();
+        layer _DownLayer;
         List<Sequence> _list = new List<Sequence>();
 
         Sequence _UpInput ;//= new Sequence();
         int[] _Data;
         int _CurCount  = 0;
 
-        int[,] _Weights;
+        int[,] _UpWeights;
+        int[,] _DownWeights;
+
         public layer(int dataSize)
         {
             _Data = new int[dataSize];
@@ -23,17 +26,25 @@ namespace khtm
             
         }
 
-        public void SetUplayer(layer upLayer)
+        public void SetUplayer(layer upLayer, int[,] upWeight)
         {
             _UpLayer = upLayer;
-            Build();
+            _UpWeights = upWeight;
         }
 
-        public void Build()
+
+        public void SetDownlayer(layer downLayer, int[,] downWeight)
         {
-            if( _UpLayer != null)
-                _Weights = new int[_Data.Length, _UpLayer._Data.Length];
+            _DownLayer = downLayer;
+            _DownWeights = downWeight;
         }
+
+
+        //public void Build()
+        //{
+        //    if( _UpLayer != null)
+        //        _UpWeights = new int[_Data.Length, _UpLayer._Data.Length];
+        //}
 
 
         public int AddInputData(int dataIndex)
@@ -72,7 +83,7 @@ namespace khtm
                 int upLayerIndex = _UpLayer.AddInputData(input._Index);
                 if (upLayerIndex != 0)
                 {
-
+                    _UpWeights[input._Index, upLayerIndex]++;
                 }
 
             }
@@ -90,5 +101,6 @@ namespace khtm
 
             return null;
         }
+
     }
 }
