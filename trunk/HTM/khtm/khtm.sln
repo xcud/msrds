@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "khtm", "khtm.csproj", "{9F28BFA6-39A0-4B8D-ABD3-01D494482487}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "app", "..\app\app.csproj", "{BDE8F4E8-15A0-458D-92F0-DB907C6F0920}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -13,6 +15,10 @@ Global
 		{9F28BFA6-39A0-4B8D-ABD3-01D494482487}.Debug|x86.Build.0 = Debug|x86
 		{9F28BFA6-39A0-4B8D-ABD3-01D494482487}.Release|x86.ActiveCfg = Release|x86
 		{9F28BFA6-39A0-4B8D-ABD3-01D494482487}.Release|x86.Build.0 = Release|x86
+		{BDE8F4E8-15A0-458D-92F0-DB907C6F0920}.Debug|x86.ActiveCfg = Debug|x86
+		{BDE8F4E8-15A0-458D-92F0-DB907C6F0920}.Debug|x86.Build.0 = Debug|x86
+		{BDE8F4E8-15A0-458D-92F0-DB907C6F0920}.Release|x86.ActiveCfg = Release|x86
+		{BDE8F4E8-15A0-458D-92F0-DB907C6F0920}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
