@@ -61,6 +61,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SymbolInfo.cs" />
     <EmbeddedResource Include="AddSymbol.resx">
       <DependentUpon>AddSymbol.cs</DependentUpon>
     </EmbeddedResource>

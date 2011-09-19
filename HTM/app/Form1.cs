@@ -19,7 +19,7 @@ namespace app
         private int _sY;
         private int _sX;
         List<int> _SimbolList = new List<int>();
-
+        List<SymbolInfo> _SymbolInfoList = new List<SymbolInfo>();
 
         int MAX_INDEX = 8;
         private int _LastAddIndexSimbol;
@@ -125,6 +125,12 @@ namespace app
 
         private void button1_Click(object sender, EventArgs e)
         {
+            AddSymbol addSymbol = new AddSymbol(_SymbolInfoList);
+            var result = addSymbol.ShowDialog();
+            if (result == System.Windows.Forms.DialogResult.OK)
+            {
+                var symbolinfo = new SymbolInfo();
+            }
 
         }
     }
