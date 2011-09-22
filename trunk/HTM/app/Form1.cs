@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Windows;
+using System.Xml.Serialization;
+using System.IO;
 
 namespace app
 {
@@ -129,8 +131,81 @@ namespace app
             var result = addSymbol.ShowDialog();
             if (result == System.Windows.Forms.DialogResult.OK)
             {
+
+                if (addSymbol.textBox1.Text.Length == 0)
+                    return;
+
                 var symbolinfo = new SymbolInfo();
+
+                symbolinfo.ID = addSymbol.textBox1.Text;
+                symbolinfo._List.AddRange(_SimbolList);
+
+                AddSymbolInfo(symbolinfo);
             }
+
+        }
+
+        private void AddSymbolInfo(SymbolInfo symbolinfo)
+        {
+            _SymbolInfoList.Add(symbolinfo);
+            listBox2.Items.Add(symbolinfo.ID);
+        }
+
+
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+
+            // Create a new XmlSerializer instance with the type of the test class
+            
+            XmlSerializer SerializerObj = new XmlSerializer(_SymbolInfoList.GetType());
+
+            // Create a new file stream to write the serialized object to a file
+            TextWriter WriteFileStream = new StreamWriter(@"data.xml");
+            SerializerObj.Serialize(WriteFileStream, _SymbolInfoList);
+
+            // Cleanup
+            WriteFileStream.Close();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+           
+                XmlSerializer SerializerObj = new XmlSerializer(_SymbolInfoList.GetType());
+                
+
+                try
+                {
+
+                    // Create a new file stream to write the serialized object to a file
+                    TextReader WriteFileStream = new StreamReader(@"data.xml");
+
+                    _SymbolInfoList = SerializerObj.Deserialize(WriteFileStream) as List<SymbolInfo>;
+
+                    WriteFileStream.Close();
+
+                    // Cleanup
+                    
+                }
+                catch (Exception ex)
+                {
+                    
+                }
+                finally
+                {
+                    
+                }
+
+                foreach (var item in _SymbolInfoList)
+                {
+
+                    this.listBox2.Items.Add(item.ID);
+                }
 
         }
     }

@@ -5,9 +5,9 @@ using System.Text;
 
 namespace app
 {
-    class SymbolInfo
+    public class SymbolInfo
     {
         public string ID;
-        public List<int> _List;
+        public List<int> _List = new List<int>();
     }
 }

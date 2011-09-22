@@ -24,6 +24,9 @@ namespace app
         {
             // TODO: Complete member initialization
             this._SymbolInfoList = _SymbolInfoList;
+
+            InitializeComponent();
+
         }
 
         private void AddSymbol_Load(object sender, EventArgs e)
