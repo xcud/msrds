@@ -37,6 +37,7 @@
             this.button4 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
+            this.remove = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -67,7 +68,7 @@
             this.listBox2.FormattingEnabled = true;
             this.listBox2.Location = new System.Drawing.Point(422, 12);
             this.listBox2.Name = "listBox2";
-            this.listBox2.Size = new System.Drawing.Size(162, 433);
+            this.listBox2.Size = new System.Drawing.Size(267, 433);
             this.listBox2.TabIndex = 2;
             // 
             // button1
@@ -92,7 +93,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(513, 467);
+            this.button3.Location = new System.Drawing.Point(618, 467);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(71, 26);
             this.button3.TabIndex = 5;
@@ -107,6 +108,7 @@
             this.button4.TabIndex = 6;
             this.button4.Text = "clear";
             this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // button5
             // 
@@ -120,18 +122,29 @@
             // 
             // button6
             // 
-            this.button6.Location = new System.Drawing.Point(305, 131);
+            this.button6.Location = new System.Drawing.Point(305, 180);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(83, 26);
             this.button6.TabIndex = 8;
             this.button6.Text = "learn";
             this.button6.UseVisualStyleBackColor = true;
             // 
+            // remove
+            // 
+            this.remove.Location = new System.Drawing.Point(305, 131);
+            this.remove.Name = "remove";
+            this.remove.Size = new System.Drawing.Size(83, 26);
+            this.remove.TabIndex = 9;
+            this.remove.Text = "remove";
+            this.remove.UseVisualStyleBackColor = true;
+            this.remove.Click += new System.EventHandler(this.remove_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(596, 521);
+            this.ClientSize = new System.Drawing.Size(752, 521);
+            this.Controls.Add(this.remove);
             this.Controls.Add(this.button6);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.button4);
@@ -160,6 +173,7 @@
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.Button remove;
     }
 }
 

@@ -148,7 +148,7 @@ namespace app
         private void AddSymbolInfo(SymbolInfo symbolinfo)
         {
             _SymbolInfoList.Add(symbolinfo);
-            listBox2.Items.Add(symbolinfo.ID);
+            listBox2.Items.Add(symbolinfo);
         }
 
 
@@ -204,9 +204,27 @@ namespace app
                 foreach (var item in _SymbolInfoList)
                 {
 
-                    this.listBox2.Items.Add(item.ID);
+                    this.listBox2.Items.Add(item);
                 }
 
+        }
+
+        private void remove_Click(object sender, EventArgs e)
+        {
+            if (-1 < listBox2.SelectedIndex)
+            {
+                
+                _SymbolInfoList.RemoveAt(listBox2.SelectedIndex);
+                listBox2.Items.RemoveAt(listBox2.SelectedIndex);
+
+            }
+
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            _g.Clear(Color.White);
+            _SimbolList.Clear();
         }
     }
 }
