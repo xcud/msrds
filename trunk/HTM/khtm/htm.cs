@@ -5,7 +5,7 @@ using System.Text;
 
 namespace khtm
 {
-    class htm
+    public class htm
     {
         //layer _RootLayer = null;
         layer[] _Layer;

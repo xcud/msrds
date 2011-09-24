@@ -25,6 +25,8 @@ namespace app
 
         int MAX_INDEX = 8;
         private int _LastAddIndexSimbol;
+        khtm.htm _htm = new khtm.htm();
+
         public Form1()
         {
             InitializeComponent();
@@ -225,6 +227,13 @@ namespace app
         {
             _g.Clear(Color.White);
             _SimbolList.Clear();
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            int [] network = new int [2]  {2,2};
+
+            _htm.BuildNetwork(network);
         }
     }
 }
