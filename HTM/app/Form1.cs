@@ -22,7 +22,7 @@ namespace app
         private int _sX;
         List<int> _SimbolList = new List<int>();
         List<SymbolInfo> _SymbolInfoList = new List<SymbolInfo>();
-
+        List<Vector> _VectorList = new List<Vector>();
         int MAX_INDEX = 8;
         private int _LastAddIndexSimbol;
         khtm.htm _htm = new khtm.htm();
@@ -65,6 +65,45 @@ namespace app
         private void pictureBox1_MouseUp(object sender, MouseEventArgs e)
         {
             _bRecodeOn = false;
+
+            while (10 <  _VectorList.Count)
+            {
+                double shortLength = double.MaxValue;
+                int shortLengthIndex = 0;
+                for (int i = 1; i < _VectorList.Count; i++)
+                {
+                    var len = Vector.Determinant(_VectorList[i],_VectorList[i-1]);
+                    if (len < shortLength)
+                    {
+                        shortLengthIndex = i;
+                        shortLength = len;
+                    }
+                }
+
+                _VectorList.RemoveAt(shortLengthIndex);
+
+            }
+
+            _g.Clear(Color.White);
+
+
+            for (int i = 1; i < _VectorList.Count; i++)
+            {
+                _g.DrawLine(_Pen, (int)_VectorList[i].X, (int)_VectorList[i].Y, (int)_VectorList[i - 1].X, (int)_VectorList[i - 1].Y);
+
+                int simbol = GetSimbolIndex(_VectorList[i].X, _VectorList[i].Y, _VectorList[i-1].X, _VectorList[i-1].Y) / (360 / MAX_INDEX);
+
+                this.listBox1.Items.Insert(0, simbol);
+
+                //if( _LastAddIndexSimbol != -1 )
+                //	return;
+
+                _LastAddIndexSimbol = simbol;
+
+                _SimbolList.Add(simbol);
+            }
+
+
         }
 
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
@@ -76,32 +115,24 @@ namespace app
                 //if( _SimbolList.Count == 10)
                 //    return;
                 
-				System.Windows.Vector v = new System.Windows.Vector(e.Location.X-_sX,e.Location.Y-_sY);
-					
-				if( v.Length < 10)
-					return;
+				System.Windows.Vector v = new System.Windows.Vector(e.Location.X,e.Location.Y);
+
+
+                _VectorList.Add(v);
+                //if( v.Length < 10)
+                //    return;
 
 				_g.DrawLine(_Pen,_sX,_sY,e.Location.X,e.Location.Y);
 					
-				int simbol = GetSimbolIndex(_sX,_sY,e.Location.X,e.Location.Y)/(360/MAX_INDEX);
-
-				this.listBox1.Items.Insert(0,simbol);
-					
-				//if( _LastAddIndexSimbol != -1 )
-				//	return;
-					
-				_LastAddIndexSimbol = simbol;
-
-				_SimbolList.Add(simbol);
 
 				_sX = e.Location.X;
 				_sY = e.Location.Y;
 					
-                }
+            }
         }
 
-        
-	    int GetSimbolIndex(int sx,int sy,int ex,int ey)
+
+        int GetSimbolIndex(double sx, double sy, double ex, double ey)
 	    {
 
 
