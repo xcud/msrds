@@ -60,23 +60,48 @@ namespace app
             _bRecodeOn = true;
             _sX = e.Location.X;
             _sY = e.Location.Y;
+
+            _VectorList.Add(new System.Windows.Vector(e.Location.X, e.Location.Y));
         }
 
         private void pictureBox1_MouseUp(object sender, MouseEventArgs e)
         {
             _bRecodeOn = false;
 
-            while (10 <  _VectorList.Count)
+
+
+
+            for (int i = 1; i < _VectorList.Count -1 ; i++)
+            {
+
+                var v1 = _VectorList[i] - _VectorList[i - 1];
+                var v2 = _VectorList[i+1] - _VectorList[i];
+
+                var len = Vector.AngleBetween(v2, v1);
+                listBox1.Items.Add(len);
+
+
+            }
+
+            while (3 <  _VectorList.Count)
             {
                 double shortLength = double.MaxValue;
+                //double shortLength = 0;
                 int shortLengthIndex = 0;
-                for (int i = 1; i < _VectorList.Count; i++)
+                for (int i = 2; i < _VectorList.Count-1; i++)
                 {
-                    var len = Vector.Determinant(_VectorList[i],_VectorList[i-1]);
-                    if (len < shortLength)
+                    var v1 = _VectorList[i] - _VectorList[i - 1];
+                    var v2 = _VectorList[i + 1] - _VectorList[i];
+
+                    var len = Vector.AngleBetween(v2, v1);
+
+                    //var len = Vector.AngleBetween(_VectorList[i], _VectorList[i - 1]);
+                    //var len = Vector.Determinant(_VectorList[i],_VectorList[i-1]);
+                    if (Math.Abs(len) < shortLength)
+                    //if (shortLength < len )
                     {
                         shortLengthIndex = i;
-                        shortLength = len;
+                        shortLength = Math.Abs(len);
                     }
                 }
 
@@ -115,12 +140,16 @@ namespace app
                 //if( _SimbolList.Count == 10)
                 //    return;
                 
-				System.Windows.Vector v = new System.Windows.Vector(e.Location.X,e.Location.Y);
+				//System.Windows.Vector v = new System.Windows.Vector(e.Location.X,e.Location.Y);
 
 
-                _VectorList.Add(v);
-                //if( v.Length < 10)
-                //    return;
+                System.Windows.Vector v = new System.Windows.Vector(e.Location.X - _sX, e.Location.Y - _sY);
+
+                
+                if( v.Length < 5)
+                    return;
+                
+                _VectorList.Add(new System.Windows.Vector(e.Location.X,e.Location.Y));
 
 				_g.DrawLine(_Pen,_sX,_sY,e.Location.X,e.Location.Y);
 					
@@ -258,6 +287,8 @@ namespace app
         {
             _g.Clear(Color.White);
             _SimbolList.Clear();
+            _VectorList.Clear();
+            listBox1.Items.Clear();
         }
 
         private void button6_Click(object sender, EventArgs e)
