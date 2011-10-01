@@ -83,7 +83,7 @@ namespace app
 
             }
 
-            while (3 <  _VectorList.Count)
+            while (15 <  _VectorList.Count)
             {
                 double shortLength = double.MaxValue;
                 //double shortLength = 0;
@@ -106,6 +106,7 @@ namespace app
                 }
 
                 _VectorList.RemoveAt(shortLengthIndex);
+                listBox1.Items.Add("remove");
 
             }
 
@@ -237,7 +238,19 @@ namespace app
 
         private void Form1_Load(object sender, EventArgs e)
         {
-           
+
+
+            //listBox1.Items.Add( Vector.AngleBetween(new Vector(1,0), new Vector(0,1)));
+            //listBox1.Items.Add(Vector.AngleBetween(new Vector(1, 0), new Vector(0,-1)));
+
+            //listBox1.Items.Add(Vector.AngleBetween(new Vector(1, 0), new Vector(1,0)));
+            //listBox1.Items.Add(Vector.AngleBetween(new Vector(1, 0), new Vector(-1, 0)));
+            
+
+
+
+
+
                 XmlSerializer SerializerObj = new XmlSerializer(_SymbolInfoList.GetType());
                 
 
