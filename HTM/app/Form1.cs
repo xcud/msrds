@@ -27,6 +27,8 @@ namespace app
         private int _LastAddIndexSimbol;
         khtm.htm _htm = new khtm.htm();
 
+        const int INPUT = 14;
+
         public Form1()
         {
             InitializeComponent();
@@ -83,7 +85,7 @@ namespace app
 
             }
 
-            while (15 <  _VectorList.Count)
+            while (INPUT+1 < _VectorList.Count)
             {
                 double shortLength = double.MaxValue;
                 //double shortLength = 0;
@@ -109,6 +111,9 @@ namespace app
                 listBox1.Items.Add("remove");
 
             }
+
+
+
 
             _g.Clear(Color.White);
 
@@ -190,6 +195,13 @@ namespace app
 
         private void button1_Click(object sender, EventArgs e)
         {
+
+            if (_SimbolList.Count != INPUT)
+            {
+                MessageBox.Show("입력 패턴길이가 너무 짧습니다.");
+                return;
+            }
+
             AddSymbol addSymbol = new AddSymbol(_SymbolInfoList);
             var result = addSymbol.ShowDialog();
             if (result == System.Windows.Forms.DialogResult.OK)
@@ -206,6 +218,8 @@ namespace app
                 AddSymbolInfo(symbolinfo);
             }
 
+            clear_Click(null,null);
+
         }
 
         private void AddSymbolInfo(SymbolInfo symbolinfo)
@@ -218,6 +232,11 @@ namespace app
 
         private void button5_Click(object sender, EventArgs e)
         {
+            if (_SymbolInfoList.Count != INPUT)
+            {
+                MessageBox.Show("입력 패턴길이가 너무 짧습니다.");
+                return;
+            }
 
         }
 
@@ -296,7 +315,8 @@ namespace app
 
         }
 
-        private void button4_Click(object sender, EventArgs e)
+
+        private void clear_Click(object sender, EventArgs e)
         {
             _g.Clear(Color.White);
             _SimbolList.Clear();
@@ -306,9 +326,19 @@ namespace app
 
         private void button6_Click(object sender, EventArgs e)
         {
-            int [] network = new int [2]  {2,2};
+            int[] network = new int[] { INPUT, 10, _SymbolInfoList.Count };
 
             _htm.BuildNetwork(network);
+
+            foreach (var dataList in _SymbolInfoList)
+            {
+                _htm.SetTarget(dataList.ID);
+                foreach (var data in dataList._List)
+                {
+                    _htm.AddInputData(data);
+                }
+            }
+            
         }
     }
 }

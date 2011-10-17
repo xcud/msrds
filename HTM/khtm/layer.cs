@@ -5,10 +5,10 @@ using System.Text;
 
 namespace khtm
 {
-    class layer
+    public class layer : NLayer.iLayer
     {
-        layer _UpLayer ;//= new layer();
-        layer _DownLayer;
+        NLayer.iLayer _UpLayer;//= new layer();
+        NLayer.iLayer _DownLayer;
         List<Sequence> _list = new List<Sequence>();
 
         Sequence _UpInput ;//= new Sequence();
@@ -26,14 +26,14 @@ namespace khtm
             
         }
 
-        public void SetUplayer(layer upLayer, int[,] upWeight)
+        public void SetUplayer(NLayer.iLayer upLayer, int[,] upWeight)
         {
             _UpLayer = upLayer;
             _UpWeights = upWeight;
         }
 
 
-        public void SetDownlayer(layer downLayer, int[,] downWeight)
+        public void SetDownlayer(NLayer.iLayer downLayer, int[,] downWeight)
         {
             _DownLayer = downLayer;
             _DownWeights = downWeight;
