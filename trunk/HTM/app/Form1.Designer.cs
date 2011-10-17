@@ -108,7 +108,7 @@
             this.button4.TabIndex = 6;
             this.button4.Text = "clear";
             this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
+            this.button4.Click += new System.EventHandler(this.clear_Click);
             // 
             // button5
             // 
