@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace khtm
+namespace khtm.NLayer
 {
     public class layer : NLayer.iLayer
     {
