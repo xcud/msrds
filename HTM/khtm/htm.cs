@@ -11,6 +11,7 @@ namespace khtm
         NLayer.iLayer[] _Layer;
         int[][,] _Weights;
         NLayer.TargetLayer _TargetLayer;
+        
         public void BuildNetwork(int [] layerSizeSet)
         {
 
@@ -56,9 +57,9 @@ namespace khtm
 
 
 
-        public void SetTarget(string p)
+        public void SetTarget(string symbol)
         {
-            _TargetLayer.SetTarget(p);
+            _TargetLayer.SetTarget(symbol);
         }
     }
 }

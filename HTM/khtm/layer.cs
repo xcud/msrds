@@ -77,7 +77,6 @@ namespace khtm
                 sequence = input;
             }
 
-
             if (_UpLayer != null)
             {
                 int upLayerIndex = _UpLayer.AddInputData(input._Index);
@@ -85,7 +84,6 @@ namespace khtm
                 {
                     _UpWeights[input._Index, upLayerIndex]++;
                 }
-
             }
 
             return sequence._Index;

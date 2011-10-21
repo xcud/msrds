@@ -12,5 +12,9 @@ namespace khtm.NLayer
 
 
         void SetDownlayer(iLayer downLayer, int[,] downWeight);
+
+        int AddInputData(int dataIndex);
+
+
     }
 }
