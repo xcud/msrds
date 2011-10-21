@@ -44,7 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="htm.cs" />
-    <Compile Include="layer.cs" />
+    <Compile Include="NLayer\layer.cs" />
     <Compile Include="NLayer\iLayer.cs" />
     <Compile Include="NLayer\TargetLayer.cs" />
     <Compile Include="Program.cs" />

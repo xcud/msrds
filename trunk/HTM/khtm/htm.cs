@@ -22,7 +22,7 @@ namespace khtm
                 _Weights[i] = new int[layerSizeSet[i],layerSizeSet[i+1]]; 
             }
             
-            _Layer = new layer[layerSizeSet.Length];
+            _Layer = new NLayer.layer[layerSizeSet.Length];
 
             for(int i =0 ;i < layerSizeSet.Length;i++)
             {
@@ -33,7 +33,7 @@ namespace khtm
                 }
                 else
                 {
-                    _Layer[i] = new layer(layerSizeSet[i]);
+                    _Layer[i] = new NLayer.layer(layerSizeSet[i]);
                 }
                 
 
