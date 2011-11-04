@@ -193,7 +193,7 @@ namespace app
 	}
         public Graphics _g { get; set; }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void add_new(object sender, EventArgs e)
         {
 
             if (_SimbolList.Count != INPUT)
@@ -230,7 +230,7 @@ namespace app
 
 
 
-        private void button5_Click(object sender, EventArgs e)
+        private void add_selected(object sender, EventArgs e)
         {
             if (_SymbolInfoList.Count != INPUT)
             {
@@ -240,7 +240,7 @@ namespace app
 
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void save(object sender, EventArgs e)
         {
 
             // Create a new XmlSerializer instance with the type of the test class
@@ -340,5 +340,23 @@ namespace app
             }
             
         }
+
+        private void evaluate(object sender, EventArgs e)
+        {
+
+            if (_SimbolList.Count != INPUT)
+            {
+                MessageBox.Show("입력 패턴길이가 너무 짧습니다.");
+                return;
+            }
+
+
+
+            int symbolID = _htm.Evaluate(_SimbolList);
+
+            this.listBox1.Items.Insert(0, "evaluate =>" + symbolID.ToString());
+
+        }
+
     }
 }

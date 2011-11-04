@@ -65,5 +65,13 @@ namespace khtm
         {
             _TargetLayer.SetTarget(symbol);
         }
+
+        public int Evaluate(List<int> _SymbolInfoList)
+        {
+
+
+
+            return -1;   
+        }
     }
 }
