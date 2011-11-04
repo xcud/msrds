@@ -15,14 +15,14 @@ namespace khtm
         public void BuildNetwork(int [] layerSizeSet)
         {
 
-            _Weights = new int [layerSizeSet.Length][,];
+            _Weights = new int [layerSizeSet.Length-1][,];
 
-            for (int i = 0; i < layerSizeSet.Length-1; i++)
+            for (int i = 0; i < _Weights.Length; i++)
             {
                 _Weights[i] = new int[layerSizeSet[i],layerSizeSet[i+1]]; 
             }
-            
-            _Layer = new NLayer.layer[layerSizeSet.Length];
+
+            _Layer = new NLayer.iLayer[layerSizeSet.Length];
 
             for(int i =0 ;i < layerSizeSet.Length;i++)
             {
@@ -33,15 +33,19 @@ namespace khtm
                 }
                 else
                 {
-                    _Layer[i] = new NLayer.layer(layerSizeSet[i]);
+                    _Layer[i] = new NLayer.MiddleKLayer(i,layerSizeSet[i]);
                 }
-                
+
 
 
                 if (i != 0)
                 {
-                    _Layer[i - 1].SetUplayer(_Layer[i], _Weights[i]);
-                    _Layer[i].SetDownlayer(_Layer[i - 1], _Weights[i]);
+                    _Layer[i - 1].SetUplayer(_Layer[i], _Weights[i-1]);
+                    _Layer[i].SetDownlayer(_Layer[i - 1], _Weights[i-1]);
+                }
+                else
+                {
+
                 }
 
 
