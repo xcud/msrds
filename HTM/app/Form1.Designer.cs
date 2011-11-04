@@ -38,6 +38,7 @@
             this.button5 = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
             this.remove = new System.Windows.Forms.Button();
+            this.button7 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -79,7 +80,7 @@
             this.button1.TabIndex = 3;
             this.button1.Text = "add new";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.button1.Click += new System.EventHandler(this.add_new);
             // 
             // button2
             // 
@@ -89,7 +90,7 @@
             this.button2.TabIndex = 4;
             this.button2.Text = "save";
             this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.button2.Click += new System.EventHandler(this.save);
             // 
             // button3
             // 
@@ -118,7 +119,7 @@
             this.button5.TabIndex = 7;
             this.button5.Text = "add selected";
             this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
+            this.button5.Click += new System.EventHandler(this.add_selected);
             // 
             // button6
             // 
@@ -140,11 +141,22 @@
             this.remove.UseVisualStyleBackColor = true;
             this.remove.Click += new System.EventHandler(this.remove_Click);
             // 
+            // button7
+            // 
+            this.button7.Location = new System.Drawing.Point(305, 229);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(83, 26);
+            this.button7.TabIndex = 10;
+            this.button7.Text = "evaluate";
+            this.button7.UseVisualStyleBackColor = true;
+            this.button7.Click += new System.EventHandler(this.evaluate);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(752, 521);
+            this.Controls.Add(this.button7);
             this.Controls.Add(this.remove);
             this.Controls.Add(this.button6);
             this.Controls.Add(this.button5);
@@ -175,6 +187,7 @@
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.Button remove;
+        private System.Windows.Forms.Button button7;
     }
 }
 
