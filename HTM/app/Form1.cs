@@ -324,9 +324,9 @@ namespace app
             listBox1.Items.Clear();
         }
 
-        private void button6_Click(object sender, EventArgs e)
+        private void learn(object sender, EventArgs e)
         {
-            int[] network = new int[] { INPUT, 10, _SymbolInfoList.Count };
+            int[] network = new int[] { 2, 2, _SymbolInfoList.Count };
 
             _htm.BuildNetwork(network);
 

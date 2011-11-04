@@ -5,7 +5,7 @@ using System.Text;
 
 namespace khtm.NLayer
 {
-    public class layer : NLayer.iLayer
+    public class MiddleKLayer : NLayer.iLayer
     {
         NLayer.iLayer _UpLayer;//= new layer();
         NLayer.iLayer _DownLayer;
@@ -18,12 +18,13 @@ namespace khtm.NLayer
         int[,] _UpWeights;
         int[,] _DownWeights;
 
-        public layer(int dataSize)
+        int _LayerIndex;
+
+
+        public MiddleKLayer(int LayerIndex ,int dataSize)
         {
             _Data = new int[dataSize];
-
-            
-            
+            _LayerIndex = LayerIndex;
         }
 
         public void SetUplayer(NLayer.iLayer upLayer, int[,] upWeight)
@@ -52,7 +53,7 @@ namespace khtm.NLayer
             _Data[_CurCount] = dataIndex;
             _CurCount++;
 
-            int sequenceIndex = 0;
+            int sequenceIndex = -1;
             // 원하는 데이타만큼 다들어왔냐
             if (_Data.Length == _CurCount)
             {
@@ -72,7 +73,7 @@ namespace khtm.NLayer
             if( sequence == null)
             {
                 _list.Add(input);
-                input._Index = _list.Count;
+                input._Index = _list.Count-1;
 
                 sequence = input;
             }
@@ -80,7 +81,7 @@ namespace khtm.NLayer
             if (_UpLayer != null)
             {
                 int upLayerIndex = _UpLayer.AddInputData(input._Index);
-                if (upLayerIndex != 0)
+                if (upLayerIndex != -1)
                 {
                     _UpWeights[input._Index, upLayerIndex]++;
                 }
